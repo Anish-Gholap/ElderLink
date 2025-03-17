@@ -5,6 +5,7 @@ const app = express()
 const cors = require('cors')
 const mongoose = require('mongoose')
 const logger = require('./utils/logger')
+const eventsRouter = require('./views/events')
 
 
 // MongoDB Connection
@@ -23,5 +24,7 @@ mongoose.connect(config.MONGODB_URI)
 app.use(cors())
 app.use(express.static('dist'))
 app.use(express.json())
+
+app.use('/events', eventsRouter)
 
 module.exports = app
