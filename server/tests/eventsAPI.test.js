@@ -52,6 +52,9 @@ describe("testing GET /events", () => {
     })
 })
 
+describe("testing POST /events", () => {
+})
+
 after(async () => {
     //console.log("END: Users in DB: ", await usersinDB().length, "Events in DB: ", await eventsInDB().length)
     await mongoose.connection.close()
