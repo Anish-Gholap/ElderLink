@@ -1,15 +1,20 @@
 const eventsRouter = require('express').Router()
-const {handleGetAllEvents, handleGetEventById} = require('../controllers/events')
+const {getAllEvents, getEventById, addEvent} = require('../controllers/events')
 
 
 // GET all events
-eventsRouter.get('/', handleGetAllEvents)
+eventsRouter.get('/', getAllEvents)
 
 // GET event by id
-eventsRouter.get('/:id', handleGetEventById)
+eventsRouter.get('/:id', getEventById)
 
+/*
+Protected routes:
+User authentication required
+*/
 
-
+// POST event to DB
+eventsRouter.post("/", addEvent)
 
 
 

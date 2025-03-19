@@ -2,7 +2,7 @@ const Event = require('../models/event')
 const User = require('../models/user')
 
 //handle get all events
-const handleGetAllEvents = async (request, response) => {
+const getAllEvents = async (request, response) => {
     const {createdBy} = request.query
 
     const filter = {}
@@ -15,7 +15,7 @@ const handleGetAllEvents = async (request, response) => {
 }
 
 // handle get event by id
-const handleGetEventById = async (request, response) => {
+const getEventById = async (request, response) => {
     const eventId = request.params.id
     const event = await Event.findById(eventId)
 
@@ -27,11 +27,36 @@ const handleGetEventById = async (request, response) => {
     }
 }
 
+/*
+Protected routes:
+User authentication required. Token must be sent in request body for verification
+Retrieve user from request body added by the userExtractor middleware.
+*/
+
+const addEvent = async (request, response) => {
+    const body = request.body
+    const user = request.user
+
+    const event = new Event({
+        ...body,
+        createdBy: user._id
+    })
+
+    const savedEvent = await event.save()
+
+    user.eventsCreated = user.eventsCreated.concat(savedEvent._id)
+    // add here is user should be added to his own event attendees list
+    // user.attendees = user.attendees.concat(user._id)
+    await user.save()
+
+    response.status(201).json(savedEvent)
+}
 
 
 
 
 module.exports = {
-    handleGetAllEvents,
-    handleGetEventById
+    getAllEvents,
+    getEventById,
+    addEvent
 }
