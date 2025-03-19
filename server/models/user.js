@@ -13,6 +13,11 @@ const userSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Event'
     }],
+    // phoneNumber: {
+    //     type: String,
+    //     required: true,
+    //     minLength: [8, "Enter SG phone number without +65 prefix"]
+    // },
     eventsAttending: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Event'

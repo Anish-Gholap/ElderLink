@@ -6,6 +6,7 @@ const cors = require('cors')
 const mongoose = require('mongoose')
 const logger = require('./utils/logger')
 const eventsRouter = require('./views/events')
+const loginRouter = require('./views/login')
 const middlewares = require('./utils/middlewares')
 
 // MongoDB Connection
@@ -27,8 +28,10 @@ app.use(express.json())
 app.use(middlewares.requestLogger)
 app.use(middlewares.userExtractor)
 
+app.use('/login', loginRouter)
 app.use('/events', eventsRouter)
 
 app.use(middlewares.unknownEndpoint)
 app.use(middlewares.errorHandler)
+
 module.exports = app

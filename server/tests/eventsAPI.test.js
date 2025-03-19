@@ -7,7 +7,7 @@ const app = require('../app')
 const Event = require('../models/event')
 const helper = require('./testHelper')
 const User = require('../models/user')
-const {usersinDB, eventsInDB} = require("./testHelper");
+const {usersInDB, eventsInDB} = require("./testHelper");
 
 const api = supertest(app)
 
@@ -30,7 +30,7 @@ beforeEach(async () => {
 })
 
 afterEach(async () => {
-    const users = await helper.usersinDB()
+    const users = await helper.usersInDB()
     console.log("Users currently in test DB")
     await users.forEach((user) => console.log(user.username))
 })
@@ -53,6 +53,13 @@ describe("testing GET /events", () => {
 })
 
 describe("testing POST /events", () => {
+    const newEvent = {
+        title: "Squash",
+        location: "Tampines CC",
+        dateTime: "20/3/25",
+        numAttendees: 2,
+        description: " Squash match"
+    }
 })
 
 after(async () => {

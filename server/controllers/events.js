@@ -52,6 +52,32 @@ const addEvent = async (request, response) => {
     response.status(201).json(savedEvent)
 }
 
+const removeEvent = async (request, response) => {
+    const user = request.user
+    const eventToDelete = await Event.findById(request.params.id)
+    const eventAttendeesId = eventToDelete.attendees
+
+    // check if event belongs to user who called the Delete
+    if (eventToDelete.createdBy.toString() === user._id.toString()){
+        await Event.findByIdAndDelete(eventToDelete)
+    } else {
+        return response.status(403).json({error: "Not authorized to delete this event"})
+    }
+
+    // Remove event from host eventsCreated
+    user.eventsCreated.filter(({_id}) => eventToDelete._id.toString() !== _id.toString())
+
+    // Remove event from users attending list
+    if (eventAttendeesId.length > 0) {
+        await User.updateMany(
+            { _id: { $in: eventAttendeesId } },
+            { $pull: { eventsAttending: eventToDelete._id } }
+        )
+    }
+
+    response.status(204).end()
+}
+
 
 
 

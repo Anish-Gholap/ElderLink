@@ -1,7 +1,6 @@
 const Event = require('../models/event')
 const User = require('../models/user')
 
-
 const initialEvents = [
     {
         title: "Chess",
@@ -32,6 +31,6 @@ const eventsInDB = async () => {
 
 module.exports = {
     initialEvents,
-    usersinDB: usersInDB,
+    usersInDB: usersInDB,
     eventsInDB
 }
