@@ -20,12 +20,18 @@ const initialEvents = [
     }
 ]
 
-const usersinDB = async () => {
+const usersInDB = async () => {
     const users = await User.find({})
     return users.map(user => user.toJSON())
 }
 
+const eventsInDB = async () => {
+    const events = await Event.find({})
+    return events.map(event => event.toJSON())
+}
+
 module.exports = {
     initialEvents,
-    usersinDB
+    usersinDB: usersInDB,
+    eventsInDB
 }
