@@ -31,10 +31,6 @@ const handleGetEventById = async (request, response) => {
 
 
 
-
-
-
-
 module.exports = {
     handleGetAllEvents,
     handleGetEventById
