@@ -14,7 +14,7 @@ User authentication required
 */
 
 // POST event to DB
-eventsRouter.post("/", addEvent)
+eventsRouter.post('/', addEvent)
 
 
 

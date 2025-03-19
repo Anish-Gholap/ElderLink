@@ -7,7 +7,9 @@ const mongoose = require('mongoose')
 const logger = require('./utils/logger')
 const eventsRouter = require('./views/events')
 const loginRouter = require('./views/login')
+const usersRouter = require('./views/users')
 const middlewares = require('./utils/middlewares')
+const {userExtractor} = require("./utils/middlewares");
 
 // MongoDB Connection
 mongoose.set('strictQuery', false)
@@ -28,8 +30,9 @@ app.use(express.json())
 app.use(middlewares.requestLogger)
 app.use(middlewares.userExtractor)
 
-app.use('/login', loginRouter)
-app.use('/events', eventsRouter)
+app.use('/api/login', loginRouter)
+app.use('/api/events', eventsRouter)
+app.use('/api/users', usersRouter)
 
 app.use(middlewares.unknownEndpoint)
 app.use(middlewares.errorHandler)

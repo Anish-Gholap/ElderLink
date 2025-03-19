@@ -3,11 +3,11 @@ const bcrypt = require('bcryptjs')
 const User = require('../models/user')
 
 //login user
-const handleLogin = async (request, response) => {
+const loginUser = async (request, response) => {
   const {username, password} = request.body
 
   const user = await User.findOne({username})
-  const isPasswordCorrect = user !== null ? await bcrypt.compare(password.user.passwordHash) : false
+  const isPasswordCorrect = user !== null ? await bcrypt.compare(password, user.passwordHash) : false
 
   if(!(user && isPasswordCorrect)) {
     return response.status(401).json({error: 'invalid username or password'})
@@ -24,4 +24,6 @@ const handleLogin = async (request, response) => {
   response.status(200).send({token, username: user.username, name: user.name, id: user.id, tokenExpiresAt})
 }
 
-module.exports = handleLogin
+module.exports = {
+  loginUser
+}
