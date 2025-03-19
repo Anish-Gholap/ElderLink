@@ -1,4 +1,5 @@
 const Event = require('../models/event')
+const User = require('../models/user')
 
 //handle get all events
 const handleGetAllEvents = async (request, response) => {
