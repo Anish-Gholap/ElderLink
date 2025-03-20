@@ -48,6 +48,8 @@ const editUser = async (request, response) => {
     })
 }
 
+// TODO: Remove user. Try Mongoose hooks to update Events tied to user to delete
+
 module.exports = {
     createUser,
     getAllUsers,

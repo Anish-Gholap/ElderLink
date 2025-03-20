@@ -8,6 +8,7 @@ const logger = require('./utils/logger')
 const eventsRouter = require('./views/events')
 const loginRouter = require('./views/login')
 const usersRouter = require('./views/users')
+const eventsAttendanceRouter = require('./views/eventsAttendance')
 const middlewares = require('./utils/middlewares')
 const {userExtractor} = require("./utils/middlewares");
 
@@ -33,6 +34,7 @@ app.use(middlewares.userExtractor)
 app.use('/api/login', loginRouter)
 app.use('/api/events', eventsRouter)
 app.use('/api/users', usersRouter)
+app.use('/api/events/', eventsAttendanceRouter)
 
 app.use(middlewares.unknownEndpoint)
 app.use(middlewares.errorHandler)
