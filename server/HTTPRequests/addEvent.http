@@ -1,0 +1,13 @@
+POST http://localhost:3002/api/events
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphY2tkYW5pZWxzIiwiaWQiOiI2N2RhZmJlY2JhMzliN2UyMDI0YzJmMzEiLCJpYXQiOjE3NDI0ODQxMzUsImV4cCI6MTc0MjQ4NzczNX0.TWjOPAuuNSUTw0IItoLKaqmv4J1Akxm2t1G2xUoW1e0
+
+{
+  "title": "checkers",
+  "location": "bedok cc",
+  "dateTime": "21/03/25",
+  "description": "checkers",
+  "numAttendees": 2
+}
+
+###

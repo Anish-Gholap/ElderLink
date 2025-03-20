@@ -37,9 +37,11 @@ const addEvent = async (request, response) => {
     const body = request.body
     const user = request.user
 
+    console.log(user)
+
     const event = new Event({
         ...body,
-        createdBy: user._id
+        createdBy: user.id
     })
 
     const savedEvent = await event.save()
@@ -53,16 +55,10 @@ const addEvent = async (request, response) => {
 }
 
 const removeEvent = async (request, response) => {
+    const eventToDelete = request.event
     const user = request.user
-    const eventToDelete = await Event.findById(request.params.id)
-    const eventAttendeesId = eventToDelete.attendees
 
-    // check if event belongs to user who called the Delete
-    if (eventToDelete.createdBy.toString() === user._id.toString()){
-        await Event.findByIdAndDelete(eventToDelete)
-    } else {
-        return response.status(403).json({error: "Not authorized to delete this event"})
-    }
+    await Event.findByIdAndDelete(eventToDelete._id)
 
     // Remove event from host eventsCreated
     user.eventsCreated.filter(({_id}) => eventToDelete._id.toString() !== _id.toString())
@@ -78,11 +74,26 @@ const removeEvent = async (request, response) => {
     response.status(204).end()
 }
 
+const editEvent = async (request, response) => {
+    const eventId = request.event.id
+    const body = request.body
+
+    const updatedEvent = await Event.findByIdAndUpdate(
+        eventId,
+        {...body},
+        {new: true, runValidators: true}
+    )
+
+    response.status(200).end()
+}
+
 
 
 
 module.exports = {
     getAllEvents,
     getEventById,
-    addEvent
+    addEvent,
+    removeEvent,
+    editEvent
 }

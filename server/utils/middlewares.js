@@ -1,6 +1,7 @@
 const logger = require('./logger')
 const jwt = require('jsonwebtoken')
 const User = require('../models/user')
+const Event = require('../models/event')
 
 
 // Logs Request in a clear format
@@ -42,23 +43,73 @@ const errorHandler = (error, request, response, next) => {
 }
 
 // Identifies user from token
-const userExtractor = (request, response, next) => {
-    // extract token
-    const authorization = request.get('authorization')
-    if (authorization && authorization.startsWith('Bearer ')) {
+const userExtractor = async (request, response, next) => {
+    try {
+        const authorization = request.get('authorization')
+
+        //if no token sent with request
+        if (!authorization || !authorization.startsWith('Bearer ')){
+            request.token = null
+            request.user = null
+            return next()
+        }
+
         request.token = authorization.replace('Bearer ', '')
 
-        const decodedToken = jwt.verify(request.token, process.env.SECRET)
-        if(decodedToken){
-            request.user = User.findById(decodedToken.id)
-        } else {
-            return response.status(401).json({error: 'invalid token'})
-        }
-    } else {
-        request.token = null
-    }
+        try {
+            const decodedToken = jwt.verify(request.token, process.env.SECRET)
 
-    next()
+            if(!decodedToken || !decodedToken.id){
+                return response.status(401).json({error: "token invalid or missing user id"})
+            }
+
+            const user = await User.findById(decodedToken.id)
+
+            if(!user) {
+                return response.status(401).json({error: "user not found"})
+            }
+
+            request.user = user
+
+        } catch (tokenError) {
+            return response.status(401).json({error: 'token invalid or expired', details: tokenError.message})
+        }
+
+        next()
+
+    } catch (error) {
+        next(error)
+    }
+}
+
+// checks event ownership
+const checkEventOwner = async (request, response, next) => {
+    try {
+        const eventId = request.params.id
+
+        if (!eventId) {
+            return response.status(400).json({error: "Event ID is required"})
+        }
+
+        if (!request.user) {
+            return response.status(401).json({error: "Authentication required"})
+        }
+
+        const event = await Event.findById(eventId)
+
+        if(!event) {
+            return response.status(404).json({error: "Event not found"})
+        }
+
+        if (!event.createdBy.equals(request.user._id)) {
+            return response.status(403).json({error: "Request Denied! You do not have the required permissions"})
+        }
+
+        request.event = event
+        next()
+    } catch (error) {
+        next(error)
+    }
 }
 
 
@@ -66,5 +117,6 @@ module.exports = {
     requestLogger,
     errorHandler,
     unknownEndpoint,
-    userExtractor
+    userExtractor,
+    checkEventOwner
 }

@@ -27,7 +27,29 @@ const getAllUsers = async (request, response) => {
     response.status(200).json(users)
 }
 
+// edit user
+const editUser = async (request, response) => {
+    const body = request.body
+    const userToEditId = request.user.id
+
+    const updatedUser = await User.findByIdAndUpdate(
+        userToEditId,
+        body,
+        {new: true, runValidators: true}
+    )
+
+    response.status(200).json({
+        success:true,
+        data: {
+            id: updatedUser._id,
+            name: updatedUser.name,
+            phoneNumber: updatedUser.phoneNumber
+        }
+    })
+}
+
 module.exports = {
     createUser,
-    getAllUsers
+    getAllUsers,
+    editUser
 }
