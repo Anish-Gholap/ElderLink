@@ -9,8 +9,10 @@ const eventsRouter = require('./views/events')
 const loginRouter = require('./views/login')
 const usersRouter = require('./views/users')
 const eventsAttendanceRouter = require('./views/eventsAttendance')
+const locationsRouter = require('./views/locations')
 const middlewares = require('./utils/middlewares')
 const {userExtractor} = require("./utils/middlewares");
+const {initializeCache} = require('./services/locations')
 
 // MongoDB Connection
 mongoose.set('strictQuery', false)
@@ -24,6 +26,17 @@ mongoose.connect(config.MONGODB_URI)
         logger.error('error connecting to MongoDB', error.message)
     })
 
+const startCache = async () => {
+    try {
+        await initializeCache()
+
+    } catch (error) {
+        console.error('Failed to initialize location cache: ', error)
+    }
+}
+
+startCache()
+
 // Middlewares
 app.use(cors())
 app.use(express.static('dist'))
@@ -35,6 +48,7 @@ app.use('/api/login', loginRouter)
 app.use('/api/events', eventsRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/events/', eventsAttendanceRouter)
+app.use('/api/locations', locationsRouter)
 
 app.use(middlewares.unknownEndpoint)
 app.use(middlewares.errorHandler)
