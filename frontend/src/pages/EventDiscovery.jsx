@@ -32,7 +32,8 @@ const EventDiscovery = () => {
     if (communityClub) params.append("communityClub", communityClub)
 
     try {
-      const res = await fetch(`/search?${params.toString()}`)
+      const res = await fetch(`http://localhost:3002/api/search?${params.toString()}`)
+
       const data = await res.json()
       setSearchResults(data)
     } catch (error) {
