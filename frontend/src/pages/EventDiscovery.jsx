@@ -77,8 +77,12 @@ const EventDiscovery = () => {
       </form>
 
       {/* 🗂 Event Cards */}
-      {eventsToDisplay.map(event => 
-        <EventCard event={event} key={event.id} />
+      {eventsToDisplay && eventsToDisplay.length > 0 ? (
+        eventsToDisplay.map(event => 
+          <EventCard event={event} key={event.id} />
+        )
+      ) : (
+        <p>No events found.</p>
       )}
 
       <CreateEventButton />
