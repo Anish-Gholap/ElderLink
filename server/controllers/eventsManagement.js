@@ -39,8 +39,11 @@ const addEvent = async (request, response) => {
 
     console.log(user)
 
+    const eventDate = new Date(body.date)
+
     const event = new Event({
         ...body,
+        date: eventDate,
         createdBy: user.id
     })
 
@@ -78,16 +81,21 @@ const editEvent = async (request, response) => {
     const eventId = request.event.id
     const body = request.body
 
+    const updateData = {...body}
+
+    if (updateData.date) {
+        updateData.eventDate = new Data(updateData.date)
+        delete updateData.date
+    }
+
     const updatedEvent = await Event.findByIdAndUpdate(
         eventId,
-        {...body},
+        updateData,
         {new: true, runValidators: true}
     )
 
     response.status(200).end()
 }
-
-
 
 
 module.exports = {

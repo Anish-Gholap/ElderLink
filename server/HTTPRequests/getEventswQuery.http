@@ -1,0 +1,15 @@
+### Search by search term
+GET http://localhost:3002/api/search?searchTerm=go
+Accept: application/json
+
+### Filter by community club
+GET http://localhost:3002/api/search?communityClub=nanyang
+Accept: application/json
+
+### Get events by distance
+GET http://localhost:3002/api/search?lat=1.30547641732019964&long=103.910560313669
+Accept: application/json
+
+### Filter by date
+GET http://localhost:3002/api/search?date=2025-03-21
+Accept: application/json

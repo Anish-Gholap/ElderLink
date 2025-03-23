@@ -42,15 +42,35 @@ const fetchLocationsFromAPI = async () => {
         const text = await response.text()
         const data = JSON.parse(text)
 
-        const ccData = data.features.map(feature => {
-            return parseDescription(feature.properties.Description);
+        // CC Names only
+        // const ccData = data.features.map(feature => {
+        //     return parseDescription(feature.properties.Description);
+        // })
+        //
+        // const ccNames = ccData.map(data => data.NAME);
+        // //console.log("Community club names:", ccNames);
+
+        // CC Names and Coordinates
+        const ccDetails = data.features.map(feature => {
+            const description = parseDescription(feature.properties.Description)
+            const coordinates = feature.geometry.coordinates
+
+            return {
+                name: description.NAME,
+                address: {
+                    postalCode: description.ADDRESSPOSTALCODE,
+                    street: description.ADDRESSSTREETNAME,
+                    block: description.ADDRESSBLOCKHOUSENUMBER
+                },
+                location: {
+                    latitude: coordinates[1],
+                    longitude: coordinates[0]
+                },
+                description: description.DESCRIPTION
+            }
         })
 
-        // Now you can access the name and other fields
-        const ccNames = ccData.map(data => data.NAME);
-        console.log("Community club names:", ccNames);
-
-        return ccNames
+        return ccDetails
 
 
     } catch(e) {
@@ -82,8 +102,17 @@ const getLocations = async () => {
     return locationsCache
 }
 
+const getLocationNames = async () => {
+    if (!locationsCache || Date.now() - lastFetchTime > CACHE_TTL) {
+        await refreshCache()
+    }
+
+    return locationsCache.map(location => location.name)
+}
+
 module.exports = {
     initializeCache,
     refreshCache,
-    getLocations
+    getLocations,
+    getLocationNames
 }
