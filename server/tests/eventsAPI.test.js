@@ -18,11 +18,13 @@ beforeEach(async () => {
     await User.deleteMany({})
 
     await Event.insertMany(helper.initialEvents)
+    console.log("Events in DB")
 
     const passwordHash = await bcrypt.hash('eventsTest', 10)
     const user = new User ({
         username: 'eventsTest',
-        passwordHash: passwordHash
+        passwordHash: passwordHash,
+        phoneNumber: "99999999"
     })
     await user.save()
 
@@ -41,28 +43,27 @@ afterEach(async () => {
 describe("testing GET /events", () => {
     test("events returned as JSON with status code 200", async() => {
         await api
-            .get('/events')
+            .get('/api/events')
             .expect(200)
             .expect('Content-Type', /application\/json/)
     })
 
     test("correct number of events returned", async() => {
-        const response = await api.get('/events')
+        const response = await api.get('/api/events')
         assert.strictEqual(response.body.length, helper.initialEvents.length)
     })
 })
 
-describe("testing POST /events", () => {
-    const newEvent = {
-        title: "Squash",
-        location: "Tampines CC",
-        dateTime: "20/3/25",
-        numAttendees: 2,
-        description: " Squash match"
-    }
-})
+// describe("testing POST /events", () => {
+//     const newEvent = {
+//         title: "Squash",
+//         location: "Tampines CC",
+//         date: "2025-03-20T11:00:00Z",
+//         numAttendees: 2,
+//         description: " Squash match"
+//     }
+// })
 
 after(async () => {
-    //console.log("END: Users in DB: ", await usersinDB().length, "Events in DB: ", await eventsInDB().length)
     await mongoose.connection.close()
 })

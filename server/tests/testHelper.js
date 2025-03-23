@@ -5,7 +5,7 @@ const initialEvents = [
     {
         title: "Chess",
         description: "Chess",
-        dateTime: "18/03/25",
+        date: "2025-03-18T11:00:00Z",
         location: "Nanyang CC",
         numAttendees: 2
     },
@@ -13,7 +13,7 @@ const initialEvents = [
     {
         title: "Mahjong",
         description: "Mahjong",
-        dateTime: "19/03/25",
+        date: "2025-03-19T16:00:00Z",
         location: "Jurong West CC",
         numAttendees: 4
     }
