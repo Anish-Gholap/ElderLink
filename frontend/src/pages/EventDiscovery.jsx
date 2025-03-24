@@ -1,11 +1,11 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import axios from "axios"
 import EventCard from "../components/EventCard"
 import { useEventsContext } from "../contexts/EventsContext"
 import { useNavigate } from "react-router-dom"
 
 const CreateEventButton = () => {
   const navigate = useNavigate()
-
   return (
     <div>
       <button onClick={() => navigate("/create-event")}>
@@ -23,21 +23,45 @@ const EventDiscovery = () => {
   const [communityClub, setCommunityClub] = useState("")
   const [searchResults, setSearchResults] = useState(null)
 
+  // 📍 Load nearby events when page loads using geolocation
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const { latitude, longitude } = position.coords
+        console.log("📍 Got user location:", latitude, longitude)
+
+        try {
+          const res = await axios.get("http://localhost:3002/api/search", {
+            params: {
+              lat: latitude,
+              long: longitude,
+            },
+          })
+          console.log("✅ Events near user:", res.data)
+          setSearchResults(res.data)
+        } catch (err) {
+          console.error("❌ Error fetching nearby events", err)
+        }
+      },
+      (err) => {
+        console.error("❌ Failed to get user location", err)
+      }
+    )
+  }, [])
+
+  // 🔍 Manual search form
   const handleSearch = async (e) => {
     e.preventDefault()
 
-    const params = new URLSearchParams()
-    if (searchTerm) params.append("searchTerm", searchTerm)
-    if (searchDate) params.append("date", searchDate)
-    if (communityClub) params.append("communityClub", communityClub)
-
     try {
-      const res = await fetch(`http://localhost:3002/api/search?${params.toString()}`)
-      // To update, dont use fetch, use axios.get() instead
-      // await axios.get("/api/search", { params })
-
-      const data = await res.json()
-      setSearchResults(data)
+      const res = await axios.get("http://localhost:3002/api/search", {
+        params: {
+          searchTerm,
+          date: searchDate,
+          communityClub,
+        },
+      })
+      setSearchResults(res.data)
     } catch (error) {
       console.error("Error fetching search results:", error)
     }
@@ -81,9 +105,9 @@ const EventDiscovery = () => {
 
       {/* 🗂 Event Cards */}
       {eventsToDisplay && eventsToDisplay.length > 0 ? (
-        eventsToDisplay.map(event => 
+        eventsToDisplay.map(event => (
           <EventCard event={event} key={event.id} />
-        )
+        ))
       ) : (
         <p>No events found.</p>
       )}
