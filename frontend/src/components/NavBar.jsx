@@ -38,11 +38,15 @@ const NavBar = () => {
       {showSidebar && (
         <div className="sidebar-overlay" onClick={closeSidebar}>
           <div className="sidebar" onClick={(e) => e.stopPropagation()}>
-            <button onClick={closeSidebar}>❌</button>
+            <div className="sidebar-header">
+              <h2 className="sidebar-title">ElderLink</h2>
+              <button onClick={closeSidebar}>❌</button>
+            </div>
             <ul className="sidebar-links">
               <li onClick={() => { navigate("/event-discovery"); closeSidebar() }}>
                 Events Discovery
               </li>
+              <hr />
               <li onClick={() => { navigate("/profile"); closeSidebar() }}>
                 Profile Page
               </li>

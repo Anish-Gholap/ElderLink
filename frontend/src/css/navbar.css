@@ -119,3 +119,41 @@
   cursor: pointer;
   color: black;
 }
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: black;
+  position: relative;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #ddd;
+}
+
+.sidebar-header h2 {
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.sidebar-links li {
+  padding: 12px 0;
+  font-size: 1.1rem;
+  cursor: pointer;
+  color: black;
+}
+
+.sidebar-links hr {
+  border: none;
+  border-top: 1px solid #ccc;
+  margin: 4px 0;
+}
+
+.sidebar-title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin: 0;
+}
