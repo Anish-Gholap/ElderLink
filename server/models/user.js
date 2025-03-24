@@ -16,12 +16,18 @@ const userSchema = new mongoose.Schema({
     phoneNumber: {
         type: String,
         required: true,
-        minLength: [8, "Enter SG phone number without +65 prefix"]
+        minLength: [8, "Enter SG phone number without +65 prefix"],
+        unique: true
     },
     eventsAttending: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Event'
+    }],
+    notifications: [{ 
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Notification'
     }]
+    
 })
 
 userSchema.set('toJSON', {

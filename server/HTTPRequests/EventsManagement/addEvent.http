@@ -1,0 +1,13 @@
+POST http://localhost:3002/api/events
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFuaXNoIiwiaWQiOiI2N2UxMGY3ODAyMTY1ZTViYzgzYWZiZmUiLCJpYXQiOjE3NDI4MDMyNTEsImV4cCI6MTc0MjgwNjg1MX0.00UveiIYBQs_VG5Sn9TtRG_VErlMOWjV25FQglquZ44
+
+{
+  "title": "Mahjong",
+  "location": "Boon Lay CC",
+  "date": "2025-03-21T14:00:00Z",
+  "description": "checkers",
+  "numAttendees": 4
+}
+
+###

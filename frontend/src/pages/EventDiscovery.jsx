@@ -1,11 +1,10 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import EventCard from "../components/EventCard"
 import { useEventsContext } from "../contexts/EventsContext"
 import { useNavigate } from "react-router-dom"
 
 const CreateEventButton = () => {
   const navigate = useNavigate()
-
   return (
     <div>
       <button onClick={() => navigate("/create-event")}>
@@ -23,6 +22,33 @@ const EventDiscovery = () => {
   const [communityClub, setCommunityClub] = useState("")
   const [searchResults, setSearchResults] = useState(null)
 
+  const [userLat, setUserLat] = useState(null)
+  const [userLong, setUserLong] = useState(null)
+
+  // Get user location (but don't fetch events yet)
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords
+        console.log("User location:", latitude, longitude)
+        setUserLat(latitude)
+        setUserLong(longitude)
+
+        // Ready for use later if needed:
+        const params = new URLSearchParams()
+        params.append("lat", latitude)
+        params.append("long", longitude)
+        const searchUrl = `/api/search?${params.toString()}`
+        console.log("Prepared request:", searchUrl)
+
+        // Don't send the request yet
+      },
+      (error) => {
+        console.error("❌ Failed to get user location", error)
+      }
+    )
+  }, [])
+
   const handleSearch = async (e) => {
     e.preventDefault()
 
@@ -33,7 +59,6 @@ const EventDiscovery = () => {
 
     try {
       const res = await fetch(`http://localhost:3002/api/search?${params.toString()}`)
-
       const data = await res.json()
       setSearchResults(data)
     } catch (error) {
@@ -54,7 +79,14 @@ const EventDiscovery = () => {
     <>
       <h1>Discover Events</h1>
 
-      {/* 🔍 Search Form */}
+      {/* Show user's coordinates */}
+      {userLat && userLong ? (
+        <p>Your location: {userLat.toFixed(5)}, {userLong.toFixed(5)}</p>
+      ) : (
+        <p>Getting your location...</p>
+      )}
+
+      {/* Search Form */}
       <form onSubmit={handleSearch} style={{ marginBottom: "1rem" }}>
         <input
           type="text"
@@ -77,11 +109,11 @@ const EventDiscovery = () => {
         <button type="button" onClick={handleReset}>Reset</button>
       </form>
 
-      {/* 🗂 Event Cards */}
+      {/* Event Cards */}
       {eventsToDisplay && eventsToDisplay.length > 0 ? (
-        eventsToDisplay.map(event => 
+        eventsToDisplay.map(event => (
           <EventCard event={event} key={event.id} />
-        )
+        ))
       ) : (
         <p>No events found.</p>
       )}

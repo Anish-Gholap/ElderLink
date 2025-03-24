@@ -22,7 +22,7 @@ const unknownEndpoint = (request, response) => {
 
 // handle errors
 const errorHandler = (error, request, response, next) => {
-    logger.error(error)
+    //logger.error(error)
 
     //handle specific errors
     if (error.name === 'CastError') {
