@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import EventCard from "../components/EventCard"
 import { useEventsContext } from "../contexts/EventsContext"
 import { useNavigate } from "react-router-dom"
+import { Typography, TextField, Button } from "@mui/material"
 
 const CreateEventButton = () => {
   const navigate = useNavigate()
@@ -77,7 +78,7 @@ const EventDiscovery = () => {
 
   return (
     <>
-      <h1>Discover Events</h1>
+      <Typography textAlign='center' variant="h4">Discover Events</Typography>
 
       {/* Show user's coordinates */}
       {userLat && userLong ? (
@@ -87,29 +88,34 @@ const EventDiscovery = () => {
       )}
 
       {/* Search Form */}
-      <form onSubmit={handleSearch} style={{ marginBottom: "1rem" }}>
-        <input
-          type="text"
-          placeholder="Event Name"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-        <input
-          type="date"
-          value={searchDate}
-          onChange={(e) => setSearchDate(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="Community Club"
-          value={communityClub}
-          onChange={(e) => setCommunityClub(e.target.value)}
-        />
-        <button type="submit">Search</button>
-        <button type="button" onClick={handleReset}>Reset</button>
-      </form>
+        <form onSubmit={handleSearch} style={{ marginBottom: "1rem", display: "flex", flexDirection: "column", gap: "1rem" }}>
+          <TextField
+            label="Event Name"
+            variant="outlined"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <TextField
+            label="Date"
+            type="date"
+            InputLabelProps={{ shrink: true }}
+            variant="outlined"
+            value={searchDate}
+            onChange={(e) => setSearchDate(e.target.value)}
+          />
+          <TextField
+            label="Community Club"
+            variant="outlined"
+            value={communityClub}
+            onChange={(e) => setCommunityClub(e.target.value)}
+          />
+          <div style={{ display: "flex", gap: "1rem" }}>
+            <Button type="submit" variant="contained" color="primary">Search</Button>
+            <Button type="button" variant="outlined" onClick={handleReset}>Reset</Button>
+          </div>
+        </form>
 
-      {/* Event Cards */}
+        {/* Event Cards */}
       {eventsToDisplay && eventsToDisplay.length > 0 ? (
         eventsToDisplay.map(event => (
           <EventCard event={event} key={event.id} />

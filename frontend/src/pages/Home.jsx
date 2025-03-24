@@ -1,3 +1,4 @@
+import { Box, Button, Typography } from '@mui/material'
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
@@ -8,17 +9,27 @@ const Home = () => {
     window.localStorage.clear()
     console.log("local storage cleared")
   }, [])
-  
+
   return (
-    <div>
-      <h2> Welcome to ElderLink </h2>
-      <p> Login To Begin </p>
+    <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
+      <img src="\image 28.png" alt="ElderLink" />
+      <Typography variant="h3" fontWeight={600} mt={2}>
+        ElderLink
+      </Typography>
+      <Typography fontSize='1rem' fontStyle='italic'>
+        Connecting Seniors to the Community
+      </Typography>
       <Link to="/login">
-        <button>
+        <Button variant="contained" color="warning" style={{ marginTop: 40, width: "8rem" }}>
           Login
-        </button>
+        </Button>
       </Link>
-    </div>
+      <Link to="/register">
+        <Button variant="outlined" color="info" style={{ marginTop: 20, width: "8rem" }}>
+          Sign Up
+        </Button>
+      </Link>
+    </Box>
   )
 }
 

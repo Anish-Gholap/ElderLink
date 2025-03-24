@@ -2,8 +2,6 @@
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -21,8 +19,10 @@ a:hover {
 
 body {
   margin: 0;
+  padding-top: 3rem; /* 20px padding to stop content from being hidden under the navbar*/
   display: flex;
-  place-items: center;
+  justify-content: center;
+  align-items: center;
   min-width: 320px;
   min-height: 100vh;
 }
@@ -32,5 +32,9 @@ h1 {
   line-height: 1.1;
 }
 
+h1,h2,h3,h4,h5,h6 {
+  font-weight: 600;
+  margin: 0;
+}
 
 
