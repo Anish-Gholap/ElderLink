@@ -8,12 +8,14 @@ const logger = require('./utils/logger')
 const eventsRouter = require('./views/events')
 const loginRouter = require('./views/login')
 const usersRouter = require('./views/users')
+const notificationsRouter = require ('./views/notifications')
 const eventsAttendanceRouter = require('./views/eventsAttendance')
 const locationsRouter = require('./views/locations')
 const searchRouter = require('./views/search')
 const middlewares = require('./utils/middlewares')
 const {userExtractor} = require("./utils/middlewares");
 const {initializeCache} = require('./services/locations')
+
 
 // MongoDB Connection
 mongoose.set('strictQuery', false)
@@ -48,6 +50,7 @@ app.use(middlewares.userExtractor)
 app.use('/api/login', loginRouter)
 app.use('/api/events', eventsRouter)
 app.use('/api/users', usersRouter)
+app.use('/api/notifications', notificationsRouter)
 app.use('/api/events/', eventsAttendanceRouter)
 app.use('/api/locations', locationsRouter)
 app.use('/api/search', searchRouter)

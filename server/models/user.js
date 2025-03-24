@@ -22,7 +22,12 @@ const userSchema = new mongoose.Schema({
     eventsAttending: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Event'
+    }],
+    notifications: [{ 
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Notification'
     }]
+    
 })
 
 userSchema.set('toJSON', {

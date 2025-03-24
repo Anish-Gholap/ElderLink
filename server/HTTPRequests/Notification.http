@@ -1,0 +1,9 @@
+POST http://localhost:3002/api/notifications/amended/67e043ad87628fc62fa0632b
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3R1c2VyMSIsImlkIjoiNjdlMDQzYWQ4NzYyOGZjNjJmYTA2MzJiIiwiaWF0IjoxNzQyNzU0Mzg5LCJleHAiOjE3NDI3NTc5ODl9.P5MMIdVOrBS-yp00bmR88GeAcy_1Z4WusGPLToKEslI
+
+{
+  "eventId": "67e0431e87628fc62fa06320", 
+  "message": "The event has been amended.",
+  "notificationType": "Amended"
+}
