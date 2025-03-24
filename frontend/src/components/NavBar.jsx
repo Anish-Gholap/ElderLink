@@ -47,8 +47,19 @@ const NavBar = () => {
                 Events Discovery
               </li>
               <hr />
+              <li onClick={() => { navigate("/event-management"); closeSidebar() }}>
+                Events Management 
+                (To Implement)
+              </li>
+              <hr />
+              <li onClick={() => { navigate("/notifictions"); closeSidebar() }}>
+                Notifications
+                (To Implement)
+              </li>
+              <hr />
               <li onClick={() => { navigate("/profile"); closeSidebar() }}>
-                Profile Page
+                Profile Page 
+                (To Implement)
               </li>
             </ul>
           </div>
