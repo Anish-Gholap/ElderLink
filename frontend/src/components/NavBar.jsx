@@ -49,7 +49,6 @@ const NavBar = () => {
               <hr />
               <li onClick={() => { navigate("/events-management"); closeSidebar() }}>
                 Events Management 
-                (To Implement)
               </li>
               <hr />
               <li onClick={() => { navigate("/notifictions"); closeSidebar() }}>
