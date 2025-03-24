@@ -33,6 +33,8 @@ const EventDiscovery = () => {
 
     try {
       const res = await fetch(`http://localhost:3002/api/search?${params.toString()}`)
+      // To update, dont use fetch, use axios.get() instead
+      // await axios.get("/api/search", { params })
 
       const data = await res.json()
       setSearchResults(data)
