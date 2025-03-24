@@ -1,43 +1,59 @@
-import { useEventsContext } from "../contexts/EventsContext"
-import EventCard from "../components/EventCard"
-import { useNavigate } from "react-router-dom"
+import { useEventsContext } from "../contexts/EventsContext";
+import EventCard from "../components/EventCard";
+import { useNavigate } from "react-router-dom";
+import { Button, Container, Typography, Box } from '@mui/material';
 
 const CreateEventButton = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   return (
-    <div>
-      <button onClick={() => navigate("/create-event")}>
+    <Box sx={{ mb: 2 }}>
+      <Button variant="contained" color="primary" onClick={() => navigate("/create-event")}>
         Add New Event
-      </button>
-    </div>
-  )
-}
+      </Button>
+    </Box>
+  );
+};
 
 const ManageEvents = () => {
-  const {myEvents, removeEvent} = useEventsContext()
-  const navigate = useNavigate()
+  const { myEvents, removeEvent } = useEventsContext();
+  const navigate = useNavigate();
 
   const handleDelete = (id) => {
-    removeEvent(id).catch(err => console.error(err))
-  } 
+    removeEvent(id).catch(err => console.error(err));
+  };
 
   return (
-    <div>
-      <h2> Created By You </h2>
-      {myEvents.map(event => {
-        return (
-          <div key={event.id} style={{ marginBottom: "1rem" }}>
-            {console.log("Event id ", event.id)}
-            <EventCard event={event} key={event.id} />
-            <button onClick={() => navigate(`/events/${event.id}/edit`)}>Edit</button>
-            <button onClick={() => handleDelete(event.id)}>Delete</button>
-          </div>
-        )
-      })}
+    <Container>
+      <Typography variant="h4" gutterBottom>
+        Created By You
+      </Typography>
+      {myEvents.map(event => (
+        <Box key={event.id} sx={{ mb: 2 }}>
+          {console.log("Event id ", event.id)}
+          <EventCard event={event} />
+          <Box sx={{ mt: 1 }}>
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={() => navigate(`/events/${event.id}/edit`)}
+              sx={{ mr: 1 }}
+            >
+              Edit
+            </Button>
+            <Button
+              variant="outlined"
+              color="secondary"
+              onClick={() => handleDelete(event.id)}
+            >
+              Delete
+            </Button>
+          </Box>
+        </Box>
+      ))}
       <CreateEventButton />
-    </div>
-  )
-}
+    </Container>
+  );
+};
 
-export default ManageEvents
+export default ManageEvents;

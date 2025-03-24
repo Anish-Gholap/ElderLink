@@ -4,7 +4,7 @@ import loginService from "../services/login"
 import { useAuthContext } from "../contexts/AuthContext"
 import { useNavigate } from "react-router-dom"
 import { TextField, Box, Typography } from "@mui/material"
-import ArrowBackIcon from '@mui/icons-material/ArrowBack' // Import the arrow icon
+import { FaArrowLeft } from "react-icons/fa";
 
 const Login = () => {
   const [username, setUsername] = useState("")
@@ -48,10 +48,10 @@ const Login = () => {
 
   return (
     <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
-      <Box position="fixed" top={0} left={0} p={2}>
-        <ArrowBackIcon fontSize="large" />
+      <Box position="fixed" display='flex' alignItems='center' top={0} left={0} p={2} onClick={() => navigate(-1)} sx={{ cursor: "pointer" }}>
+        <FaArrowLeft fontSize="2rem" />
       </Box>
-      <Typography variant="h4" mt={2}>
+      <Typography variant="h4">
         Login
       </Typography>
       <LoginForm
@@ -62,7 +62,7 @@ const Login = () => {
         handlePasswordChange={({ target }) => setPassword(target.value)}
       />
       <Typography mt={2}>
-        Don't have an account? <a href="/register">Register</a>
+        Don't have an account? <a href="/signup">Sign Up</a>
       </Typography>
     </Box>
   )

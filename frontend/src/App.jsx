@@ -11,6 +11,7 @@ import ManageEvents from './pages/ManageEvents'
 import CreateEvent from './pages/CreateEvent'
 import EventDetails from './pages/EventDetails'
 import EditEvent from './pages/EditEvent'
+import SignUp from './pages/SignUp'
 
 const App = () => {
   return (
@@ -20,6 +21,7 @@ const App = () => {
           <Routes>
             <Route path='/' element={<Home />} />
             <Route path='/login' element={<Login />} />
+            <Route path='/signup' element={<SignUp />} />
 
             {/* Protected Route for Pages only accessible after login */}
             <Route path='/event-discovery' element= {

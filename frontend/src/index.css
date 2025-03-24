@@ -19,12 +19,12 @@ a:hover {
 
 body {
   margin: 0;
-  padding-top: 3rem; /* 20px padding to stop content from being hidden under the navbar*/
+  padding-top: 10vh; /* 20px padding to stop content from being hidden under the navbar*/
   display: flex;
   justify-content: center;
   align-items: center;
   min-width: 320px;
-  min-height: 100vh;
+  min-height: 70vh;
 }
 
 h1 {

@@ -2,15 +2,8 @@ import { useState } from "react"
 import { Link, useNavigate, useLocation } from "react-router-dom"
 import { useAuthContext } from "../contexts/AuthContext"
 import "../css/navbar.css"
+import { Box } from "@mui/material"
 
-const BackButton = () => {
-  const navigate = useNavigate()
-  return (
-    <button onClick={() => navigate(-1)}>
-      return
-    </button>
-  )
-}
 
 const NavBar = () => {
   const { logout } = useAuthContext()
@@ -25,10 +18,21 @@ const NavBar = () => {
     <>
       <nav className="navbar">
         <button className="burger-btn" onClick={toggleSidebar}>☰</button>
-        <div className="logo">ElderLink</div>
+        <div className="logo">
+          <Box display="flex" alignItems="center">
+          <img src="/image 28.png" alt="ElderLink Logo" style={{
+            width: 40,
+            height: 40,
+            marginRight: 10
+          }} />
+          ElderLink
+          </Box>
+        </div>
         <ul className="nav-links">
           {location.pathname !== "/event-discovery" && (
-            <li><BackButton /></li>
+            <li>
+              <Link to={-1}>Go Back</Link>
+            </li>
           )}
           <li><Link to="/events-management">Manage Events</Link></li>
           <li><button className="logout-btn" onClick={logout}>Logout</button></li>
@@ -48,7 +52,7 @@ const NavBar = () => {
               </li>
               <hr />
               <li onClick={() => { navigate("/events-management"); closeSidebar() }}>
-                Events Management 
+                Events Management
               </li>
               <hr />
               <li onClick={() => { navigate("/notifictions"); closeSidebar() }}>
@@ -57,7 +61,7 @@ const NavBar = () => {
               </li>
               <hr />
               <li onClick={() => { navigate("/profile"); closeSidebar() }}>
-                Profile Page 
+                Profile Page
                 (To Implement)
               </li>
             </ul>

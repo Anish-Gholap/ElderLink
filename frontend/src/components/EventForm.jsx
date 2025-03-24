@@ -1,3 +1,6 @@
+import React from 'react';
+import { TextField, Button, Grid, Box } from '@mui/material';
+
 const EventForm = ({
   handleSubmit,
   handleCancel,
@@ -21,103 +24,117 @@ const EventForm = ({
   minutes
 }) => {
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        Event Name
-        <input
-          type="text"
-          name="Event Name"
-          value={eventName}
-          onChange={handleEventNameChange}
-          required
-        />
-      </div>
-
-      <div>
-        Location
-        <input
-          type="text"
-          name="Location"
-          value={eventLocation}
-          onChange={handleEventLocationChange}
-          required
-        />
-      </div>
-
-      <div>
-        Number of Attendees
-        <input
-          type="number"
-          name="Number of Attendees"
-          value={eventNumAttendees}
-          onChange={handleEventNumAttendeesChange}
-          required
-        />
-      </div>
-
-      <div>
-        Date & Time
-        <div>
-          <input
-            type="number"
-            name="Year"
-            placeholder="Year (e.g. 2025)"
-            value={year}
-            onChange={handleYearChange}
+    <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3, maxWidth: 600 }}>
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <TextField
+            fullWidth
+            label="Event Name"
+            value={eventName}
+            onChange={handleEventNameChange}
             required
           />
-          <input
-            type="number"
-            name="Month"
-            placeholder="Month (0-11)"
-            value={month}
-            onChange={handleMonthChange}
-            required
-          />
-          <input
-            type="number"
-            name="Day"
-            placeholder="Day"
-            value={day}
-            onChange={handleDayChange}
-            required
-          />
-          <input
-            type="number"
-            name="Hours"
-            placeholder="Hours (0-23)"
-            value={hours}
-            onChange={handleHoursChange}
-            required
-          />
-          <input
-            type="number"
-            name="Minutes"
-            placeholder="Minutes (0-59)"
-            value={minutes}
-            onChange={handleMinutesChange}
-            required
-          />
-        </div>
-      </div>
+        </Grid>
 
-      <div>
-        Description
-        <input
-          type="text"
-          name="Description"
-          value={eventDescription}
-          onChange={handleEventDescriptionChange}
-          required
-        />
-      </div>
+        <Grid item xs={12}>
+          <TextField
+            fullWidth
+            label="Location"
+            value={eventLocation}
+            onChange={handleEventLocationChange}
+            required
+          />
+        </Grid>
 
-      <div>
-        <button onClick={handleCancel} type="button">Cancel</button>
-        <button type="submit">Save</button>
-      </div>
-    </form>
-  )
+        <Grid item xs={12}>
+          <TextField
+            fullWidth
+            label="Number of Attendees"
+            type="number"
+            value={eventNumAttendees}
+            onChange={handleEventNumAttendeesChange}
+            required
+          />
+        </Grid>
+
+        <Grid item xs={12}>
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={4}>
+              <TextField
+                fullWidth
+                label="Year (e.g. 2025)"
+                type="number"
+                value={year}
+                onChange={handleYearChange}
+                required
+              />
+            </Grid>
+            <Grid item xs={12} sm={2}>
+              <TextField
+                fullWidth
+                label="Month (0-11)"
+                type="number"
+                value={month}
+                onChange={handleMonthChange}
+                required
+              />
+            </Grid>
+            <Grid item xs={12} sm={2}>
+              <TextField
+                fullWidth
+                label="Day"
+                type="number"
+                value={day}
+                onChange={handleDayChange}
+                required
+              />
+            </Grid>
+            <Grid item xs={12} sm={2}>
+              <TextField
+                fullWidth
+                label="Hours (0-23)"
+                type="number"
+                value={hours}
+                onChange={handleHoursChange}
+                required
+              />
+            </Grid>
+            <Grid item xs={12} sm={2}>
+              <TextField
+                fullWidth
+                label="Minutes (0-59)"
+                type="number"
+                value={minutes}
+                onChange={handleMinutesChange}
+                required
+              />
+            </Grid>
+          </Grid>
+        </Grid>
+
+        <Grid item xs={12}>
+          <TextField
+            fullWidth
+            label="Description"
+            value={eventDescription}
+            onChange={handleEventDescriptionChange}
+            required
+          />
+        </Grid>
+
+        <Grid item xs={12} sm={6}>
+          <Button fullWidth variant="contained" color="secondary" onClick={handleCancel}>
+            Cancel
+          </Button>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <Button fullWidth variant="contained" color="primary" type="submit">
+            Save
+          </Button>
+        </Grid>
+      </Grid>
+    </Box>
+  );
 }
 
-export default EventForm
+export default EventForm;

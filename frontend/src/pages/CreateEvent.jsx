@@ -2,6 +2,7 @@ import { useState } from "react"
 import EventForm from "../components/EventForm"
 import { useEventsContext } from "../contexts/EventsContext"
 import { useNavigate } from "react-router-dom"
+import { Typography } from "@mui/material"
 
 const CreateEvent = () => {
   const [eventName, setEventName] = useState("")
@@ -75,7 +76,9 @@ const CreateEvent = () => {
 
   return (
     <div>
-      <h1>Create Event</h1>
+      <Typography variant="h3" align="center" gutterBottom>
+        Create Event
+      </Typography>
       <EventForm 
         handleSubmit={handleEventCreation}
         handleCancel={handleCancel}
