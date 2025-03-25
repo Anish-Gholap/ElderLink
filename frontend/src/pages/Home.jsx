@@ -24,7 +24,7 @@ const Home = () => {
           Login
         </Button>
       </Link>
-      <Link to="/register">
+      <Link to="/signup">
         <Button variant="outlined" color="info" style={{ marginTop: 20, width: "8rem" }}>
           Sign Up
         </Button>
