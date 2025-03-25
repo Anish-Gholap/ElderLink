@@ -38,7 +38,7 @@ const getEventById = async (eventId) => {
 }
 
 const editEvent = async (eventId, updatedEvent, token) => {
-  const response = await axios.put(`${baseUrl}/${eventId}`, updatedEvent, {
+  const response = await axios.patch(`${baseUrl}/${eventId}`, updatedEvent, {
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json"

@@ -29,22 +29,16 @@ const getNotifications = async (req, res) => {
 };
 
 
-
-
-
 // Create a notification for an amended event
-const AmendedMessage = async (req, res) => {
-  const { userId } = req.params;  // userId from URL
-  const { eventId, message, notificationType } = req.body;
-
+const AmendedMessage = async (userId, eventId, message, notificationType) => {
   try {
     if (!userId) {
-      return res.status(400).json({ error: 'UserId is required' });
+      throw new Error('UserId is required');
     }
 
     // Create a new notification
     const newNotification = new Notification({
-      userId: userId,  // userId from URL
+      userId: userId,  // userId passed to the function
       eventId: eventId,
       message: message,
       notificationType: notificationType,
@@ -53,31 +47,31 @@ const AmendedMessage = async (req, res) => {
     // Save the notification to the database
     await newNotification.save();
 
-    // Now, update the user's notifications array with the new notification ID
+    // Update the user's notifications array with the new notification ID
     await User.findByIdAndUpdate(
       userId,
       { $push: { notifications: newNotification._id } },  // Add notification to user's notifications array
       { new: true }  // Return the updated user document
     );
 
-    // Respond with success
-    res.status(201).json({ message: 'Notification sent successfully', newNotification });
+    // Optionally log success (you can remove this if not needed)
+    console.log('Notification sent successfully');
+
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Server error' });
+    throw new Error('Server error');
   }
 };
 
 
-// Create a notification for a deleted event
-const DeletedMessage = async (req, res) => {
-  try {
-    const { eventId, message } = req.body;
-    const userId = req.params.userId;  // Get userId from the URL params
 
+// Create a notification for a deleted event
+const DeletedMessage = async (userId, eventId, message) => {
+  try {
+    // Find the event by eventId
     const event = await Event.findById(eventId);
     if (!event) {
-      return res.status(404).json({ message: 'Event not found' });
+      throw new Error('Event not found');
     }
 
     // Create the notification for the "Deleted" event
@@ -98,12 +92,12 @@ const DeletedMessage = async (req, res) => {
       { new: true }  // Return the updated user document
     );
 
-    // Respond with the created notification
-    res.status(201).json({ message: 'Notification created and added to user notifications', notification });
+    console.log('Notification created and added to user notifications');
   } catch (error) {
-    res.status(500).json({ message: 'Server error', error });
+    console.error('Error creating notification:', error);
   }
 };
+
 
 
 // Remove a specific notification for the user

@@ -1,5 +1,6 @@
 const Event = require('../models/event')
 const User = require('../models/user')
+const {AmendedMessage, DeletedMessage } = require('../controllers/notifications')
 
 //handle get all events
 const getAllEvents = async (request, response) => {
@@ -62,6 +63,15 @@ const removeEvent = async (request, response) => {
     const user = request.user
     const eventAttendeesId = eventToDelete.attendees
 
+    for (const attendeeId of eventAttendeesId) {
+        await DeletedMessage(
+            attendeeId,  // userId of each attendee
+            eventToDelete._id,  // eventId
+            `The event ${eventToDelete.name} has been removed.`,  // message
+            'Deleted'  // notificationType
+        );
+    }
+
     await Event.findByIdAndDelete(eventToDelete._id)
 
     // Remove event from host eventsCreated
@@ -81,12 +91,13 @@ const removeEvent = async (request, response) => {
 
 const editEvent = async (request, response) => {
     const eventId = request.event.id
+    const eventAttendeesId = request.event.attendees
     const body = request.body
 
     const updateData = {...body}
 
     if (updateData.date) {
-        updateData.eventDate = new Data(updateData.date)
+        updateData.eventDate = new Date(updateData.date)
         delete updateData.date
     }
 
@@ -95,6 +106,15 @@ const editEvent = async (request, response) => {
         updateData,
         {new: true, runValidators: true}
     )
+
+    for (const attendeeId of eventAttendeesId) {
+        await AmendedMessage(
+            attendeeId,  // userId of each attendee
+            eventId,  // eventId
+            `The event ${request.event.name} has been amended.`,  // message
+            'Amended'  // notificationType
+        );
+    }
 
     response.status(200).end()
 }
