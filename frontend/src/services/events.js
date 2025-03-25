@@ -2,7 +2,7 @@ import axios from 'axios'
 const baseUrl = "/api/events"
 
 const getAllEvents = async () => {
-    const response = await axios.get(baseUrl)
+    const response = await axios.get(baseUrl) // Implement search instead from Server-HTTPRequests/getEventswQuery
     return response.data
 }
 
