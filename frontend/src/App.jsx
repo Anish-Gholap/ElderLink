@@ -6,6 +6,7 @@ import Home from './pages/Home'
 import Login from './pages/Login'
 import ProtectedRoute from './components/ProtectedRoute'
 import EventDiscovery from './pages/EventDiscovery'
+import { NotificationsProvider } from './contexts/NotificationsContext'
 import Layout from './components/Layout'
 import ManageEvents from './pages/ManageEvents'
 import CreateEvent from './pages/CreateEvent'
@@ -18,6 +19,7 @@ const App = () => {
   return (
     <AuthProvider>
       <EventsProvider>
+      <NotificationsProvider>
         <Layout>
           <Routes>
             <Route path='/' element={<Home />} />
@@ -57,6 +59,7 @@ const App = () => {
             } />
           </Routes>
         </Layout>
+        </NotificationsProvider>
       </EventsProvider>
     </AuthProvider>
   )
