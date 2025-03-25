@@ -1,7 +1,7 @@
 import { useEventsContext } from "../contexts/EventsContext";
 import EventCard from "../components/EventCard";
 import { useNavigate } from "react-router-dom";
-import { Button, Container, Typography, Box } from '@mui/material';
+import { Button, Container, Typography, Box, } from '@mui/material';
 import Toggle from "../components/Toggle"
 
 const CreateEventButton = () => {
@@ -26,17 +26,20 @@ const ManageEvents = () => {
 
   return (
     <Container>
-      <Toggle />
       <Typography variant="h4" gutterBottom>
-        Created By You
+        Manage Events
       </Typography>
+      <Toggle />
       {myEvents.map(event => (
-        <Box key={event.id} sx={{ mb: 2 }}>
+        <Box key={event.id} sx={{ mb: 2, position: "relative" }}>
           {console.log("Event id ", event.id)}
-          <EventCard event={event} />
-          <Box sx={{ mt: 1 }}>
+          <EventCard event={event} sx={{
+            minWidth: "300px",
+            position: "relative"
+          }} />
+          <Box sx={{ mt: 1, position: "absolute", right: 10, top:7 }}>
             <Button
-              variant="outlined"
+              variant="contained"
               color="primary"
               onClick={() => navigate(`/events/${event.id}/edit`)}
               sx={{ mr: 1 }}
@@ -44,7 +47,7 @@ const ManageEvents = () => {
               Edit
             </Button>
             <Button
-              variant="outlined"
+              variant="contained"
               color="secondary"
               onClick={() => handleDelete(event.id)}
             >

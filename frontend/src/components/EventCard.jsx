@@ -6,7 +6,7 @@ import { FaRegClock } from "react-icons/fa";
 import { FaPeopleGroup } from "react-icons/fa6";
 import { LuPartyPopper } from "react-icons/lu";
 
-const EventCard = ({ event }) => {
+const EventCard = ({ event, sx }) => {
   const formattedDate = new Date(event.date).toLocaleString("en-SG", {
     dateStyle: "medium",
     timeStyle: "short",
@@ -15,7 +15,7 @@ const EventCard = ({ event }) => {
 
   return (
     <Link to={`/events/${event.id}`} className="event-card-link" style={{ textDecoration: 'none' }}>
-      <Box className="event-card" style={{ padding: '16px', border: '1px solid #ccc', borderRadius: '8px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
+      <Box sx={sx} className="event-card" style={{ padding: '16px', border: '1px solid #ccc', borderRadius: '8px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
         <Typography variant="h5" component="h3" className="event-title" style={{ marginBottom: '8px' }}>
           <LuPartyPopper style={{ marginRight: '4px' }} />
           {event.title}
