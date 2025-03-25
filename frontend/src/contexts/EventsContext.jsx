@@ -103,7 +103,7 @@ export const EventsProvider = ({ children }) => {
       }
 
       // send updated event
-      await eventsService.joinEvent(eventId, user.id)
+      await eventsService.joinEvent(eventId, user.id, user.token)
       window.alert("Joined event successfully")
 
       // refresh event lists after update

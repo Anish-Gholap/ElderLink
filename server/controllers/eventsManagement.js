@@ -60,12 +60,14 @@ const addEvent = async (request, response) => {
 const removeEvent = async (request, response) => {
     const eventToDelete = request.event
     const user = request.user
+    const eventAttendeesId = eventToDelete.attendees
 
     await Event.findByIdAndDelete(eventToDelete._id)
 
     // Remove event from host eventsCreated
-    user.eventsCreated.filter(({_id}) => eventToDelete._id.toString() !== _id.toString())
-
+    user.eventsCreated = user.eventsCreated.filter(({ _id }) => eventToDelete._id.toString() !== _id.toString());
+    await user.save();
+    
     // Remove event from users attending list
     if (eventAttendeesId.length > 0) {
         await User.updateMany(
