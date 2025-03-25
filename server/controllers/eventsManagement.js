@@ -62,7 +62,7 @@ const removeEvent = async (request, response) => {
     const eventToDelete = request.event
     const user = request.user
     const eventAttendeesId = eventToDelete.attendees
-
+    console.log("eventToDelete object:", eventToDelete);
     for (const attendeeId of eventAttendeesId) {
         await DeletedMessage(
             attendeeId,  // userId of each attendee
@@ -105,7 +105,7 @@ const editEvent = async (request, response) => {
         updateData,
         {new: true, runValidators: true}
     )
-
+    console.log("eventToAmend object:", request.event);
     for (const attendeeId of eventAttendeesId) {
         await AmendedMessage(
             attendeeId,  // userId of each attendee
