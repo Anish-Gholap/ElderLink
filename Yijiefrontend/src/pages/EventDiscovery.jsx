@@ -2,14 +2,17 @@ import { useState, useEffect } from "react"
 import EventCard from "../components/EventCard"
 import { useEventsContext } from "../contexts/EventsContext"
 import { useNavigate } from "react-router-dom"
-import {
-  Typography,
-  TextField, Button,
-  Dialog, DialogContent, DialogActions, DialogTitle,
-  Box,
-  Autocomplete
-} from "@mui/material"
-import listOfCCs from "../assets/listOfCCs";
+
+const CreateEventButton = () => {
+  const navigate = useNavigate()
+  return (
+    <div>
+      <button onClick={() => navigate("/create-event")}>
+        Create Event
+      </button>
+    </div>
+  )
+}
 
 const EventDiscovery = () => {
   const { allEvents } = useEventsContext()
@@ -21,10 +24,6 @@ const EventDiscovery = () => {
 
   const [userLat, setUserLat] = useState(null)
   const [userLong, setUserLong] = useState(null)
-
-  const [showSearchDialog, setShowSearchDialog] = useState(false)
-
-  const navigate = useNavigate()
 
   // Get user location (but don't fetch events yet)
   useEffect(() => {
@@ -78,7 +77,7 @@ const EventDiscovery = () => {
 
   return (
     <>
-      <Typography textAlign='center' fontWeight={700} variant="h4">Discover Events</Typography>
+      <h1>Discover Events</h1>
 
       {/* Show user's coordinates */}
       {userLat && userLong ? (
@@ -88,58 +87,27 @@ const EventDiscovery = () => {
       )}
 
       {/* Search Form */}
-      <Box my={3} >
-        <Button variant="contained" color="info" fullWidth onClick={() => navigate("/create-event")}>
-          Create Event
-        </Button>
-        <Button sx={{ mt: 2 }} variant="contained" color="success" fullWidth onClick={() => setShowSearchDialog(true)}>
-          Filter Events
-        </Button>
-      </Box>
-      <Dialog open={showSearchDialog} onClose={() => setShowSearchDialog(false)}>
-        <Box mx={5} mt={4}>
-          <Typography variant="h4" >Search Events</Typography>
-        </Box>
-        <DialogContent>
-          <form onSubmit={handleSearch} style={{ display: "flex", flexDirection: "column", gap: "2rem", padding: "1rem" }}>
-            <TextField
-              label="Event Name"
-              variant="outlined"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            <TextField
-              label="Date"
-              type="date"
-              InputLabelProps={{ shrink: true }}
-              variant="outlined"
-              value={searchDate}
-              onChange={(e) => setSearchDate(e.target.value)}
-            />
-            <Autocomplete
-              disablePortal
-              options={listOfCCs}
-              renderInput={(params) => <TextField
-                {...params}
-                label="CC location"
-              />}
-            />
-          </form>
-        </DialogContent>
-        <DialogActions style={{ padding: "1rem", display: "flex", justifyContent: "space-between" }}>
-          <Box sx={{ mr: 5 }}>
-            <Button sx={{ mr: 2 }} type="submit" variant="contained" color="primary" onClick={handleSearch}>
-              Search
-            </Button>
-            <Button type="button" variant="outlined" onClick={handleReset}>
-              Reset
-            </Button>
-          </Box>
-          <Button color='primary' onClick={() => setShowSearchDialog(false)}>
-            Close
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <form onSubmit={handleSearch} style={{ marginBottom: "1rem" }}>
+        <input
+          type="text"
+          placeholder="Event Name"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        <input
+          type="date"
+          value={searchDate}
+          onChange={(e) => setSearchDate(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Community Club"
+          value={communityClub}
+          onChange={(e) => setCommunityClub(e.target.value)}
+        />
+        <button type="submit">Search</button>
+        <button type="button" onClick={handleReset}>Reset</button>
+      </form>
 
       {/* Event Cards */}
       {eventsToDisplay && eventsToDisplay.length > 0 ? (
@@ -150,7 +118,7 @@ const EventDiscovery = () => {
         <p>No events found.</p>
       )}
 
-
+      <CreateEventButton />
     </>
   )
 }

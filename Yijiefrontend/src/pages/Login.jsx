@@ -3,8 +3,6 @@ import LoginForm from "../components/LoginForm"
 import loginService from "../services/login"
 import { useAuthContext } from "../contexts/AuthContext"
 import { useNavigate } from "react-router-dom"
-import { TextField, Box, Typography } from "@mui/material"
-import { FaArrowLeft } from "react-icons/fa";
 
 const Login = () => {
   const [username, setUsername] = useState("")
@@ -47,13 +45,8 @@ const Login = () => {
 
 
   return (
-    <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
-      <Box position="fixed" display='flex' alignItems='center' top={0} left={0} p={2} onClick={() => navigate(-1)} sx={{ cursor: "pointer" }}>
-        <FaArrowLeft fontSize="2rem" />
-      </Box>
-      <Typography variant="h4">
-        Login
-      </Typography>
+    <div>
+      <h2> Login Page </h2>
       <LoginForm
         handleSubmit={handleLogin}
         username={username}
@@ -61,10 +54,8 @@ const Login = () => {
         handleUsernameChange={({ target }) => setUsername(target.value)}
         handlePasswordChange={({ target }) => setPassword(target.value)}
       />
-      <Typography mt={2}>
-        Don't have an account? <a href="/signup">Sign Up</a>
-      </Typography>
-    </Box>
+
+    </div>
   )
 }
 

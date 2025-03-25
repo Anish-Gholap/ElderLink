@@ -2,8 +2,6 @@ import { useState } from "react"
 import EventForm from "../components/EventForm"
 import { useEventsContext } from "../contexts/EventsContext"
 import { useNavigate } from "react-router-dom"
-import { Box, Typography } from "@mui/material"
-import { LuPartyPopper } from "react-icons/lu"
 
 const CreateEvent = () => {
   const [eventName, setEventName] = useState("")
@@ -76,26 +74,9 @@ const CreateEvent = () => {
   }
 
   return (
-    <Box
-      sx={{
-        backgroundColor: '#f36f00',
-        padding: '15%',
-        color: 'white',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: '7%',
-        boxShadow: '0 16px 32px rgba(0,0,0,0.2)',
-      }}
-    >
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-        <LuPartyPopper fontSize='3rem' />
-        <Typography variant="h3" align="center" >
-          Create Event
-        </Typography>
-      </Box>
-      <EventForm
+    <div>
+      <h1>Create Event</h1>
+      <EventForm 
         handleSubmit={handleEventCreation}
         handleCancel={handleCancel}
         eventName={eventName}
@@ -117,7 +98,7 @@ const CreateEvent = () => {
         handleHoursChange={({ target }) => setHours(target.value)}
         handleMinutesChange={({ target }) => setMinutes(target.value)}
       />
-    </Box>
+    </div>
   )
 }
 
