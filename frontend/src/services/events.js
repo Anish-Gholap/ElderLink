@@ -38,7 +38,7 @@ const getEventById = async (eventId) => {
 }
 
 const editEvent = async (eventId, updatedEvent, token) => {
-  const response = await axios.put(`${baseUrl}/${eventId}`, updatedEvent, {
+  const response = await axios.patch(`${baseUrl}/${eventId}`, updatedEvent, {
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json"
@@ -48,11 +48,13 @@ const editEvent = async (eventId, updatedEvent, token) => {
   return response.data
 }
 
-const joinEvent = async (eventId, userId) => {
+const joinEvent = async (eventId, userId, token) => {
   console.log("events service", userId)
-  const response = await axios.patch(`${baseUrl}/${eventId}`, {userId}, {
+  const response = await axios.post(`${baseUrl}/${eventId}/attendees`, {userId}, {
     headers: {
+      Authorization: `Bearer ${token}`,
       "Content-Type": "application/json"
+
     }
   })
 
