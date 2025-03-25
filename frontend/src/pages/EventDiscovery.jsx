@@ -2,8 +2,14 @@ import { useState, useEffect } from "react"
 import EventCard from "../components/EventCard"
 import { useEventsContext } from "../contexts/EventsContext"
 import { useNavigate } from "react-router-dom"
-import { Typography, TextField, Button, Dialog, DialogContent, DialogActions, Box, DialogTitle } from "@mui/material"
-
+import {
+  Typography,
+  TextField, Button,
+  Dialog, DialogContent, DialogActions, DialogTitle,
+  Box,
+  Autocomplete
+} from "@mui/material"
+import listOfCCs from "../assets/listOfCCs";
 
 const EventDiscovery = () => {
   const { allEvents } = useEventsContext()
@@ -19,7 +25,6 @@ const EventDiscovery = () => {
   const [showSearchDialog, setShowSearchDialog] = useState(false)
 
   const navigate = useNavigate()
-
 
   // Get user location (but don't fetch events yet)
   useEffect(() => {
@@ -84,17 +89,17 @@ const EventDiscovery = () => {
 
       {/* Search Form */}
       <Box my={3} >
-        <Button  variant="contained" color="info" fullWidth onClick={() => navigate("/create-event")}>
+        <Button variant="contained" color="info" fullWidth onClick={() => navigate("/create-event")}>
           Create Event
         </Button>
-        <Button sx={{mt:2}} variant="contained" color="success" fullWidth onClick={() => setShowSearchDialog(true)}>
+        <Button sx={{ mt: 2 }} variant="contained" color="success" fullWidth onClick={() => setShowSearchDialog(true)}>
           Filter Events
         </Button>
       </Box>
       <Dialog open={showSearchDialog} onClose={() => setShowSearchDialog(false)}>
-        <DialogTitle >
-          <Typography sx={{ px: 2 }} variant="h5">Search Events</Typography>
-        </DialogTitle>
+        <Box mx={5} mt={4}>
+          <Typography variant="h4" >Search Events</Typography>
+        </Box>
         <DialogContent>
           <form onSubmit={handleSearch} style={{ display: "flex", flexDirection: "column", gap: "2rem", padding: "1rem" }}>
             <TextField
@@ -111,11 +116,13 @@ const EventDiscovery = () => {
               value={searchDate}
               onChange={(e) => setSearchDate(e.target.value)}
             />
-            <TextField
-              label="Community Club"
-              variant="outlined"
-              value={communityClub}
-              onChange={(e) => setCommunityClub(e.target.value)}
+            <Autocomplete
+              disablePortal
+              options={listOfCCs}
+              renderInput={(params) => <TextField
+                {...params}
+                label="CC location"
+              />}
             />
           </form>
         </DialogContent>
