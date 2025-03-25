@@ -19,11 +19,21 @@ const CreateEventButton = () => {
 
 const EventAttendance = () => {
   const { user } = useAuthContext();
-  const { allEvents, removeEvent } = useEventsContext();
+  const { allEvents, removeEvent, withdrawEvent } = useEventsContext();
   const navigate = useNavigate();
 
   const handleDelete = (id) => {
     removeEvent(id).catch(err => console.error(err));
+  };
+
+  const handleWithdraw = async (eventId) => {
+    try {
+      await withdrawEvent(eventId); // Call the withdrawEvent function from context
+      window.alert("Successfully withdrawn from the event.");
+    } catch (error) {
+      console.error("Error withdrawing from event:", error);
+      window.alert("There was an error withdrawing from the event.");
+    }
   };
 
   const attendingEvents = allEvents.filter(event =>
@@ -49,9 +59,9 @@ const EventAttendance = () => {
             <Button
               variant="contained"
               color="secondary"
-              onClick={() => handleDelete(event.id)}
+              onClick={() => handleWithdraw(event.id)}
             >
-              Delete
+              Withdraw
             </Button>
           </Box>
         </Box>

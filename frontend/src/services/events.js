@@ -61,6 +61,19 @@ const joinEvent = async (eventId, userId, token) => {
   return response.data
 }
 
+// Withdraw from an event (remove user from attendees)
+const withdrawEvent = async (eventId, userId, token) => {
+  console.log("Withdrawing user", userId, "from event", eventId);
+  const response = await axios.delete(`${baseUrl}/${eventId}/attendees`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json"
+    },
+    data: { userId }  // Send the userId in the body for the withdrawal
+  });
+  return response.data;
+};
+
 export default {
   getAllEvents,
   getUserEvents,
@@ -68,5 +81,6 @@ export default {
   deleteEvent,
   getEventById,
   editEvent, 
-  joinEvent
+  joinEvent,
+  withdrawEvent
 }

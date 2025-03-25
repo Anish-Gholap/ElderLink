@@ -120,6 +120,25 @@ export const EventsProvider = ({ children }) => {
     }
     
   }
+  const withdrawEvent = async (eventId) => {
+    try {
+      await eventsService.withdrawEvent(eventId, user.id, user.token);
+      window.alert("Withdrawn from event successfully");
+  
+      // Refresh event lists after update
+      const refreshedAll = await eventsService.getAllEvents();
+      setAllEvents(refreshedAll);
+  
+      if (user?.id) {
+        const refreshedMine = await eventsService.getUserEvents(user.id);
+        setMyEvents(refreshedMine);
+      }
+    } catch (error) {
+      console.error("Failed to withdraw from event:", error);
+    }
+  };
+
+
 
   const value = {
     allEvents,
@@ -128,7 +147,8 @@ export const EventsProvider = ({ children }) => {
     removeEvent,
     getEvent,
     updateEvent,
-    joinEvent
+    joinEvent,
+    withdrawEvent
   }
 
   return (
