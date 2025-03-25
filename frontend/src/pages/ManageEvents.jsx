@@ -2,6 +2,7 @@ import { useEventsContext } from "../contexts/EventsContext";
 import EventCard from "../components/EventCard";
 import { useNavigate } from "react-router-dom";
 import { Button, Container, Typography, Box } from '@mui/material';
+import Toggle from "../components/Toggle"
 
 const CreateEventButton = () => {
   const navigate = useNavigate();
@@ -25,6 +26,7 @@ const ManageEvents = () => {
 
   return (
     <Container>
+      <Toggle />
       <Typography variant="h4" gutterBottom>
         Created By You
       </Typography>

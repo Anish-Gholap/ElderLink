@@ -12,6 +12,7 @@ import CreateEvent from './pages/CreateEvent'
 import EventDetails from './pages/EventDetails'
 import EditEvent from './pages/EditEvent'
 import SignUp from './pages/SignUp'
+import EventAttendance from './pages/EventAttendance'
 
 const App = () => {
   return (
@@ -47,6 +48,11 @@ const App = () => {
             <Route path='/events/:eventId/edit' element= {
               <ProtectedRoute>
                 <EditEvent />
+              </ProtectedRoute>
+            } />
+            <Route path='/attending-events' element= {
+              <ProtectedRoute>
+                <EventAttendance />
               </ProtectedRoute>
             } />
           </Routes>
