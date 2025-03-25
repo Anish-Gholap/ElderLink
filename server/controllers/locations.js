@@ -1,4 +1,4 @@
-const {getLocations, getLocationNames, refreshCache} = require('../services/locations')
+const {getLocations, getLocationNames, refreshCache} = require('../services/locationsCache')
 
 const getAllLocations = async (request, response) => {
     try {
