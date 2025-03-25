@@ -24,6 +24,10 @@ const EventCard = ({ event }) => {
           <FaMapLocationDot style={{ marginRight: '4px' }} />
           {event.location}
         </Typography>
+        <Typography variant="body2" className="event-location" style={{ marginBottom: '4px' }}>
+          <FaPeopleGroup style={{ marginRight: '4px' }} />
+          {event.numAttendees} slots left
+        </Typography>
         <Typography variant="body3" className="event-datetime" color="textSecondary">
           <FaRegClock style={{ marginRight: '4px' }} />
           {formattedDate}
