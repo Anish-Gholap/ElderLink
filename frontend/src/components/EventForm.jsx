@@ -1,5 +1,6 @@
 import React from 'react';
-import { TextField, Button, Grid, Box } from '@mui/material';
+import { TextField, Button, Grid, Box, Autocomplete } from '@mui/material';
+import listOfCCs from '../assets/listOfCCs';
 
 const EventForm = ({
   handleSubmit,
@@ -38,13 +39,14 @@ const EventForm = ({
         </Grid>
 
         <Grid item xs={12} >
-          <TextField
-            fullWidth
-            label="Location"
-            value={eventLocation}
-            onChange={handleEventLocationChange}
-            required
+          <Autocomplete
+            disablePortal
+            options={listOfCCs}
             sx={{ backgroundColor: 'white', borderRadius: '5px' }}
+            renderInput={(params) => <TextField
+              {...params}
+              label="CC location"
+            />}
           />
         </Grid>
 

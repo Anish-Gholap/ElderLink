@@ -23,7 +23,6 @@ const App = () => {
             <Route path='/' element={<Home />} />
             <Route path='/login' element={<Login />} />
             <Route path='/signup' element={<SignUp />} />
-
             {/* Protected Route for Pages only accessible after login */}
             <Route path='/event-discovery' element= {
               <ProtectedRoute>

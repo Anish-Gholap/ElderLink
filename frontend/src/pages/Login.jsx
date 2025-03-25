@@ -48,7 +48,7 @@ const Login = () => {
 
   return (
     <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
-      <Box position="fixed" display='flex' alignItems='center' top={0} left={0} p={2} onClick={() => navigate(-1)} sx={{ cursor: "pointer" }}>
+      <Box position="fixed" display='flex' alignItems='center' top={0} left={0} p={2} onClick={() => navigate('/')} sx={{ cursor: "pointer" }}>
         <FaArrowLeft fontSize="2rem" />
       </Box>
       <Typography variant="h4">
