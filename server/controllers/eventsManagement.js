@@ -97,9 +97,8 @@ const editEvent = async (request, response) => {
     const updateData = {...body}
 
     if (updateData.date) {
-        updateData.eventDate = new Date(updateData.date)
-        delete updateData.date
-    }
+        updateData.date = new Date(updateData.date)
+      }
 
     const updatedEvent = await Event.findByIdAndUpdate(
         eventId,
