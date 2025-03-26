@@ -4,9 +4,11 @@ import NavBar from "./NavBar";
 const Layout = ({children}) => {
   const location = useLocation()
 
-  // hide navbar on home and login pages
-  const hideNavBar = location.pathname === "/" || location.pathname === "/login"
+  const pagesWithoutNavBar = ["/", "/login", "/signup"]
 
+  // hide navbar on home and login pages
+  const hideNavBar = pagesWithoutNavBar.includes(location.pathname)
+  
   return (
     <div className="layout">
       {/*Conditional Rendering*/}

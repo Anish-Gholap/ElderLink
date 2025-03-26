@@ -6,21 +6,25 @@ import Home from './pages/Home'
 import Login from './pages/Login'
 import ProtectedRoute from './components/ProtectedRoute'
 import EventDiscovery from './pages/EventDiscovery'
+import { NotificationsProvider } from './contexts/NotificationsContext'
 import Layout from './components/Layout'
 import ManageEvents from './pages/ManageEvents'
 import CreateEvent from './pages/CreateEvent'
 import EventDetails from './pages/EventDetails'
 import EditEvent from './pages/EditEvent'
+import SignUp from './pages/SignUp'
+import EventAttendance from './pages/EventAttendance'
 
 const App = () => {
   return (
     <AuthProvider>
       <EventsProvider>
+      <NotificationsProvider>
         <Layout>
           <Routes>
             <Route path='/' element={<Home />} />
             <Route path='/login' element={<Login />} />
-
+            <Route path='/signup' element={<SignUp />} />
             {/* Protected Route for Pages only accessible after login */}
             <Route path='/event-discovery' element= {
               <ProtectedRoute>
@@ -47,8 +51,14 @@ const App = () => {
                 <EditEvent />
               </ProtectedRoute>
             } />
+            <Route path='/attending-events' element= {
+              <ProtectedRoute>
+                <EventAttendance />
+              </ProtectedRoute>
+            } />
           </Routes>
         </Layout>
+        </NotificationsProvider>
       </EventsProvider>
     </AuthProvider>
   )

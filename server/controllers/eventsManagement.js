@@ -62,12 +62,12 @@ const removeEvent = async (request, response) => {
     const eventToDelete = request.event
     const user = request.user
     const eventAttendeesId = eventToDelete.attendees
-
+    console.log("eventToDelete object:", eventToDelete);
     for (const attendeeId of eventAttendeesId) {
         await DeletedMessage(
             attendeeId,  // userId of each attendee
             eventToDelete._id,  // eventId
-            `The event ${eventToDelete.name} has been removed.`,  // message
+            `The event ${eventToDelete.title} has been canceled by the event host. Please be informed of this update.`,
             'Deleted'  // notificationType
         );
     }
@@ -105,12 +105,12 @@ const editEvent = async (request, response) => {
         updateData,
         {new: true, runValidators: true}
     )
-
+    console.log("eventToAmend object:", request.event);
     for (const attendeeId of eventAttendeesId) {
         await AmendedMessage(
             attendeeId,  // userId of each attendee
             eventId,  // eventId
-            `The event ${request.event.name} has been amended.`,  // message
+            `The event ${request.event.title} has been updated by the event host. Please review the latest details.`,  // message
             'Amended'  // notificationType
         );
     }
