@@ -14,6 +14,7 @@ import EventDetails from './pages/EventDetails'
 import EditEvent from './pages/EditEvent'
 import SignUp from './pages/SignUp'
 import EventAttendance from './pages/EventAttendance'
+import Profile from './pages/Profile'
 
 const App = () => {
   return (
@@ -54,6 +55,11 @@ const App = () => {
             <Route path='/attending-events' element= {
               <ProtectedRoute>
                 <EventAttendance />
+              </ProtectedRoute>
+            } />
+            <Route path='/profile' element= {
+              <ProtectedRoute>
+                <Profile />
               </ProtectedRoute>
             } />
           </Routes>
