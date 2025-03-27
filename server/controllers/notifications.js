@@ -30,7 +30,7 @@ const getNotifications = async (req, res) => {
 
 
 // Create a notification for an amended event
-const AmendedMessage = async (userId, eventId, message, notificationType) => {
+const amendedMessage = async (userId, eventId, message, notificationType) => {
   try {
     if (!userId) {
       throw new Error('UserId is required');
@@ -66,7 +66,7 @@ const AmendedMessage = async (userId, eventId, message, notificationType) => {
 
 
 // Create a notification for a deleted event
-const DeletedMessage = async (userId, eventId, message) => {
+const deletedMessage = async (userId, eventId, message) => {
   try {
     // Find the event by eventId
     const event = await Event.findById(eventId);
@@ -133,4 +133,4 @@ const removeNotifications = async (req, res) => {
 };
 
 
-module.exports = { getNotifications, AmendedMessage, DeletedMessage, removeNotifications }
+module.exports = { getNotifications, amendedMessage, deletedMessage, removeNotifications }

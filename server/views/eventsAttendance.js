@@ -3,7 +3,7 @@ const {joinEvent, withdrawEvent} = require('../controllers/eventsAttendance')
 const { userExtractor } = require('../utils/middlewares')
 
 // POST to join event
-eventsAttendanceRouter.post('/:id/attendees', userExtractor, joinEvent)
+eventsAttendanceRouter.post('/:id/attendees', joinEvent)
 
 // DELETE to withdraw from event
 eventsAttendanceRouter.delete('/:id/attendees', withdrawEvent)

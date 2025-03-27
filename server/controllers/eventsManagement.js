@@ -11,7 +11,9 @@ const getAllEvents = async (request, response) => {
         filter.createdBy = createdBy
     }
 
-    const events = await Event.find(filter).populate('createdBy', {username: 1, name: 1})
+    const events = await Event.find(filter)
+        .populate('createdBy', {username: 1})
+        .populate('attendees', {username: 1})
     response.json(events)
 }
 
