@@ -97,7 +97,6 @@ const NavBar = () => {
               <hr />
               <li onClick={() => { navigate("/profile"); closeSidebar() }}>
                 Profile Page
-                (To Implement)
               </li>
             </ul>
           </div>

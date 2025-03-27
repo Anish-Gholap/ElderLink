@@ -2,11 +2,13 @@ import React from 'react';
 import { Box, Typography, Avatar, IconButton } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { useAuthContext } from '../contexts/AuthContext'; // Adjust the import path as necessary
+import { useUsersContext } from '../contexts/UsersContext';
 import { FaPencilAlt } from 'react-icons/fa';
 import EditProfileDialog from '../components/EditProfileDialog';
 
 function Profile() {
     const { user } = useAuthContext();
+    const { userData } = useUsersContext();
     const [openEditProfile, setOpenEditProfile] = React.useState(false);
 
     return (
@@ -36,9 +38,9 @@ function Profile() {
                 src={user.profileImage || '/path/to/placeholder/image.jpg'} 
                 alt="Profile Image" 
             />
-            <Typography variant="h5">{user.username}</Typography>
-            <Typography variant="body1">{user.name}</Typography>
-            <Typography variant="body1">{user.phoneNumber}</Typography>
+            <Typography variant="h5">{userData.username}</Typography>
+            <Typography variant="body1">{userData.name}</Typography>
+            <Typography variant="body1">{userData.phoneNumber}</Typography>
             <Link to="#">
                 <IconButton onClick={() => setOpenEditProfile(true)}>
                     <FaPencilAlt />
