@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Dialog,
     DialogTitle,
@@ -10,10 +10,24 @@ import {
 } from '@mui/material';
 
 
-const EditProfileDialog = ({ open, onClose }) => {
+const EditProfileDialog = ({ open, onClose, onSubmit, userData }) => {
     const [userName, setUserName] = useState('');
     const [name, setName] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
+
+    useEffect(() => {
+        if (open && userData) {  // Set state only when the dialog opens
+            setUserName(userData.username || '');
+            setName(userData.name || '');
+            setPhoneNumber(userData.phoneNumber || '');
+        }
+    }, [open, userData]);
+
+    const handleSubmit = () => {
+        const updatedData = { username: userName, name, phoneNumber };
+        onSubmit(updatedData);  // Call the passed function with new data
+        onClose();  // Close the dialog
+    };
 
     return (
         <Dialog open={open} onClose={onClose}>
@@ -52,7 +66,7 @@ const EditProfileDialog = ({ open, onClose }) => {
                 <Button onClick={onClose} color="primary" variant="outlined">
                     Cancel
                 </Button>
-                <Button onClick={onClose} color="primary" variant="contained">
+                <Button onClick={handleSubmit} color="primary" variant="contained">
                     Submit
                 </Button>
             </DialogActions>

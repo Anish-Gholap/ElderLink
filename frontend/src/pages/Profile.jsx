@@ -8,14 +8,28 @@ import EditProfileDialog from '../components/EditProfileDialog';
 
 function Profile() {
     const { user } = useAuthContext();
-    const { userData } = useUsersContext();
+    const { userData, setUserData, editProfileHandler } = useUsersContext();
     const [openEditProfile, setOpenEditProfile] = React.useState(false);
+    
+    const handleProfileEdit = async (updatedData) => {
+        try { 
+            await editProfileHandler(user.id, updatedData, user.token);
+            setOpenEditProfile(false); 
+            setUserData(updatedData); 
+        } catch (error) {
+            console.log("Failed to update profile:", error);
+        }
+    };
+
+    
 
     return (
         <>
         <EditProfileDialog 
         open={openEditProfile}
         onClose={() => setOpenEditProfile(false)}
+        onSubmit={handleProfileEdit}
+        userData={userData}  
         />
    
         <Box 

@@ -8,9 +8,25 @@ const getAllUsers = async (userId) => {
     return user
   }
 
+  const updateUser = async (userId, updatedData, token) => {
+    try {
+        const response = await axios.patch(`${baseUrl}/profile`, { userId, ...updatedData }, {
+          headers: {
+              Authorization: `Bearer ${token}`, // Include token for authorization
+          }
+      });
+        return response.data; // Returning updated user data after success
+    } catch (error) {
+        console.error("Error updating user", error);
+        throw error; // Rethrow error for handling in the component or context
+    }
+};
+
+
+
   export default {
     getAllUsers,
     //createUser,
     //deleteUser,
-    //updateUser,
+    updateUser,
   }
