@@ -15,8 +15,12 @@ export const NotificationsProvider = ({ children }) => {
             console.log("Fetching notifications for user:", user.id); // Log the user ID
             notificationsService.getNotifications(user.id)
                 .then(data => {
-                    console.log("Notifications fetched:", data);  // Log the fetched notifications
-                    setNotifications(data);
+                    if(data.message && data.message === "User has no notifications"){
+                        setNotifications([]);
+                    }else {
+                        console.log("Notifications fetched:", data);  // Log the fetched notifications
+                        setNotifications(data);
+                    }
                 })
                 .catch(error => console.error("Failed to fetch notifications", error));
         }
@@ -25,17 +29,21 @@ export const NotificationsProvider = ({ children }) => {
     // Debugging the state of notifications
     console.log("Notifications state:", notifications);
 
-    const removeNotification = async (notificationId) => {
+    const removeNotification = async (UserId, notificationId) => {
         try {
-            await notificationsService.removeNotification(user.id, notificationId)
-            setNotifications(notifications.filter(n => n.id !== notificationId))
+            setNotifications(prevNotifications => {
+                const updatedNotifications = prevNotifications.filter(n => n._id !== notificationId);
+                console.log("Updated notifications state (before delete request):", updatedNotifications);
+                return updatedNotifications;
+            });
+            const response = await notificationsService.removeNotification(user.id, notificationId);
         } catch (error) {
             console.error("Failed to remove notification", error)
         }
     }
 
     return (
-        <NotificationsContext.Provider value={{ notifications, removeNotification }}>
+        <NotificationsContext.Provider value={{ user ,notifications, removeNotification }}>
             {children}
         </NotificationsContext.Provider>
     )
