@@ -1,3 +1,16 @@
-DELETE http://localhost:3002/api/events/67e042bc09bd355a43f9dade/attendees
+### Login to get token
+POST http://localhost:3002/api/login
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFuaXNoIiwiaWQiOiI2N2UwY2M0M2YwM2Y3NmEyMGRiZjE1N2YiLCJpYXQiOjE3NDI4MDI0NzgsImV4cCI6MTc0MjgwNjA3OH0.gENbZVui1GCHEuhd6BvHkpYcPs_m9CN1QVPgdMg16TU
+
+{
+  "username": "jack",
+  "password": "jack"
+}
+
+> {%
+    client.global.set("auth_token", response.body.token);
+%}
+
+### Withdraw from event
+DELETE http://localhost:3002/api/events/67e36d90cb94954bbaaad809/attendees
+Authorization: Bearer {{auth_token}}

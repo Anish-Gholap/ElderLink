@@ -11,6 +11,16 @@ const getUserEvents = async (userId) => {
   return response.data
 }
 
+const getUserAttendingEvents = async (userId, token) => {
+  console.log("getUserAttendingEvents is running")
+  const response = await axios.get(`${baseUrl}/${userId}/attending`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })
+  return response.data
+}
+
 const createEvent = async (eventData, token) => {
   const response = await axios.post(baseUrl, eventData, {
     headers: {
@@ -80,7 +90,8 @@ export default {
   createEvent,
   deleteEvent,
   getEventById,
-  editEvent, 
+  editEvent,
   joinEvent,
-  withdrawEvent
+  withdrawEvent,
+  getUserAttendingEvents
 }

@@ -19,12 +19,8 @@ const CreateEventButton = () => {
 
 const EventAttendance = () => {
   const { user } = useAuthContext();
-  const { allEvents, removeEvent, withdrawEvent } = useEventsContext();
+  const { userEventsAttending, withdrawEvent } = useEventsContext();
   const navigate = useNavigate();
-
-  const handleDelete = (id) => {
-    removeEvent(id).catch(err => console.error(err));
-  };
 
   const handleWithdraw = async (eventId) => {
     try {
@@ -36,19 +32,13 @@ const EventAttendance = () => {
     }
   };
 
-  const attendingEvents = allEvents.filter(event =>
-    event.attendees &&
-    event.attendees.includes(user.id) &&
-    event.creator !== user.id
-  );
-
   return (
     <Container>
       <Typography variant="h4" gutterBottom>
         Manage Events
       </Typography>
       <Toggle defaultToggle="attending-events" />
-      {attendingEvents.map(event => (
+      {userEventsAttending.map(event => (
         <Box key={event.id} sx={{ mb: 2, position: "relative" }}>
           {console.log("Event id ", event.id)}
           <EventCard event={event} sx={{
