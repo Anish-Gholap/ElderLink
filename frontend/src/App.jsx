@@ -14,10 +14,13 @@ import EventDetails from './pages/EventDetails'
 import EditEvent from './pages/EditEvent'
 import SignUp from './pages/SignUp'
 import EventAttendance from './pages/EventAttendance'
+import Profile from './pages/Profile'
+import { UsersProvider } from './contexts/UsersContext'
 
 const App = () => {
   return (
     <AuthProvider>
+      <UsersProvider>
       <EventsProvider>
       <NotificationsProvider>
         <Layout>
@@ -56,10 +59,16 @@ const App = () => {
                 <EventAttendance />
               </ProtectedRoute>
             } />
+            <Route path='/profile' element= {
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            } />
           </Routes>
         </Layout>
         </NotificationsProvider>
       </EventsProvider>
+      </UsersProvider>
     </AuthProvider>
   )
 }

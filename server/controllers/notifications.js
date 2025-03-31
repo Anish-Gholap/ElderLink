@@ -18,7 +18,7 @@ const getNotifications = async (req, res) => {
 
     // Check if the user has any notifications
     if (user.notifications.length === 0) {
-      return res.status(404).json({ message: 'No notifications found' });
+      return res.status(200).json({ message: 'No notifications found' });
     }
 
     // Send the populated notifications back in the response
