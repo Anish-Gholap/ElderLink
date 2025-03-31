@@ -5,18 +5,6 @@ import { useNavigate } from "react-router-dom";
 import { Button, Container, Typography, Box } from '@mui/material';
 import Toggle from "../components/Toggle"
 
-const CreateEventButton = () => {
-  const navigate = useNavigate();
-
-  return (
-    <Box sx={{ mb: 2 }}>
-      <Button variant="contained" color="primary" onClick={() => navigate("/create-event")}>
-        Add New Event
-      </Button>
-    </Box>
-  );
-};
-
 const EventAttendance = () => {
   const { user } = useAuthContext();
   const { userEventsAttending, withdrawEvent } = useEventsContext();
@@ -40,7 +28,6 @@ const EventAttendance = () => {
       <Toggle defaultToggle="attending-events" />
       {userEventsAttending.map(event => (
         <Box key={event.id} sx={{ mb: 2, position: "relative" }}>
-          {console.log("Event id ", event.id)}
           <EventCard event={event} sx={{
             minWidth: "300px",
             position: "relative"
@@ -56,7 +43,6 @@ const EventAttendance = () => {
           </Box>
         </Box>
       ))}
-      <CreateEventButton />
     </Container>
   );
 };
