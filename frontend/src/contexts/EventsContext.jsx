@@ -97,6 +97,7 @@ export const EventsProvider = ({ children }) => {
 
   const updateEvent = async (eventId, eventData) => {
     try {
+      console.log("Hello", eventData)
       await eventsService.editEvent(eventId, eventData, user.token)
 
       // refresh event lists after update

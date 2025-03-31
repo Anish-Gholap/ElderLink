@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { useEventsContext } from "../contexts/EventsContext";
 import { useNavigate } from "react-router-dom";
 import EventForm from "../components/EventForm";
+import listOfCCs from "../assets/listOfCCs"; // Import your list of community centers
 
 const EditEvent = () => {
   const { eventId } = useParams();
@@ -10,7 +11,7 @@ const EditEvent = () => {
   const navigate = useNavigate();
 
   const [eventName, setEventName] = useState("");
-  const [eventLocation, setEventLocation] = useState("");
+  const [eventLocation, setEventLocation] = useState("null");
   const [eventNumAttendees, setEventNumAttendees] = useState("");
   const [eventDescription, setEventDescription] = useState("");
 
@@ -31,9 +32,9 @@ const EditEvent = () => {
         setHours(parsedDate.getHours().toString().padStart(2, "0"));
         setMinutes(parsedDate.getMinutes().toString().padStart(2, "0"));
       }
-
+      const location = listOfCCs.find(cc => cc.label === event.location);
       setEventName(event.title || "");
-      setEventLocation(event.location || "");
+      setEventLocation(location || "");
       setEventNumAttendees(event.numAttendees || "");
       setEventDescription(event.description || "");
     }).catch(console.error);
@@ -53,7 +54,7 @@ const EditEvent = () => {
 
     const updatedData = {
       title: eventName,
-      location: eventLocation,
+      location: eventLocation?.label,
       numAttendees: eventNumAttendees,
       date: isoDateString,
       description: eventDescription,
@@ -89,7 +90,7 @@ const EditEvent = () => {
           hours={hours}
           minutes={minutes}
           handleEventNameChange={({ target }) => setEventName(target.value)}
-          handleEventLocationChange={({ target }) => setEventLocation(target.value)}
+          handleEventLocationChange={(target) => setEventLocation(target)} 
           handleEventNumAttendeesChange={({ target }) => setEventNumAttendees(target.value)}
           handleEventDescriptionChange={({ target }) => setEventDescription(target.value)}
           handleYearChange={({ target }) => setYear(target.value)}
