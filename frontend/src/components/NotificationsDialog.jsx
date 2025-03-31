@@ -85,7 +85,6 @@ function NotificationsDialog({
     const [notificationIdToDelete, setNotificationIdToDelete] = React.useState(null);
     const { user, removeNotification } = useNotificationsContext();
     const UserId = user.id
-    console.log("Hello World", UserId)
     const onDelete = (UserId ,notificationId) => { 
         if (notificationId){
             removeNotification(UserId ,notificationId);
