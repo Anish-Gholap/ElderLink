@@ -17,10 +17,10 @@ Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 
 {
-  "title": "Checkers",
-  "location": "Bishan CC",
+  "title": "Squash",
+  "location": "Nanyang CC",
   "date": "2025-03-21T14:00:00Z",
-  "description": "checkers",
+  "description": "squash",
   "numAttendees": 4
 }
 
