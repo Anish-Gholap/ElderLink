@@ -14,7 +14,7 @@ const locationsRouter = require('./views/locations')
 const searchRouter = require('./views/search')
 const middlewares = require('./utils/middlewares')
 const {userExtractor} = require("./utils/middlewares");
-const {initializeCache} = require('./services/locations')
+const {initializeCache} = require('./services/locationsCache')
 
 
 // MongoDB Connection

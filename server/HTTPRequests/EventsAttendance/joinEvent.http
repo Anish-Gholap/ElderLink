@@ -3,8 +3,8 @@ POST http://localhost:3002/api/login
 Content-Type: application/json
 
 {
-  "username": "jack",
-  "password": "jack"
+  "username": "anish",
+  "password": "anish"
 }
 
 > {%
@@ -12,5 +12,5 @@ Content-Type: application/json
 %}
 
 ### Use token in the next request
-POST http://localhost:3002/api/events/67e111a8524ff2d28bdeaff4/attendees
+POST http://localhost:3002/api/events/67e36d41cb94954bbaaad802/attendees
 Authorization: Bearer {{auth_token}}

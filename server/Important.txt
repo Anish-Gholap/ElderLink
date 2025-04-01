@@ -1,2 +1,0 @@
-1. after user registers frontend should call the login endpoint to log in and redirect user to main page with the token
-2.

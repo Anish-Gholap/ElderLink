@@ -1,8 +1,8 @@
 /* eslint-disable react-refresh/only-export-components */
-// Context to manage events across all 
-import { createContext, useState, useEffect, useContext } from "react";
+// Context to manage events across all
+import {createContext, useCallback, useContext, useEffect, useState} from "react";
 import eventsService from "../services/events"
-import { useAuthContext } from "../contexts/AuthContext"
+import {useAuthContext} from "../contexts/AuthContext"
 
 const EventsContext = createContext()
 
@@ -13,6 +13,7 @@ export const EventsProvider = ({ children }) => {
 
   const [allEvents, setAllEvents] = useState([])
   const [myEvents, setMyEvents] = useState([])
+  const [userEventsAttending, setUserEventsAttending] = useState([])
 
   // 1) Fetch all events for events discovery
   useEffect(() => {
@@ -33,6 +34,27 @@ export const EventsProvider = ({ children }) => {
       setMyEvents([]);
     }
   }, [user])
+
+  // Fetch user-specific events for events attendance
+  const fetchEventsAttending = useCallback(async () => {
+    if (user && user.id && user.token) {
+      try {
+        const data = await eventsService.getUserAttendingEvents(user.id, user.token)
+        console.log("User events attending: ", data)
+        setUserEventsAttending(data)
+      } catch (err) {
+        console.error("Error fetching user's events attending", err)
+        setUserEventsAttending([])
+      }
+    } else {
+      setUserEventsAttending([])
+    }
+  }, [user])
+
+
+  useEffect(() => {
+    fetchEventsAttending()
+  }, [fetchEventsAttending]);
 
   // helper functions to refetch and update local state to keep everything in sync
   const addEvent = async (eventData) => {
@@ -67,8 +89,7 @@ export const EventsProvider = ({ children }) => {
     if (!eventId) return null
 
     try {
-      const fetchedEvent = await eventsService.getEventById(eventId)
-      return fetchedEvent
+      return await eventsService.getEventById(eventId)
     } catch (error) {
       console.error("Error fetching event:", error)
     }
@@ -111,6 +132,8 @@ export const EventsProvider = ({ children }) => {
       const refreshedAll = await eventsService.getAllEvents()
       setAllEvents(refreshedAll)
 
+      await fetchEventsAttending()
+
       if (user?.id) {
         const refreshedMine = await eventsService.getUserEvents(user.id);
         setMyEvents(refreshedMine);
@@ -118,6 +141,7 @@ export const EventsProvider = ({ children }) => {
 
     } catch (error) {
       console.error("Failed to join event:", error)
+      window.alert("Unable to join event")
     }
     
   }
@@ -129,6 +153,8 @@ export const EventsProvider = ({ children }) => {
       // Refresh event lists after update
       const refreshedAll = await eventsService.getAllEvents();
       setAllEvents(refreshedAll);
+
+      await fetchEventsAttending()
   
       if (user?.id) {
         const refreshedMine = await eventsService.getUserEvents(user.id);
@@ -144,6 +170,7 @@ export const EventsProvider = ({ children }) => {
   const value = {
     allEvents,
     myEvents,
+    userEventsAttending,
     addEvent,
     removeEvent,
     getEvent,

@@ -2,6 +2,17 @@ const User = require('../models/user')
 const Event = require('../models/event')
 const {request, response} = require("express");
 
+// handle user events attending
+const getEventsAttending = async (request, response) => {
+    const user = request.user
+    const eventIds = user.eventsAttending
+    const events = await Event.find({
+        '_id': {$in: eventIds}
+    })
+
+    return response.status(201).json(events)
+}
+
 // handle User joining an event
 const joinEvent = async (request, response) => {
     const eventId = request.params.id
@@ -11,6 +22,10 @@ const joinEvent = async (request, response) => {
 
     if (!event) {
         return response.status(404).json({error: "Event not found"})
+    }
+
+    if (event.createdBy.toString() === user.id) {
+        return response.status(403).json({error: "Cannot join your own event"})
     }
 
     if (event.attendees.includes(user.id)) {
@@ -30,6 +45,7 @@ const joinEvent = async (request, response) => {
     response.status(200).json({message: "Joined event successfully"})
 }
 
+// handle user withdrawing from event
 const withdrawEvent = async (request, response) => {
     const eventId = request.params.id
     const user = request.user
@@ -54,6 +70,7 @@ const withdrawEvent = async (request, response) => {
 }
 
 module.exports = {
+    getEventsAttending,
     joinEvent,
     withdrawEvent
 }

@@ -59,16 +59,12 @@ const EventDetails = () => {
         marginBottom: '16px'
       }}
       />}
+      
       <Button variant="contained" color="primary" onClick={() => joinEvent(event.id)}>
         Join event
       </Button>
-      {
-        isEventOwner() && (
-          <Button variant="contained" color="secondary" sx={{ ml: 2 }}>
-            Edit event
-          </Button>
-        )
-      }
+      
+      
     </Box>
   );
 };

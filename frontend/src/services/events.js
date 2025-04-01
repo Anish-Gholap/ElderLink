@@ -2,12 +2,22 @@ import axios from 'axios'
 const baseUrl = "/api/events"
 
 const getAllEvents = async () => {
-    const response = await axios.get(baseUrl)
+    const response = await axios.get(baseUrl) // Implement search instead from Server-HTTPRequests/getEventswQuery
     return response.data
 }
 
 const getUserEvents = async (userId) => {
   const response = await axios.get(`${baseUrl}?createdBy=${userId}`)
+  return response.data
+}
+
+const getUserAttendingEvents = async (userId, token) => {
+  console.log("getUserAttendingEvents is running")
+  const response = await axios.get(`${baseUrl}/${userId}/attending`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })
   return response.data
 }
 
@@ -80,7 +90,8 @@ export default {
   createEvent,
   deleteEvent,
   getEventById,
-  editEvent, 
+  editEvent,
   joinEvent,
-  withdrawEvent
+  withdrawEvent,
+  getUserAttendingEvents
 }

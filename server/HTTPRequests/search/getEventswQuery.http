@@ -1,5 +1,5 @@
 ### Search by search term
-GET http://localhost:3002/api/search?searchTerm=go
+GET http://localhost:3002/api/search?searchTerm=ch
 Accept: application/json
 
 ### Filter by community club

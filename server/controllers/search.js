@@ -1,5 +1,5 @@
 const Event = require('../models/event')
-const {getLocations} = require('../services/locations')
+const {getLocations} = require('../services/locationsCache')
 
 //TODO: Use google Maps API to handle get events by distance
 
@@ -26,8 +26,8 @@ const getCCCords = async (communityClub) => {
     const ccDetails = await getLocations()
     const cc = ccDetails.find(cc => cc.name === communityClub)
     console.log(cc)
-    const lat = cc.location.latitude
-    const long = cc.location.longitude
+    const lat = cc.coordinates.latitude
+    const long = cc.coordinates.longitude
     return [lat, long]
 }
 
