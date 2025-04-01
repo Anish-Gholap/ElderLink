@@ -1,3 +1,4 @@
+import { useNotificationsContext } from "../contexts/NotificationsContext";
 import React from 'react'
 import {
     Dialog,
@@ -45,10 +46,11 @@ schema of notification
 
 const ConfirmDeleteDialog = ({
     open,
-    setOpen
+    setOpen,
+    notificationId,
+    onDelete,
+    UserId
 }) => {
-
-    const onDelete = () => { }; //  implement delete logic
     const onClose = () => setOpen(false);
     return (
         <Dialog open={open} onClose={onClose}
@@ -64,7 +66,9 @@ const ConfirmDeleteDialog = ({
             </DialogContent>
             <DialogActions>
                 <Button onClick={onClose}>Cancel</Button>
-                <Button onClick={onDelete} color="error">Delete</Button>
+                <Button onClick={() => {onDelete(UserId, notificationId);;}} color="error">
+                    Delete
+                </Button>
             </DialogActions>
         </Dialog>
     );
@@ -78,9 +82,22 @@ function NotificationsDialog({
     onClose
 }) {
     const [openConfirmDelete, setOpenConfirmDelete] = React.useState(false);
-
+    const [notificationIdToDelete, setNotificationIdToDelete] = React.useState(null);
+    const { user, removeNotification } = useNotificationsContext();
+    const UserId = user.id
+    const onDelete = (UserId ,notificationId) => { 
+        if (notificationId){
+            removeNotification(UserId ,notificationId);
+            setOpenConfirmDelete(false);
+        }
+        
+    }; 
     return <>
-        <ConfirmDeleteDialog open={openConfirmDelete} setOpen={setOpenConfirmDelete} />
+        <ConfirmDeleteDialog 
+        open={openConfirmDelete} 
+        setOpen={setOpenConfirmDelete}
+        notificationId={notificationIdToDelete}
+        onDelete={onDelete} />
         <Dialog open={open} fullWidth onClose={onClose} sx={
             {
                 zIndex: 2001,
@@ -109,6 +126,7 @@ function NotificationsDialog({
                                 color: "gray",
                             }}
                                 onClick={() => {
+                                    setNotificationIdToDelete(notification._id);
                                     setOpenConfirmDelete(true);
                                 }}
                             />

@@ -48,13 +48,26 @@ export const UsersProvider = ({ children }) => {
             //setLoading(false);
         }
     };
+
+    const createUserHandler = async (newUserData) => {
+        try {
+            const createdUser = await usersService.createUser(newUserData);
+    
+            setUserData(prevData => ({
+                ...prevData,
+                createdUser, // Ensure this matches your state structure
+            }));
+        } catch (error) {
+            console.error("Failed to create user:", error);
+        }
+    };
     
     
 
     if (loading) return <div>Loading...</div>;
 
     return (
-        <UsersContext.Provider value={{ userData, editProfileHandler }}>
+        <UsersContext.Provider value={{ userData, editProfileHandler, createUserHandler }}>
             {children}
         </UsersContext.Provider>
     );

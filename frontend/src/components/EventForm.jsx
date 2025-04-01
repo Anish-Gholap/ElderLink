@@ -42,6 +42,8 @@ const EventForm = ({
           <Autocomplete
             disablePortal
             options={listOfCCs}
+            value={eventLocation}
+            onChange={(event, newValue) => handleEventLocationChange(newValue)}
             sx={{ backgroundColor: 'white', borderRadius: '5px' }}
             renderInput={(params) => <TextField
               {...params}

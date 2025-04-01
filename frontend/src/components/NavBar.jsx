@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import { Link, useNavigate, useLocation } from "react-router-dom"
 import { useAuthContext } from "../contexts/AuthContext"
 import { useNotificationsContext } from "../contexts/NotificationsContext"
@@ -20,6 +20,11 @@ const NavBar = () => {
     setShowSidebar(false);
     setOpenNotifications(false);
   }
+  const notificationsArray = useMemo(() => {
+    return Array.isArray(notifications) ? [...notifications].reverse() : []
+  }, [notifications])
+  
+
 
   // sample notification only for testing
   /*const notifications = [
@@ -86,7 +91,7 @@ const NavBar = () => {
                   Notifications
                 </div>
                 <NotificationsDialog
-                  notifications={[...notifications].reverse()}  // Reverse the notifications array before passing
+                  notifications={notificationsArray.reverse()}  // Reverse the notifications array before passing
                   open={openNotifications}
                   onClose={() => {
                     console.log("close notif");
