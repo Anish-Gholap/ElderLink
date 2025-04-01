@@ -23,7 +23,7 @@ const NavBar = () => {
   const notificationsArray = useMemo(() => {
     return Array.isArray(notifications) ? [...notifications].reverse() : []
   }, [notifications])
-  
+
 
 
   // sample notification only for testing
@@ -59,15 +59,8 @@ const NavBar = () => {
             ElderLink
           </Box>
         </div>
-        <ul className="nav-links">
-          {location.pathname !== "/event-discovery" && (
-            <li>
-              <Link to={-1}>Go Back</Link>
-            </li>
-          )}
-          <li><Link to="/events-management">Manage Events</Link></li>
-          <li><button className="logout-btn" onClick={logout}>Logout</button></li>
-        </ul>
+        <button className="logout-btn" onClick={logout}>Logout</button>
+
       </nav>
 
       {showSidebar && (

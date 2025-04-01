@@ -36,24 +36,8 @@ const ManageEvents = () => {
           <EventCard event={event} sx={{
             minWidth: "300px",
             position: "relative"
-          }} />
-          <Box sx={{ mt: 1, position: "absolute", right: 10, top:7 }}>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => navigate(`/events/${event.id}/edit`)}
-              sx={{ mr: 1 }}
-            >
-              Edit
-            </Button>
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={() => handleDelete(event.id)}
-            >
-              Delete
-            </Button>
-          </Box>
+          }} handleDelete={handleDelete} />
+          
         </Box>
       ))}
       <CreateEventButton />

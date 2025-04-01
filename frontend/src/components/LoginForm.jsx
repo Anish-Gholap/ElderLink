@@ -1,7 +1,7 @@
 import { Button, TextField, Box, Typography } from '@mui/material'
 import { Link } from 'react-router-dom'
 
-const LoginForm = ({ handleSubmit, handleUsernameChange, handlePasswordChange, username, password }) => {
+const LoginForm = ({ handleSubmit, handleUsernameChange, handlePasswordChange, username, password, errorMessage }) => {
 
   return (
     <form onSubmit={handleSubmit}>
@@ -26,6 +26,9 @@ const LoginForm = ({ handleSubmit, handleUsernameChange, handlePasswordChange, u
           margin="normal"
         />
       </div>
+      <Typography color="error" variant="body2" align="center" gutterBottom >
+        {errorMessage}
+      </Typography>
       <Link to='/'> {/* Add this line */}
         <Typography fontSize='0.8rem' >
           Forgot password?

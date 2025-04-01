@@ -9,6 +9,7 @@ import { FaArrowLeft } from "react-icons/fa";
 const Login = () => {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
+  const [errorMessage, setErrorMessage] = useState("")
   const { login } = useAuthContext() // access login helper function from AuthContext
   const navigate = useNavigate()
 
@@ -18,10 +19,23 @@ const Login = () => {
     console.log("local storage cleared")
   }, [])
 
+  const validateDetails = () => {
+    if (username === "") {
+      setErrorMessage("Username cannot be empty")
+      return false
+    }
+    if (password === "") {
+      setErrorMessage("Password cannot be empty")
+      return false
+    }
+    return true
+  }
+
 
   // handle login form submission
   const handleLogin = async (event) => {
     event.preventDefault()
+    if (!validateDetails()) return
 
     try {
       const user = await loginService.login({
@@ -41,6 +55,13 @@ const Login = () => {
 
       console.log(user)
     } catch (exception) {
+      // show error message if login fails
+      if (exception.response.status === 401) {
+        setErrorMessage("Invalid username or password")
+      }
+      else {
+        setErrorMessage("An unexpected error occurred")
+      }
       console.log(exception)
     }
   }
@@ -60,6 +81,7 @@ const Login = () => {
         password={password}
         handleUsernameChange={({ target }) => setUsername(target.value)}
         handlePasswordChange={({ target }) => setPassword(target.value)}
+        errorMessage={errorMessage}
       />
       <Typography mt={2}>
         Don't have an account? <a href="/signup">Sign Up</a>

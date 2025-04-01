@@ -10,6 +10,8 @@ import {
   Autocomplete
 } from "@mui/material"
 import listOfCCs from "../assets/listOfCCs";
+import { CiFilter } from "react-icons/ci"
+import { FaPen } from "react-icons/fa"
 
 const EventDiscovery = () => {
   const { allEvents } = useEventsContext()
@@ -50,7 +52,13 @@ const EventDiscovery = () => {
     )
   }, [])
 
-  const handleSearch = async (e) => {
+  // If the community club changes from the the front page, we immediately search 
+  useEffect(() => {
+    if (!communityClub || !showSearchDialog) return;
+    handleSearch()
+  }, [communityClub])
+
+  const handleSearch = async (e = { preventDefault: () => { } }) => {
     e.preventDefault()
 
     const params = new URLSearchParams()
@@ -89,13 +97,28 @@ const EventDiscovery = () => {
 
       {/* Search Form */}
       <Box my={3} >
-        <Button variant="contained" color="info" fullWidth onClick={() => navigate("/create-event")}>
-          Create Event
-        </Button>
-        <Button sx={{ mt: 2 }} variant="contained" color="success" fullWidth onClick={() => setShowSearchDialog(true)}>
-          Filter Events
-        </Button>
+        <Typography variant="h5" textAlign='center' fontWeight={600}>Find an event!</Typography>
+        <Box display="flex" justifyContent="space-between" gap={2} my={2}>
+          <Autocomplete
+            disablePortal
+            fullWidth
+            options={listOfCCs}
+            renderInput={(params) => <TextField
+              {...params}
+              label="CC location"
+            />}
+            onChange={(event, value) => { setCommunityClub(value) }}
+          />
+          <CiFilter style={{
+            fontSize: "3rem",
+            cursor: "pointer",
+          }} onClick={() => setShowSearchDialog(true)} />
+
+        </Box>
       </Box>
+      <Button sx={{ mb: 3 }} variant="contained" color="info" fullWidth onClick={() => navigate("/create-event")}>
+        {"Create Event"} <Box sx={{ml:1}}><FaPen/> </Box>
+      </Button>
       <Dialog open={showSearchDialog} onClose={() => setShowSearchDialog(false)}>
         <Box mx={5} mt={4}>
           <Typography variant="h4" >Search Events</Typography>
