@@ -30,18 +30,15 @@ const getNotifications = async (req, res) => {
 
 
 // Create a notification for an amended event
-const amendedMessage = async (userId, eventId, message, notificationType) => {
+const amendedMessage = async (userId, eventId, message) => {
   try {
-    if (!userId) {
-      throw new Error('UserId is required');
-    }
 
     // Create a new notification
     const newNotification = new Notification({
       userId: userId,  // userId passed to the function
       eventId: eventId,
       message: message,
-      notificationType: notificationType,
+      notificationType: 'Edited',
     });
 
     // Save the notification to the database
@@ -68,11 +65,6 @@ const amendedMessage = async (userId, eventId, message, notificationType) => {
 // Create a notification for a deleted event
 const deletedMessage = async (userId, eventId, message) => {
   try {
-    // Find the event by eventId
-    const event = await Event.findById(eventId);
-    if (!event) {
-      throw new Error('Event not found');
-    }
 
     // Create the notification for the "Deleted" event
     const notification = new Notification({

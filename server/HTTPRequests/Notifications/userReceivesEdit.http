@@ -1,0 +1,68 @@
+### Login to get token
+POST http://localhost:3002/api/login
+Content-Type: application/json
+
+{
+  "username": "jack",
+  "password": "jack"
+}
+
+> {%
+    client.global.set("auth_token", response.body.token);
+%}
+
+### Add event
+POST http://localhost:3002/api/events
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "title": "Squash",
+  "location": "Nanyang CC",
+  "date": "2025-03-21T14:00:00Z",
+  "description": "squash",
+  "numAttendees": 4
+}
+
+> {%
+    client.global.set("event_id", response.body.id);
+%}
+
+### Login to get token
+POST http://localhost:3002/api/login
+Content-Type: application/json
+
+{
+  "username": "anish",
+  "password": "anish"
+}
+
+> {%
+    client.global.set("auth_token", response.body.token);
+%}
+
+### Join Event
+POST http://localhost:3002/api/events/{{event_id}}/attendees
+Authorization: Bearer {{auth_token}}
+
+### Login to get token
+POST http://localhost:3002/api/login
+Content-Type: application/json
+
+{
+  "username": "jack",
+  "password": "jack"
+}
+
+> {%
+    client.global.set("auth_token", response.body.token);
+%}
+
+### Edit event
+PATCH http://localhost:3002/api/events/{{event_id}}
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "location": "Boon Lay CC"
+}

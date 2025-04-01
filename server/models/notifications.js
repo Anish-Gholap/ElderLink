@@ -17,7 +17,7 @@ const notificationSchema = new mongoose.Schema({
   },
   notificationType: {
     type: String,
-    enum: ['Amended', 'Deleted'],  // Types of notifications
+    enum: ['Edited', 'Deleted'],  // Types of notifications
     required: true,
   },
   createdAt: {

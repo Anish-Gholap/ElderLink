@@ -12,5 +12,5 @@ Content-Type: application/json
 %}
 
 ### Use token in the next request
-POST http://localhost:3002/api/events/67e36d41cb94954bbaaad802/attendees
+POST http://localhost:3002/api/events/67ec106a943565c45c976a03/attendees
 Authorization: Bearer {{auth_token}}

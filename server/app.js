@@ -15,6 +15,8 @@ const searchRouter = require('./views/search')
 const middlewares = require('./utils/middlewares')
 const {userExtractor} = require("./utils/middlewares");
 const {initializeCache} = require('./services/locationsCache')
+const notificationsEmitter = require('./services/notificationsEmitter')
+const {setupNotificationsListeners} = require('./services/notificationsListener')
 
 
 // MongoDB Connection
@@ -46,6 +48,9 @@ app.use(express.static('dist'))
 app.use(express.json())
 app.use(middlewares.requestLogger)
 app.use(middlewares.userExtractor)
+
+// Event Listeners
+setupNotificationsListeners()
 
 app.use('/api/login', loginRouter)
 app.use('/api/events', eventsRouter)

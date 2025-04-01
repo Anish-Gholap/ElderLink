@@ -11,17 +11,8 @@ Content-Type: application/json
     client.global.set("auth_token", response.body.token);
 %}
 
-### Add event
-POST http://localhost:3002/api/events
+### Remove event
+DELETE http://localhost:3002/api/events/67ec106a943565c45c976a03
 Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 
-{
-  "title": "Squash",
-  "location": "Nanyang CC",
-  "date": "2025-03-21T14:00:00Z",
-  "description": "squash",
-  "numAttendees": 4
-}
-
-###

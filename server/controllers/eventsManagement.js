@@ -1,6 +1,7 @@
 const Event = require('../models/event')
 const User = require('../models/user')
 const {AmendedMessage, DeletedMessage } = require('../controllers/notifications')
+const notificationsEmitter = require('../services/notificationsEmitter')
 
 //handle get all events
 const getAllEvents = async (request, response) => {
@@ -64,15 +65,6 @@ const removeEvent = async (request, response) => {
     const eventToDelete = request.event
     const user = request.user
     const eventAttendeesId = eventToDelete.attendees
-    console.log("eventToDelete object:", eventToDelete);
-    for (const attendeeId of eventAttendeesId) {
-        await DeletedMessage(
-            attendeeId,  // userId of each attendee
-            eventToDelete._id,  // eventId
-            `The event ${eventToDelete.title} has been canceled by the event host. Please be informed of this update.`,
-            'Deleted'  // notificationType
-        );
-    }
 
     await Event.findByIdAndDelete(eventToDelete._id)
 
@@ -87,6 +79,13 @@ const removeEvent = async (request, response) => {
             { $pull: { eventsAttending: eventToDelete._id } }
         )
     }
+
+    // Emit the event
+    notificationsEmitter.emit('event:deleted', {
+        eventId: eventToDelete._id,
+        attendeeIds: eventAttendeesId,
+        eventTitle: eventToDelete.title
+    })
 
     response.status(204).end()
 }
@@ -107,15 +106,23 @@ const editEvent = async (request, response) => {
         updateData,
         {new: true, runValidators: true}
     )
-    console.log("eventToAmend object:", request.event);
-    for (const attendeeId of eventAttendeesId) {
-        await AmendedMessage(
-            attendeeId,  // userId of each attendee
-            eventId,  // eventId
-            `The event ${request.event.title} has been updated by the event host. Please review the latest details.`,  // message
-            'Amended'  // notificationType
-        );
-    }
+
+    // console.log("eventToAmend object:", request.event);
+    // for (const attendeeId of eventAttendeesId) {
+    //     await AmendedMessage(
+    //         attendeeId,  // userId of each attendee
+    //         eventId,  // eventId
+    //         `The event ${request.event.title} has been updated by the event host. Please review the latest details.`,  // message
+    //         'Amended'  // notificationType
+    //     );
+    // }
+
+    // Emit the event
+    notificationsEmitter.emit('event:edited', {
+        eventId: eventId,
+        attendeeIds: eventAttendeesId,
+        eventTitle: updatedEvent.title
+    })
 
     response.status(200).end()
 }
