@@ -3,8 +3,10 @@ import { Link, useNavigate, useLocation } from "react-router-dom"
 import { useAuthContext } from "../contexts/AuthContext"
 import { useNotificationsContext } from "../contexts/NotificationsContext"
 import "../css/navbar.css"
-import { Box } from "@mui/material"
+import { Box, IconButton } from "@mui/material"
 import NotificationsDialog from "./NotificationsDialog"
+import { FaBell } from "react-icons/fa6"
+
 
 
 
@@ -23,7 +25,7 @@ const NavBar = () => {
   }
 
   const handleDelete = (UserId, notificationId) => {
-    if (notificationId){
+    if (notificationId) {
       removeNotification(UserId, notificationId)
     }
   }
@@ -67,8 +69,34 @@ const NavBar = () => {
             ElderLink
           </Box>
         </div>
-        <button className="logout-btn" onClick={logout}>Logout</button>
-
+        <Box>
+          <IconButton size="large" color="inherit">
+            <FaBell  onClick={() => setOpenNotifications(true)} />
+              <span style={{ 
+                position: 'absolute', 
+                top: 5, 
+                right: 1, 
+                color: 'white', 
+                backgroundColor:"red", 
+                borderRadius: '50%', 
+                padding: '2px 6px', 
+                fontSize: '12px'
+                 }}>
+                {String(notificationsArray.length)}
+              </span>
+          </IconButton>
+          <NotificationsDialog
+                  notifications={notificationsArray.reverse()}  // Reverse the notifications array before passing
+                  open={openNotifications}
+                  handleDelete={handleDelete}
+                  userId={user.id}
+                  onClose={() => {
+                    console.log("close notif");
+                    setOpenNotifications(false)
+                  }}
+                />
+          <button style={{ marginLeft: 6 }} className="logout-btn" onClick={logout}>Logout</button>
+        </Box>
       </nav>
 
       {showSidebar && (
@@ -85,22 +113,6 @@ const NavBar = () => {
               <hr />
               <li onClick={() => { navigate("/events-management"); closeSidebar() }}>
                 Events Management
-              </li>
-              <hr />
-              <li >
-                <div onClick={() => { console.log("open notif"); setOpenNotifications(true) }}>
-                  Notifications
-                </div>
-                <NotificationsDialog
-                  notifications={notificationsArray.reverse()}  // Reverse the notifications array before passing
-                  open={openNotifications}
-                  handleDelete={handleDelete}
-                  userId = {user.id}
-                  onClose={() => {
-                    console.log("close notif");
-                    setOpenNotifications(false)
-                  }}
-                />
               </li>
               <hr />
               <li onClick={() => { navigate("/profile"); closeSidebar() }}>
