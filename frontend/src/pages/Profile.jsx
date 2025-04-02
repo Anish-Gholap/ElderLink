@@ -7,15 +7,16 @@ import { FaPencilAlt } from 'react-icons/fa';
 import EditProfileDialog from '../components/EditProfileDialog';
 
 function Profile() {
+    //AuthContext holds no information regarding user details except name, username and id
     const { user } = useAuthContext();
-    const { userData, setUserData, editProfileHandler } = useUsersContext();
+    //Seperate Extract required from UserContext
+    const { userData, editProfileHandler } = useUsersContext();
     const [openEditProfile, setOpenEditProfile] = React.useState(false);
     
     const handleProfileEdit = async (updatedData) => {
         try { 
             await editProfileHandler(user.id, updatedData, user.token);
-            setOpenEditProfile(false); 
-            setUserData(updatedData); 
+            setOpenEditProfile(false);  
         } catch (error) {
             console.log("Failed to update profile:", error);
         }
