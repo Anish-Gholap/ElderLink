@@ -8,7 +8,6 @@ export const useUsersContext = () => useContext(UsersContext);
 
 export const UsersProvider = ({ children }) => {
     const { user } = useAuthContext();
-    //console.log("DEBUG1", user.token)
     const [userData, setUserData] = useState(null);
     const [loading, setLoading] = useState(true);
 

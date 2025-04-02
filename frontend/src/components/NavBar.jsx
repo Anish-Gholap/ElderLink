@@ -7,9 +7,10 @@ import { Box } from "@mui/material"
 import NotificationsDialog from "./NotificationsDialog"
 
 
+
 const NavBar = () => {
-  const { logout } = useAuthContext()
-  const { notifications } = useNotificationsContext()
+  const { user, logout } = useAuthContext()
+  const { notifications, removeNotification } = useNotificationsContext()
   const [openNotifications, setOpenNotifications] = useState(false)
   const location = useLocation()
   const navigate = useNavigate()
@@ -20,6 +21,13 @@ const NavBar = () => {
     setShowSidebar(false);
     setOpenNotifications(false);
   }
+
+  const handleDelete = (UserId, notificationId) => {
+    if (notificationId){
+      removeNotification(UserId, notificationId)
+    }
+  }
+
   const notificationsArray = useMemo(() => {
     return Array.isArray(notifications) ? [...notifications].reverse() : []
   }, [notifications])
@@ -86,6 +94,8 @@ const NavBar = () => {
                 <NotificationsDialog
                   notifications={notificationsArray.reverse()}  // Reverse the notifications array before passing
                   open={openNotifications}
+                  handleDelete={handleDelete}
+                  userId = {user.id}
                   onClose={() => {
                     console.log("close notif");
                     setOpenNotifications(false)

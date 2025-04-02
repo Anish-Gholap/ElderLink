@@ -19,7 +19,6 @@ const CreateEvent = () => {
 
   const { addEvent } = useEventsContext()
   const navigate = useNavigate()
-
   const handleEventCreation = (event) => {
     event.preventDefault()
 
@@ -34,7 +33,7 @@ const CreateEvent = () => {
 
     const eventData = {
       title: eventName,
-      location: eventLocation,
+      location: eventLocation?.label,
       numAttendees: eventNumAttendees,
       date: isoDateString, // ✅ using "date" instead of "dateTime"
       description: eventDescription
@@ -108,7 +107,7 @@ const CreateEvent = () => {
         hours={hours}
         minutes={minutes}
         handleEventNameChange={({ target }) => setEventName(target.value)}
-        handleEventLocationChange={({ target }) => setEventLocation(target.value)}
+        handleEventLocationChange={(newValue) => setEventLocation(newValue)}
         handleEventNumAttendeesChange={({ target }) => setEventNumAttendees(target.value)}
         handleEventDescriptionChange={({ target }) => setEventDescription(target.value)}
         handleYearChange={({ target }) => setYear(target.value)}

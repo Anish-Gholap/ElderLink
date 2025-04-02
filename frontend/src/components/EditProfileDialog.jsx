@@ -67,7 +67,7 @@ const EditProfileDialog = ({ open, onClose, onSubmit, userData }) => {
                     Cancel
                 </Button>
                 <Button onClick={handleSubmit} color="primary" variant="contained">
-                    Submit
+                    Save Changes
                 </Button>
             </DialogActions>
         </Dialog>
