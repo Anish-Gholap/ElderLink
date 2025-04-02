@@ -81,7 +81,12 @@ const getEvents = async (request, response) => {
             const distancePromises = events.map(async (event) => {
                 const [ccLat, ccLong] = await getCCCords(event.location)
                 const distance = calculateDistance(lat, long, ccLat, ccLong)
-                return {...event._doc, distance}
+                const { _id, ...restProps } = event._doc;
+                return {
+                    ...restProps,
+                    id: _id,  // Rename _id to id
+                    distance
+                }
             })
 
             const eventsWDistance = await Promise.all(distancePromises)
