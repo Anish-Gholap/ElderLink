@@ -17,11 +17,11 @@ Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 
 {
-  "title": "Squash",
+  "title": "Pool",
   "location": "Nanyang CC",
-  "date": "2025-03-21T14:00:00Z",
-  "description": "squash",
-  "numAttendees": 4
+  "date": "2025-03-21T21:00:00+08:00",
+  "description": "Pool friendlies. Challenge to improve pool skills and have fun sing song",
+  "numAttendees": 2
 }
 
 ###

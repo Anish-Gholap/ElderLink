@@ -52,7 +52,7 @@ const EventDiscovery = () => {
     )
   }, [])
 
-  // If the community club changes from the the front page, we immediately search 
+  // If the community club changes from the front page, we immediately search
   useEffect(() => {
     if (!communityClub || !showSearchDialog) return;
     handleSearch()

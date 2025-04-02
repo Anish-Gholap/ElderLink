@@ -7,9 +7,11 @@ const createUser = async (request, response) => {
     const {username, name, phoneNumber, password} = request.body
 
     // validate password
-    if (password.length < 3) {
-        return response.status(400).json({error: "Password must be at least 3 characters long"})
+    const passwordValidation = validatePassword(password);
+    if (!passwordValidation.isValid) {
+        return response.status(400).json({ error: passwordValidation.message });
     }
+
     //hash password
     const saltRounds = 10
     const passwordHash = await bcrypt.hash(password, saltRounds)
@@ -53,6 +55,45 @@ const editUser = async (request, response) => {
 }
 
 // TODO: Remove user. Try Mongoose hooks to update Events tied to user to delete
+
+
+const validatePassword = (password) => {
+    // Initialize result object
+    const result = {
+        isValid: true,
+        message: ''
+    };
+
+    // Check minimum length (6 characters)
+    if (!password || password.length < 6) {
+        result.isValid = false
+        result.message = 'Password must be at least 6 characters long'
+        return result
+    }
+
+    // Check for at least 1 uppercase letter
+    if (!/[A-Z]/.test(password)) {
+        result.isValid = false
+        result.message = 'Password must contain at least one uppercase letter'
+        return result
+    }
+
+    // Check for at least 1 lowercase letter
+    if (!/[a-z]/.test(password)) {
+        result.isValid = false
+        result.message = 'Password must contain at least one lowercase letter'
+        return result
+    }
+
+    // Check for at least 1 special character
+    if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) {
+        result.isValid = false
+        result.message = 'Password must contain at least one special character'
+        return result
+    }
+
+    return result
+}
 
 module.exports = {
     createUser,
