@@ -2,6 +2,7 @@
 // Context to manage events across all
 import {createContext, useCallback, useContext, useEffect, useState} from "react";
 import eventsService from "../services/events"
+import searchService from "../services/search"
 import {useAuthContext} from "../contexts/AuthContext"
 
 const EventsContext = createContext()
@@ -14,13 +15,58 @@ export const EventsProvider = ({ children }) => {
   const [allEvents, setAllEvents] = useState([])
   const [myEvents, setMyEvents] = useState([])
   const [userEventsAttending, setUserEventsAttending] = useState([])
+  const [userLat, setUserLat] = useState(null);
+  const [userLong, setUserLong] = useState(null);
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    setLoading(true);
+
+    if (userLat && userLong) {
+      // Fetch events by distance when location is available
+      searchService.getEventsByDistance(userLat, userLong)
+          .then(data => {
+            setAllEvents(data);
+            setLoading(false);
+          })
+          .catch(err => {
+            console.error("Error fetching events by distance: ", err);
+            setLoading(false);
+          });
+    } else {
+      // Fetch all events when no location is available
+      searchService.getEventsByDistance()
+          .then(data => {
+            setAllEvents(data);
+            setLoading(false);
+          })
+          .catch(err => {
+            console.error("Error fetching all events: ", err);
+            setLoading(false);
+          });
+    }
+  }, [userLat, userLong]);
 
   // 1) Fetch all events for events discovery
-  useEffect(() => {
-    eventsService.getAllEvents()
-      .then(data => setAllEvents(data))
-      .catch(err => console.error("Error fetching all events: ", err))
-  }, [])
+  // useEffect(() => {
+  //   eventsService.getAllEvents()
+  //     .then(data => setAllEvents(data))
+  //     .catch(err => console.error("Error fetching all events: ", err))
+  // }, [])
+
+  const updateUserLocation = (latitude, longitude) => {
+    setUserLat(latitude);
+    setUserLong(longitude);
+  }
+
+  // useEffect(() => {
+  //   // Check if we have location data before making the API call
+  //   if (userLat && userLong) {
+  //     searchService.getEventsByDistance(userLat, userLong)
+  //         .then(data => setAllEvents(data))
+  //         .catch(err => console.error("Error fetching events by distance: ", err))
+  //   }
+  // }, [userLat, userLong])
 
   // 2) Fetch user-specific events for manage events
   useEffect(() => {
@@ -176,7 +222,8 @@ export const EventsProvider = ({ children }) => {
     getEvent,
     updateEvent,
     joinEvent,
-    withdrawEvent
+    withdrawEvent,
+    updateUserLocation
   }
 
   return (

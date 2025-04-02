@@ -5,66 +5,65 @@ import { useNavigate } from "react-router-dom"
 import {
   Typography,
   TextField, Button,
-  Dialog, DialogContent, DialogActions, DialogTitle,
   Box,
-  Autocomplete
+  InputAdornment
 } from "@mui/material"
-import listOfCCs from "../assets/listOfCCs";
-import { CiFilter } from "react-icons/ci"
+import { CiSearch } from "react-icons/ci"
 import { FaPen } from "react-icons/fa"
 
 const EventDiscovery = () => {
-  const { allEvents } = useEventsContext()
+  const { allEvents, updateUserLocation } = useEventsContext()
 
-  const [searchTerm, setSearchTerm] = useState("")
-  const [searchDate, setSearchDate] = useState("")
-  const [communityClub, setCommunityClub] = useState("")
+  // Single search query
+  const [searchQuery, setSearchQuery] = useState("")
   const [searchResults, setSearchResults] = useState(null)
 
+  // User location
   const [userLat, setUserLat] = useState(null)
   const [userLong, setUserLong] = useState(null)
 
-  const [showSearchDialog, setShowSearchDialog] = useState(false)
-
   const navigate = useNavigate()
 
-  // Get user location (but don't fetch events yet)
+  // Get user location
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords
-        console.log("User location:", latitude, longitude)
-        setUserLat(latitude)
-        setUserLong(longitude)
-
-        // Ready for use later if needed:
-        const params = new URLSearchParams()
-        params.append("lat", latitude)
-        params.append("long", longitude)
-        const searchUrl = `/api/search?${params.toString()}`
-        console.log("Prepared request:", searchUrl)
-
-        // Don't send the request yet
-      },
-      (error) => {
-        console.error("❌ Failed to get user location", error)
-      }
+        (position) => {
+          const { latitude, longitude } = position.coords
+          updateUserLocation(latitude, longitude);
+        },
+        (error) => {
+          console.error("❌ Failed to get user location", error)
+        }
     )
+
   }, [])
 
-  // If the community club changes from the front page, we immediately search
+  // Handle search with debounce
   useEffect(() => {
-    if (!communityClub || !showSearchDialog) return;
-    handleSearch()
-  }, [communityClub])
+    const delaySearch = setTimeout(() => {
+      if (searchQuery) {
+        handleSearch()
+      } else {
+        setSearchResults(null) // Reset to show all events
+      }
+    }, 500)
 
-  const handleSearch = async (e = { preventDefault: () => { } }) => {
-    e.preventDefault()
+    return () => clearTimeout(delaySearch)
+  }, [searchQuery])
 
+  const handleSearch = async () => {
     const params = new URLSearchParams()
-    if (searchTerm) params.append("searchTerm", searchTerm)
-    if (searchDate) params.append("date", searchDate)
-    if (communityClub) params.append("communityClub", communityClub)
+
+    // Add search term parameter for event title only
+    if (searchQuery) params.append("searchTerm", searchQuery)
+
+    // Note: We're only searching by event title, not by community club
+
+    // // Include location if available
+    // if (userLat && userLong) {
+    //   params.append("lat", userLat)
+    //   params.append("long", userLong)
+    // }
 
     try {
       const res = await fetch(`http://localhost:3002/api/search?${params.toString()}`)
@@ -76,105 +75,70 @@ const EventDiscovery = () => {
   }
 
   const handleReset = () => {
-    setSearchTerm("")
-    setSearchDate("")
-    setCommunityClub("")
+    setSearchQuery("")
     setSearchResults(null)
   }
 
   const eventsToDisplay = searchResults !== null ? searchResults : allEvents
 
   return (
-    <>
-      <Typography textAlign='center' fontWeight={700} variant="h4">Discover Events</Typography>
+      <>
+        <Typography textAlign='center' fontWeight={700} variant="h4" mb={3}>Discover Events</Typography>
 
-      {/* Show user's coordinates */}
-      {userLat && userLong ? (
-        <p>Your location: {userLat.toFixed(5)}, {userLong.toFixed(5)}</p>
-      ) : (
-        <p>Getting your location...</p>
-      )}
-
-      {/* Search Form */}
-      <Box my={3} >
-        <Typography variant="h5" textAlign='center' fontWeight={600}>Find an event!</Typography>
-        <Box display="flex" justifyContent="space-between" gap={2} my={2}>
-          <Autocomplete
-            disablePortal
-            fullWidth
-            options={listOfCCs}
-            renderInput={(params) => <TextField
-              {...params}
-              label="CC location"
-            />}
-            onChange={(event, value) => { setCommunityClub(value) }}
+        {/* Main Search Bar */}
+        <Box sx={{ mb: 3 }}>
+          <TextField
+              fullWidth
+              placeholder="Search events by name..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              InputProps={{
+                startAdornment: (
+                    <InputAdornment position="start">
+                      <CiSearch size={24} />
+                    </InputAdornment>
+                ),
+                endAdornment: searchQuery ? (
+                    <InputAdornment position="end">
+                      <Button size="small" onClick={handleReset}>
+                        Clear
+                      </Button>
+                    </InputAdornment>
+                ) : null
+              }}
           />
-          <CiFilter style={{
-            fontSize: "3rem",
-            cursor: "pointer",
-          }} onClick={() => setShowSearchDialog(true)} />
-
         </Box>
-      </Box>
-      <Button sx={{ mb: 3 }} variant="contained" color="info" fullWidth onClick={() => navigate("/create-event")}>
-        {"Create Event"} <Box sx={{ml:1}}><FaPen/> </Box>
-      </Button>
-      <Dialog open={showSearchDialog} onClose={() => setShowSearchDialog(false)}>
-        <Box mx={5} mt={4}>
-          <Typography variant="h4" >Search Events</Typography>
-        </Box>
-        <DialogContent>
-          <form onSubmit={handleSearch} style={{ display: "flex", flexDirection: "column", gap: "2rem", padding: "1rem" }}>
-            <TextField
-              label="Event Name"
-              variant="outlined"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            <TextField
-              label="Date"
-              type="date"
-              InputLabelProps={{ shrink: true }}
-              variant="outlined"
-              value={searchDate}
-              onChange={(e) => setSearchDate(e.target.value)}
-            />
-            <Autocomplete
-              disablePortal
-              options={listOfCCs}
-              renderInput={(params) => <TextField
-                {...params}
-                label="CC location"
-              />}
-            />
-          </form>
-        </DialogContent>
-        <DialogActions style={{ padding: "1rem", display: "flex", justifyContent: "space-between" }}>
-          <Box sx={{ mr: 5 }}>
-            <Button sx={{ mr: 2 }} type="submit" variant="contained" color="primary" onClick={handleSearch}>
-              Search
-            </Button>
-            <Button type="button" variant="outlined" onClick={handleReset}>
-              Reset
-            </Button>
-          </Box>
-          <Button color='primary' onClick={() => setShowSearchDialog(false)}>
-            Close
-          </Button>
-        </DialogActions>
-      </Dialog>
 
-      {/* Event Cards */}
-      {eventsToDisplay && eventsToDisplay.length > 0 ? (
-        eventsToDisplay.map(event => (
-          <EventCard event={event} key={event.id} />
-        ))
-      ) : (
-        <p>No events found.</p>
-      )}
+        {/* Create Event Button */}
+        <Button
+            sx={{ mb: 3 }}
+            variant="contained"
+            color="info"
+            fullWidth
+            onClick={() => navigate("/create-event")}
+        >
+          {"Create Event"} <Box sx={{ml:1}}><FaPen/></Box>
+        </Button>
 
+        {/* Location indicator */}
+        {userLat && userLong && searchQuery && (
+            <Typography variant="caption" display="block" color="text.secondary" mb={2}>
+              Results sorted by proximity to your location
+            </Typography>
+        )}
 
-    </>
+        {/* Event Cards */}
+        {eventsToDisplay && eventsToDisplay.length > 0 ? (
+            eventsToDisplay.map(event => (
+                <EventCard event={event} key={event._id} />
+            ))
+        ) : (
+            <Box sx={{ textAlign: 'center', py: 4 }}>
+              <Typography variant="h6">No events found.</Typography>
+              <Typography color="text.secondary">Try adjusting your search terms.</Typography>
+            </Box>
+        )}
+      </>
   )
 }
 

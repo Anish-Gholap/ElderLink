@@ -1,9 +1,9 @@
 ### Search by search term
-GET http://localhost:3002/api/search?searchTerm=ch
+GET http://localhost:3002/api/search?searchTerm=s
 Accept: application/json
 
 ### Filter by community club
-GET http://localhost:3002/api/search?communityClub=nanyang
+GET http://localhost:3002/api/search?communityClub=Bukit
 Accept: application/json
 
 ### Get events by distance

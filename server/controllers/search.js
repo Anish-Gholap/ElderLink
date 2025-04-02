@@ -87,7 +87,7 @@ const getEvents = async (request, response) => {
             const eventsWDistance = await Promise.all(distancePromises)
 
             const eventsByDistance = await eventsWDistance.sort((a, b) => a.distance - b.distance)
-            console.log(eventsByDistance)
+            //console.log(eventsByDistance)
 
             return response.status(200).json(eventsByDistance)
         }
