@@ -1,4 +1,3 @@
-import { useNotificationsContext } from "../contexts/NotificationsContext";
 import React from 'react'
 import {
     Dialog,
@@ -47,11 +46,16 @@ schema of notification
 const ConfirmDeleteDialog = ({
     open,
     setOpen,
-    notificationId,
-    onDelete,
-    UserId
+    handleDelete,
+    userId,
+    notificationId
 }) => {
     const onClose = () => setOpen(false);
+    const onDelete = () => {
+        handleDelete(userId, notificationId);
+        onClose();  // Close the delete confirmation dialog
+    };
+
     return (
         <Dialog open={open} onClose={onClose}
             sx={
@@ -66,7 +70,7 @@ const ConfirmDeleteDialog = ({
             </DialogContent>
             <DialogActions>
                 <Button onClick={onClose}>Cancel</Button>
-                <Button onClick={() => {onDelete(UserId, notificationId);;}} color="error">
+                <Button onClick={onDelete} color="error">
                     Delete
                 </Button>
             </DialogActions>
@@ -79,25 +83,21 @@ const ConfirmDeleteDialog = ({
 function NotificationsDialog({
     notifications = [],
     open,
-    onClose
+    onClose,
+    handleDelete,
+    userId,
+    notificationId
 }) {
     const [openConfirmDelete, setOpenConfirmDelete] = React.useState(false);
     const [notificationIdToDelete, setNotificationIdToDelete] = React.useState(null);
-    const { user, removeNotification } = useNotificationsContext();
-    const UserId = user.id
-    const onDelete = (UserId ,notificationId) => { 
-        if (notificationId){
-            removeNotification(UserId ,notificationId);
-            setOpenConfirmDelete(false);
-        }
-        
-    }; 
+    
     return <>
         <ConfirmDeleteDialog 
         open={openConfirmDelete} 
         setOpen={setOpenConfirmDelete}
         notificationId={notificationIdToDelete}
-        onDelete={onDelete} />
+        userId = {userId}
+        handleDelete={handleDelete} />
         <Dialog open={open} fullWidth onClose={onClose} sx={
             {
                 zIndex: 2001,
