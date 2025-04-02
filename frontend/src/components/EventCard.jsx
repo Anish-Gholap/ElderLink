@@ -6,7 +6,7 @@ import { FaRegClock } from "react-icons/fa";
 import { FaPeopleGroup } from "react-icons/fa6";
 import { LuPartyPopper } from "react-icons/lu";
 
-const EventCard = ({ event, handleDelete, sx }) => {
+const EventCard = ({ event, handleDelete, sx, actions = null}) => {
   const navigate = useNavigate()
 
   const formattedDate = new Date(event.date).toLocaleString("en-SG", {
@@ -54,23 +54,7 @@ const EventCard = ({ event, handleDelete, sx }) => {
           {formattedDate}
         </Typography>
       </Box>
-      <Box sx={{ mt: 1 }}>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => navigate(`/events/${event.id}/edit`)}
-          sx={{ mr: 1 }}
-        >
-          Edit
-        </Button>
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={() => handleDelete(event.id)}
-        >
-          Delete
-        </Button>
-      </Box>
+      {actions}
     </Box>
 
   )
