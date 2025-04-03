@@ -1,6 +1,7 @@
 /**
- * Service to interact with location API
+ * Used by leaflet to display the event location on the minimap
  */
+import axios from "axios";
 
 // Cache to avoid repeated API calls
 const locationCache = {
@@ -89,3 +90,23 @@ export const findLocationByName = async (locationName) => {
 
     return null;
 };
+
+export const getLocationNames = async () => {
+    try {
+        const response = await axios.get('/api/locations/names')
+        console.log(response.data[0])
+
+        return response.data.filter(location => {
+            const locationString = String(location).toLowerCase()
+            return !locationString.includes('(u/c)') &&
+              !locationString.includes('(pending u/c)') &&
+              !locationString.includes('(pending relocation)')
+        })
+    } catch (error) {
+        if (error.response && error.response.data && error.response.data.error) {
+            throw error.response.data.error
+        } else {
+            throw new Error('Failed to fetch location names')
+        }
+    }
+}
