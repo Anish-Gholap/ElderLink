@@ -21,7 +21,8 @@ const EventAttendance = () => {
   };
 
   return (
-    <Container>
+    <Container sx={{ mt: 4, mb: 4, display: "flex", flexDirection: "column", alignItems: "center" }}>
+
       <Typography textAlign='center' fontWeight={700} variant="h4" mb={3}>Manage Events</Typography>
 
       <Toggle defaultToggle="attending-events" />
@@ -49,15 +50,15 @@ const EventAttendance = () => {
             <Typography color="text.secondary" sx={{ mt: 1 }}>
               Explore and join exciting events happening near you!
             </Typography>
-            <Link to="/event-discovery" style={{ textDecoration: 'none' }}>
-              <Button variant="contained" color="primary" sx={{ mt: 2 }}>
-                Discover Events
-              </Button>
-            </Link>
-            
+
           </Box>
         )
       }
+      <Link to="/event-discovery" style={{ textDecoration: 'none' }}>
+        <Button variant="contained" color="primary" sx={{ mt: 2 }}>
+          Discover Events
+        </Button>
+      </Link>
     </Container>
   );
 };

@@ -11,7 +11,7 @@ export const useSnackbar = () => {
   const [message, setMessage] = useState('');
   const [severity, setSeverity] = useState('info');
   const [redirectPath, setRedirectPath] = useState(null);
-  const [autoHideDuration, setAutoHideDuration] = useState(1000);
+  const [autoHideDuration, setAutoHideDuration] = useState(3000);
 
   const navigate = useNavigate();
 
@@ -22,7 +22,7 @@ export const useSnackbar = () => {
    * @param {string|null} redirect - Path to redirect to after snackbar closes
    * @param {number} duration - How long to show the message in ms
    */
-  const showMessage = (msg, type = 'info', redirect = null, duration = 1000) => {
+  const showMessage = (msg, type = 'info', redirect = null, duration = 3000) => {
     setMessage(msg);
     setSeverity(type);
     setRedirectPath(redirect);

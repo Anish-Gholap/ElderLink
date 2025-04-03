@@ -26,7 +26,7 @@ const ManageEvents = () => {
   };
 
   return (
-    <Container>
+    <Container sx={{ mt: 4, mb: 4, display: "flex", flexDirection: "column", alignItems: "center" }}>
       <Typography textAlign='center' fontWeight={700} variant="h4" mb={3}>Manage Events</Typography>
       <Toggle />
       {myEvents.map(event => (
@@ -67,10 +67,10 @@ const ManageEvents = () => {
             <Typography color="text.secondary" sx={{ mt: 1, mb:2 }} >
               Create your very own event!
             </Typography>
-            <CreateEventButton />
           </Box>
         )
       }
+      <CreateEventButton />
     </Container>
   );
 };
