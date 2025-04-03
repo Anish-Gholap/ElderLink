@@ -4,15 +4,20 @@ import { FaArrowLeft } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import SignUpForm from '../components/SignUpForm';
 import { useUsersContext } from "../contexts/UsersContext";
+import { useSnackbar } from '../hooks/useSnackbar';
+import SnackbarComponent from '../components/SnackbarComponent';
+import usersService from "../services/users.js"
 
-function SignUp() {
+const SignUp = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [name, setName] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+
   const navigate = useNavigate();
   const { createUserHandler } = useUsersContext();
+  const snackbar = useSnackbar();
 
   useEffect(() => {
     window.localStorage.clear();
@@ -23,23 +28,34 @@ function SignUp() {
     event.preventDefault();
 
     if (!username || !name || !phoneNumber || !password || !confirmPassword) {
-      return "Please fill in all fields"
+      snackbar.showError("Please fill in all fields");
+      return;
     }
 
     if (password !== confirmPassword) {
-      alert("Passwords do not match.");
+      snackbar.showError("Passwords do not match.");
       return;
     }
 
     try {
-        // Call createUserHandler with the required fields
-        await createUserHandler({ username, name, phoneNumber, password });
+      // Call createUserHandler with the required fields
+      // await createUserHandler({ username, name, phoneNumber, password });
 
-        // Redirect to login after successful sign-up
-        navigate("/login"); 
+      const newUser = {
+        username,
+        name,
+        phoneNumber,
+        password
+      }
+
+      await usersService.createUser(newUser)
+
+      // Show success message and redirect to login
+      snackbar.showSuccess("Registration successful, redirecting to Login", "/login");
+
     } catch (error) {
-        console.error("Sign-up failed:", error);
-        alert("Sign-up failed. Please try again.");
+      console.error("Sign-up failed:", error);
+      snackbar.showError(`Sign-up failed. ${error}` );
     }
   };
 
@@ -55,7 +71,7 @@ function SignUp() {
         handleSubmit={handleSignUp}
         username={username}
         name={name}
-        phoneNumber ={phoneNumber}
+        phoneNumber={phoneNumber}
         password={password}
         confirmPassword={confirmPassword}
         handleUsernameChange={({ target }) => setUsername(target.value)}
@@ -63,6 +79,14 @@ function SignUp() {
         handlePasswordChange={({ target }) => setPassword(target.value)}
         handlePhoneChange={({ target }) => setPhoneNumber(target.value)}
         handleConfirmPasswordChange={({ target }) => setConfirmPassword(target.value)}
+      />
+
+      <SnackbarComponent
+        open={snackbar.open}
+        message={snackbar.message}
+        severity={snackbar.severity}
+        autoHideDuration={snackbar.autoHideDuration}
+        handleClose={snackbar.handleClose}
       />
     </Box>
   );

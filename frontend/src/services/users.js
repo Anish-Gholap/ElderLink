@@ -32,7 +32,7 @@ const createUser = async (newUserData) => {
       return response.data; // Return the newly created user
   } catch (error) {
       console.error("Error creating user", error);
-      throw error; // Rethrow for handling in the component or context
+      throw error.response.data.error; // Rethrow for handling in the component or context
   }
 };
 

@@ -4,14 +4,17 @@ import loginService from "../services/login"
 import { useAuthContext } from "../contexts/AuthContext"
 import { useNavigate } from "react-router-dom"
 import { TextField, Box, Typography } from "@mui/material"
-import { FaArrowLeft } from "react-icons/fa";
+import { FaArrowLeft } from "react-icons/fa"
+import {useSnackbar} from "../hooks/useSnackbar.js"
+import SnackbarComponent from "../components/SnackbarComponent.jsx"
+
 
 const Login = () => {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
-  const [errorMessage, setErrorMessage] = useState("")
   const { login } = useAuthContext() // access login helper function from AuthContext
   const navigate = useNavigate()
+  const snackbar = useSnackbar()
 
   // clear localStorage to force login if LoginPage was loaded outside of app flow
   useEffect(() => {
@@ -21,11 +24,11 @@ const Login = () => {
 
   const validateDetails = () => {
     if (username === "") {
-      setErrorMessage("Username cannot be empty")
+      snackbar.showError("Username cannot be empty")
       return false
     }
     if (password === "") {
-      setErrorMessage("Password cannot be empty")
+      snackbar.showError("Password cannot be empty")
       return false
     }
     return true
@@ -51,16 +54,16 @@ const Login = () => {
       setPassword("")
 
       // navigate to event discovery page
-      navigate("/event-discovery")
+      snackbar.showSuccess("Login successful", "/event-discovery")
 
       console.log(user)
     } catch (exception) {
       // show error message if login fails
       if (exception.response.status === 401) {
-        setErrorMessage("Invalid username or password")
+        snackbar.showError("Invalid username or password")
       }
       else {
-        setErrorMessage("An unexpected error occurred")
+        snackbar.showError("An unexpected error occurred")
       }
       console.log(exception)
     }
@@ -81,11 +84,17 @@ const Login = () => {
         password={password}
         handleUsernameChange={({ target }) => setUsername(target.value)}
         handlePasswordChange={({ target }) => setPassword(target.value)}
-        errorMessage={errorMessage}
       />
       <Typography mt={2}>
         Don't have an account? <a href="/signup">Sign Up</a>
       </Typography>
+      <SnackbarComponent
+        open={snackbar.open}
+        message={snackbar.message}
+        severity={snackbar.severity}
+        autoHideDuration={snackbar.autoHideDuration}
+        handleClose={snackbar.handleClose}
+      />
     </Box>
   )
 }

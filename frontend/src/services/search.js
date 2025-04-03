@@ -2,7 +2,6 @@ import axios from 'axios'
 const baseUrl = '/api/search'
 
 const getEventsByDistance = async (lat, long) => {
-    console.log("Search service called")
     const response = await axios.get(`${baseUrl}`, {
         params: {
             lat: lat,
@@ -13,4 +12,15 @@ const getEventsByDistance = async (lat, long) => {
     return response.data
 }
 
-export default {getEventsByDistance}
+const searchEvents = async (params) => {
+    const response = await axios.get(`${baseUrl}`, {
+        params: params
+    })
+
+    return response.data
+}
+
+export default {
+    getEventsByDistance,
+    searchEvents
+}

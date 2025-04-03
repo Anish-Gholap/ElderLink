@@ -22,24 +22,35 @@ const getUserAttendingEvents = async (userId, token) => {
 }
 
 const createEvent = async (eventData, token) => {
-  const response = await axios.post(baseUrl, eventData, {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  })
-  return response.data
+  try {
+    const response = await axios.post(baseUrl, eventData, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+
+    return response.data
+
+  } catch (error) {
+    throw error.response.data.error
+  }
 }
 
 const deleteEvent = async (eventId, token) => {
   console.log("From eventsService ", eventId)
 
   // backend checks token validity
-  const response = await axios.delete(`${baseUrl}/${eventId}`, {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  })
-  return response.data
+  try {
+    const response = await axios.delete(`${baseUrl}/${eventId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    return response.data
+
+  } catch (error) {
+    throw error.response.data.error
+  }
 }
 
 const getEventById = async (eventId) => {
@@ -48,40 +59,54 @@ const getEventById = async (eventId) => {
 }
 
 const editEvent = async (eventId, updatedEvent, token) => {
-  const response = await axios.patch(`${baseUrl}/${eventId}`, updatedEvent, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json"
-    }
-  })
+  try {
+    const response = await axios.patch(`${baseUrl}/${eventId}`, updatedEvent, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
+      }
+    })
 
-  return response.data
+    return response.data
+
+  } catch (error) {
+    throw error.response.data.error
+  }
 }
 
 const joinEvent = async (eventId, userId, token) => {
-  console.log("events service", userId)
-  const response = await axios.post(`${baseUrl}/${eventId}/attendees`, {userId}, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json"
+  try {
+    console.log("events service", userId)
+    const response = await axios.post(`${baseUrl}/${eventId}/attendees`, {userId}, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
 
-    }
-  })
+      }
+    })
 
-  return response.data
+    return response.data
+  } catch (error) {
+    throw error.response.data.error
+  }
 }
 
 // Withdraw from an event (remove user from attendees)
 const withdrawEvent = async (eventId, userId, token) => {
-  console.log("Withdrawing user", userId, "from event", eventId);
-  const response = await axios.delete(`${baseUrl}/${eventId}/attendees`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json"
-    },
-    data: { userId }  // Send the userId in the body for the withdrawal
-  });
-  return response.data;
+  try {
+    console.log("Withdrawing user", userId, "from event", eventId);
+    const response = await axios.delete(`${baseUrl}/${eventId}/attendees`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
+      },
+      data: { userId }  // Send the userId in the body for the withdrawal
+    });
+    return response.data;
+
+  } catch (error) {
+    throw error.response.data.error
+  }
 };
 
 export default {

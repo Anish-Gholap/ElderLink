@@ -12,12 +12,15 @@
 */
 
 import { createContext, useState, useEffect, useContext } from "react";
+import {useNavigate} from "react-router-dom"
 
 const AuthContext = createContext()
 
 export const useAuthContext = () => useContext(AuthContext)
 
 export const AuthProvider = ({children}) => {
+  const navigate = useNavigate()
+
   // initialise user state from localStorage to persist login after Refresh
   const [user, setUser] = useState(() => {
     return JSON.parse(localStorage.getItem("user")) || null
@@ -64,6 +67,7 @@ export const AuthProvider = ({children}) => {
   const logout = () => {
     setUser(null)
     localStorage.removeItem("user")
+    navigate("/")
   }
 
   const value = {

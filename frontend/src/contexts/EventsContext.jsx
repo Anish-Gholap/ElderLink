@@ -4,6 +4,7 @@ import {createContext, useCallback, useContext, useEffect, useState} from "react
 import eventsService from "../services/events"
 import searchService from "../services/search"
 import {useAuthContext} from "../contexts/AuthContext"
+import excludeVariablesFromRoot from "@mui/material/styles/excludeVariablesFromRoot.js";
 
 const EventsContext = createContext()
 
@@ -104,17 +105,22 @@ export const EventsProvider = ({ children }) => {
 
   // helper functions to refetch and update local state to keep everything in sync
   const addEvent = async (eventData) => {
-    // send token for authorization
-    const response = await eventsService.createEvent(eventData, user.token)
-    console.log(response)
-    
-    const refreshedAll = await eventsService.getAllEvents()
-    setAllEvents(refreshedAll)
+    try {
+      // send token for authorization
+      const response = await eventsService.createEvent(eventData, user.token)
+      console.log(response)
 
-    // If user is creator, refetch their events
-    if (user?.id) {
-      const refreshedMine = await eventsService.getUserEvents(user.id)
-      setMyEvents(refreshedMine)
+      const refreshedAll = await eventsService.getAllEvents()
+      setAllEvents(refreshedAll)
+
+      // If user is creator, refetch their events
+      if (user?.id) {
+        const refreshedMine = await eventsService.getUserEvents(user.id)
+        setMyEvents(refreshedMine)
+      }
+    } catch (exception) {
+      console.log("Event Creation Failed: ", exception)
+      throw exception
     }
   }
 

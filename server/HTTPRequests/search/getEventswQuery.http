@@ -3,7 +3,7 @@ GET http://localhost:3002/api/search?searchTerm=s
 Accept: application/json
 
 ### Filter by community club
-GET http://localhost:3002/api/search?communityClub=Bukit
+GET http://localhost:3002/api/search?communityClub=Bu
 Accept: application/json
 
 ### Get events by distance
@@ -11,5 +11,5 @@ GET http://localhost:3002/api/search?lat=1.30547641732019964&long=103.9105603136
 Accept: application/json
 
 ### Filter by date
-GET http://localhost:3002/api/search?date=2025-03-21
+GET http://localhost:3002/api/search?date=2025-11-10
 Accept: application/json

@@ -32,7 +32,7 @@ const joinEvent = async (request, response) => {
         return response.status(403).json({error: "You have already joined this event"})
     }
 
-    if (event.attendees.length + 1 > event.numAttendees - 1) {
+    if (event.attendees.length + 1 > event.numAttendees) {
         return response.status(403).json("Event Full")
     }
 

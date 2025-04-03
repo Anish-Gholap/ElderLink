@@ -1,9 +1,11 @@
-import { useState } from "react"
+import React, { useState } from "react"
 import EventForm from "../components/EventForm"
 import { useEventsContext } from "../contexts/EventsContext"
 import { useNavigate } from "react-router-dom"
 import { Box, Typography } from "@mui/material"
 import { LuPartyPopper } from "react-icons/lu"
+import {useSnackbar} from "../hooks/useSnackbar.js"
+import SnackbarComponent from "../components/SnackbarComponent.jsx";
 
 const CreateEvent = () => {
   const [eventName, setEventName] = useState("")
@@ -19,7 +21,9 @@ const CreateEvent = () => {
 
   const { addEvent } = useEventsContext()
   const navigate = useNavigate()
-  const handleEventCreation = (event) => {
+  const snackbar = useSnackbar()
+
+  const handleEventCreation = async (event) => {
     event.preventDefault()
 
     const selectedDate = new Date(
@@ -40,24 +44,27 @@ const CreateEvent = () => {
     }
 
     try {
-      addEvent(eventData)
+      await addEvent(eventData)
+
+      // Reset fields
+      setEventName("")
+      setEventLocation("")
+      setEventNumAttendees("")
+      setEventDescription("")
+      setYear("")
+      setMonth("")
+      setDay("")
+      setHours("")
+      setMinutes("")
+
+      // console.log("Event to add:", eventData)
+      // navigate('/event-discovery')
+      snackbar.showSuccess("Event successfully created", "/event-discovery")
+
     } catch (exception) {
       console.log(exception)
+      snackbar.showError(exception)
     }
-
-    // Reset fields
-    setEventName("")
-    setEventLocation("")
-    setEventNumAttendees("")
-    setEventDescription("")
-    setYear("")
-    setMonth("")
-    setDay("")
-    setHours("")
-    setMinutes("")
-
-    console.log("Event to add:", eventData)
-    navigate('/event-discovery')
   }
 
   const handleCancel = (event) => {
@@ -115,6 +122,13 @@ const CreateEvent = () => {
         handleDayChange={({ target }) => setDay(target.value)}
         handleHoursChange={({ target }) => setHours(target.value)}
         handleMinutesChange={({ target }) => setMinutes(target.value)}
+      />
+      <SnackbarComponent
+        open={snackbar.open}
+        message={snackbar.message}
+        severity={snackbar.severity}
+        autoHideDuration={snackbar.autoHideDuration}
+        handleClose={snackbar.handleClose}
       />
     </Box>
   )
