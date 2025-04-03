@@ -263,7 +263,7 @@ const EventDiscovery = () => {
       {/* Event Cards */}
       {eventsToDisplay && eventsToDisplay.length > 0 ? (
         eventsToDisplay.map(event => (
-          <EventCard event={event} key={event._id}/>
+          <EventCard event={event} key={event.id}/>
         ))
       ) : (
         <Box sx={{textAlign: 'center', py: 4}}>

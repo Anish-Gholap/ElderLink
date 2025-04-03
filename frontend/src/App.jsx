@@ -16,6 +16,7 @@ import SignUp from './pages/SignUp'
 import EventAttendance from './pages/EventAttendance'
 import Profile from './pages/Profile'
 import { UsersProvider } from './contexts/UsersContext'
+import { Typography } from '@mui/material'
 
 const App = () => {
   return (
@@ -64,6 +65,10 @@ const App = () => {
                 <Profile />
               </ProtectedRoute>
             } />
+            {/* 404 Route */}
+            <Route path='*' element={<Typography variant="h5" textAlign="center" mt={5} fontWeight={400}>
+              Oops! That URL doesn't seem to exist. Please check the address!
+            </Typography>} />
           </Routes>
         </Layout>
         </NotificationsProvider>

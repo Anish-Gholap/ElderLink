@@ -1,7 +1,7 @@
 import { useEventsContext } from "../contexts/EventsContext";
 import EventCard from "../components/EventCard";
 import { useAuthContext } from "../contexts/AuthContext" // Add this import
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button, Container, Typography, Box } from '@mui/material';
 import Toggle from "../components/Toggle"
 
@@ -22,9 +22,8 @@ const EventAttendance = () => {
 
   return (
     <Container>
-      <Typography variant="h4" gutterBottom>
-        Manage Events
-      </Typography>
+      <Typography textAlign='center' fontWeight={700} variant="h4" mb={3}>Manage Events</Typography>
+
       <Toggle defaultToggle="attending-events" />
       {userEventsAttending.map(event => (
         <Box key={event.id} sx={{ mb: 2, position: "relative" }}>
@@ -32,7 +31,7 @@ const EventAttendance = () => {
             minWidth: "300px",
             position: "relative"
           }} />
-          <Box sx={{ mt: 1, position: "absolute", right: 10, top:7 }}>
+          <Box sx={{ mt: 1, position: "absolute", right: 10, top: 7 }}>
             <Button
               variant="contained"
               color="secondary"
@@ -43,6 +42,22 @@ const EventAttendance = () => {
           </Box>
         </Box>
       ))}
+      {
+        userEventsAttending.length === 0 && (
+          <Box sx={{ textAlign: 'center', py: 4 }}>
+            <Typography variant="h6">You are not attending any events.</Typography>
+            <Typography color="text.secondary" sx={{ mt: 1 }}>
+              Explore and join exciting events happening near you!
+            </Typography>
+            <Link to="/event-discovery" style={{ textDecoration: 'none' }}>
+              <Button variant="contained" color="primary" sx={{ mt: 2 }}>
+                Discover Events
+              </Button>
+            </Link>
+            
+          </Box>
+        )
+      }
     </Container>
   );
 };

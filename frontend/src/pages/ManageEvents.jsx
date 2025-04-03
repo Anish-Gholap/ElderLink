@@ -26,9 +26,7 @@ const ManageEvents = () => {
 
   return (
     <Container>
-      <Typography variant="h4" gutterBottom>
-        Manage Events
-      </Typography>
+      <Typography textAlign='center' fontWeight={700} variant="h4" mb={3}>Manage Events</Typography>
       <Toggle />
       {myEvents.map(event => (
         <Box key={event.id} sx={{ mb: 2, position: "relative" }}>
@@ -61,7 +59,17 @@ const ManageEvents = () => {
 
         </Box>
       ))}
-      <CreateEventButton />
+      {
+        myEvents.length === 0 && (
+          <Box sx={{ textAlign: 'center', py: 4 }}>
+            <Typography variant="h6">You have no events.</Typography>
+            <Typography color="text.secondary" sx={{ mt: 1, mb:2 }} >
+              Create your very own event!
+            </Typography>
+            <CreateEventButton />
+          </Box>
+        )
+      }
     </Container>
   );
 };

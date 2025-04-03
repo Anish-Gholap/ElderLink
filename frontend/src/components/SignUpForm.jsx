@@ -17,8 +17,7 @@ const SignUpForm = ({
     const [error, setError] = useState(null)
 
     const validateDetails = () => {
-        // check if any field is empty
-        console.log(username, name, phoneNumber, password, confirmPassword)
+
         if (!username || !name || !phoneNumber || !password || !confirmPassword) {
             return "Please fill in all fields"
         }
@@ -62,12 +61,13 @@ const SignUpForm = ({
 
                 <div>
                     <TextField
-                        label="Name"
+                        label="Full Name"
                         variant="outlined"
                         value={name}
                         onChange={handleNameChange}
                         fullWidth
                         margin="normal"
+                        helperText="Please enter your full name"
                     />
                 </div>
 
@@ -79,6 +79,9 @@ const SignUpForm = ({
                         onChange={handlePhoneChange}
                         fullWidth
                         margin="normal"
+                        InputProps={{
+                            startAdornment: <span>+65</span>, // Add country code prefix
+                        }}
                     />
                 </div>
 
