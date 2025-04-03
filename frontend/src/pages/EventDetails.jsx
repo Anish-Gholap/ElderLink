@@ -2,13 +2,14 @@ import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useEventsContext } from "../contexts/EventsContext";
 import { Box, Typography, Button, CircularProgress, IconButton } from '@mui/material';
-import { FaArrowLeft, FaMapLocationDot } from "react-icons/fa6";
+import { FaArrowLeft, FaClock, FaMapLocationDot } from "react-icons/fa6";
 import { FaRegClock } from "react-icons/fa";
 import { FaPeopleGroup } from "react-icons/fa6";
 import { LuPartyPopper } from "react-icons/lu";
 import EventLocationMap from "../components/EventLocationMap"; // Import our map component
 import { findLocationByName } from "../services/locations"; // Import location service
 import { useAuthContext } from "../contexts/AuthContext";
+import userService from '../services/users';
 
 const EventDetails = () => {
   const { eventId } = useParams();
@@ -16,6 +17,7 @@ const EventDetails = () => {
   const [event, setEvent] = useState(null);
   const [locationData, setLocationData] = useState(null);
   const [isLoadingMap, setIsLoadingMap] = useState(false);
+  const [host, setHost] = useState(null);
   const { getEvent, joinEvent } = useEventsContext();
 
   // Fetch event
@@ -23,7 +25,7 @@ const EventDetails = () => {
     getEvent(eventId).then(setEvent);
   }, [eventId, getEvent]);
 
-  // Fetch location data when event is loaded
+  // Fetch location and owner data when event changes
   useEffect(() => {
     if (!event || !event.location) return;
 
@@ -47,7 +49,24 @@ const EventDetails = () => {
       }
     };
 
+    const getOwnerData = async () => {
+      try {
+        const founduser = await userService.getAllUsers(event.createdBy);
+        console.log("founduser", founduser);
+        if (founduser) {
+          setHost(founduser);
+        } else {
+          console.warn(`Owner not found for: ${event.createdBy}`);
+        }
+      }
+      catch (error) {
+        console.error("Failed to fetch owner data:", error);
+      }
+    };
+    // Fetch location data and owner data
     getLocationData();
+    getOwnerData();
+
   }, [event]);
 
   if (!event) return <Typography>Loading...</Typography>;
@@ -82,11 +101,25 @@ const EventDetails = () => {
           <FaMapLocationDot style={{ marginRight: '8px' }} />
           <Typography variant="h6">{event.location}</Typography>
         </Box>
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <FaClock style={{ marginRight: '8px' }} />
+          <Typography variant="h6">{new Date(event.date).toLocaleString("en-SG", {
+            dateStyle: "medium",
+            timeStyle: "short",
+            timeZone: "Asia/Singapore"
+          })}</Typography>
+        </Box>
       </Box>
 
       <Box sx={{ mb: 2, color: "black" }}>
         <Typography variant="h6" fontWeight='600'>Details</Typography>
         <Typography variant="body3">{event.description}</Typography>
+      </Box>
+
+      <Box sx={{ mb: 2, color: "black" }}>
+        <Typography variant="h6" fontWeight='600'>Host Details</Typography>
+        <Typography variant="body3"><span style={{ fontWeight: 'bold' }}>Name: </span>{host ? host.name : "Loading host data..."}</Typography>
+        <br /><Typography variant="body3"><span style={{ fontWeight: 'bold' }}>Phone Number: </span>{host ? host.phoneNumber : "Loading host data..."}</Typography>
       </Box>
 
       {/* Map Section */}
