@@ -21,6 +21,7 @@ const ManageEvents = () => {
   const navigate = useNavigate();
 
   const handleDelete = (id) => {
+    window.confirm("Are you sure you wish to delete this event?")
     removeEvent(id).catch(err => console.error(err));
   };
 

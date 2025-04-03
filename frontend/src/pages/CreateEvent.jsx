@@ -4,20 +4,16 @@ import { useEventsContext } from "../contexts/EventsContext"
 import { useNavigate } from "react-router-dom"
 import { Box, Typography } from "@mui/material"
 import { LuPartyPopper } from "react-icons/lu"
-import {useSnackbar} from "../hooks/useSnackbar.js"
-import SnackbarComponent from "../components/SnackbarComponent.jsx";
+import { useSnackbar } from "../hooks/useSnackbar.js"
+import SnackbarComponent from "../components/SnackbarComponent.jsx"
+import dayjs from "dayjs"
 
 const CreateEvent = () => {
   const [eventName, setEventName] = useState("")
   const [eventLocation, setEventLocation] = useState("")
   const [eventNumAttendees, setEventNumAttendees] = useState("")
   const [eventDescription, setEventDescription] = useState("")
-
-  const [year, setYear] = useState("")
-  const [month, setMonth] = useState("")
-  const [day, setDay] = useState("")
-  const [hours, setHours] = useState("")
-  const [minutes, setMinutes] = useState("")
+  const [dateTime, setDateTime] = useState(dayjs()) // Initialize with current date/time
 
   const { addEvent } = useEventsContext()
   const navigate = useNavigate()
@@ -26,20 +22,20 @@ const CreateEvent = () => {
   const handleEventCreation = async (event) => {
     event.preventDefault()
 
-    const selectedDate = new Date(
-      parseInt(year),
-      parseInt(month), // 0-indexed
-      parseInt(day),
-      parseInt(hours),
-      parseInt(minutes)
-    )
-    const isoDateString = selectedDate.toISOString()
+    // Validation checks
+    if (!eventName || !eventLocation || !eventNumAttendees || !dateTime || !eventDescription) {
+      snackbar.showError("Please fill in all required fields")
+      return
+    }
+
+    // Get ISO string from dayjs object
+    const isoDateString = dateTime.toISOString()
 
     const eventData = {
       title: eventName,
       location: eventLocation?.label,
-      numAttendees: eventNumAttendees,
-      date: isoDateString, // ✅ using "date" instead of "dateTime"
+      numAttendees: parseInt(eventNumAttendees),
+      date: isoDateString,
       description: eventDescription
     }
 
@@ -51,14 +47,8 @@ const CreateEvent = () => {
       setEventLocation("")
       setEventNumAttendees("")
       setEventDescription("")
-      setYear("")
-      setMonth("")
-      setDay("")
-      setHours("")
-      setMinutes("")
+      setDateTime(dayjs())
 
-      // console.log("Event to add:", eventData)
-      // navigate('/event-discovery')
       snackbar.showSuccess("Event successfully created", "/event-discovery")
 
     } catch (exception) {
@@ -73,12 +63,16 @@ const CreateEvent = () => {
     setEventLocation("")
     setEventNumAttendees("")
     setEventDescription("")
-    setYear("")
-    setMonth("")
-    setDay("")
-    setHours("")
-    setMinutes("")
+    setDateTime(dayjs())
     navigate('/event-discovery')
+  }
+
+  // Handle number of attendees to ensure positive values
+  const handleEventNumAttendeesChange = ({ target }) => {
+    const value = parseInt(target.value)
+    if (value >= 1 || target.value === '') {
+      setEventNumAttendees(target.value)
+    }
   }
 
   return (
@@ -108,20 +102,12 @@ const CreateEvent = () => {
         eventLocation={eventLocation}
         eventNumAttendees={eventNumAttendees}
         eventDescription={eventDescription}
-        year={year}
-        month={month}
-        day={day}
-        hours={hours}
-        minutes={minutes}
+        dateTime={dateTime}
         handleEventNameChange={({ target }) => setEventName(target.value)}
         handleEventLocationChange={(newValue) => setEventLocation(newValue)}
-        handleEventNumAttendeesChange={({ target }) => setEventNumAttendees(target.value)}
+        handleEventNumAttendeesChange={handleEventNumAttendeesChange}
         handleEventDescriptionChange={({ target }) => setEventDescription(target.value)}
-        handleYearChange={({ target }) => setYear(target.value)}
-        handleMonthChange={({ target }) => setMonth(target.value)}
-        handleDayChange={({ target }) => setDay(target.value)}
-        handleHoursChange={({ target }) => setHours(target.value)}
-        handleMinutesChange={({ target }) => setMinutes(target.value)}
+        handleDateTimeChange={(newDateTime) => setDateTime(newDateTime)}
       />
       <SnackbarComponent
         open={snackbar.open}

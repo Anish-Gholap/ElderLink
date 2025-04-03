@@ -1,68 +1,60 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useEventsContext } from "../contexts/EventsContext";
 import { useNavigate } from "react-router-dom";
 import EventForm from "../components/EventForm";
+import {useSnackbar} from "../hooks/useSnackbar.js";
+import SnackbarComponent from "../components/SnackbarComponent.jsx";
+import dayjs from "dayjs";
 
 const EditEvent = () => {
   const { eventId } = useParams();
   const { getEvent, updateEvent } = useEventsContext();
   const navigate = useNavigate();
 
-  const [eventName, setEventName] = useState("");
-  const [eventLocation, setEventLocation] = useState("");
-  const [eventNumAttendees, setEventNumAttendees] = useState("");
-  const [eventDescription, setEventDescription] = useState("");
+  const [eventName, setEventName] = useState("")
+  const [eventLocation, setEventLocation] = useState("")
+  const [eventNumAttendees, setEventNumAttendees] = useState("")
+  const [eventDescription, setEventDescription] = useState("")
+  const [dateTime, setDateTime] = useState(dayjs())
 
-  const [year, setYear] = useState("");
-  const [month, setMonth] = useState("");
-  const [day, setDay] = useState("");
-  const [hours, setHours] = useState("");
-  const [minutes, setMinutes] = useState("");
+  const snackbar = useSnackbar()
 
   useEffect(() => {
     getEvent(eventId).then(event => {
-      if (event.date) {
-        const parsedDate = new Date(event.date);
-
-        setYear(parsedDate.getFullYear().toString());
-        setMonth(parsedDate.getMonth().toString()); // 0-indexed
-        setDay(parsedDate.getDate().toString());
-        setHours(parsedDate.getHours().toString().padStart(2, "0"));
-        setMinutes(parsedDate.getMinutes().toString().padStart(2, "0"));
-      }
       setEventName(event.title || "");
       setEventLocation(event.location || "");
       setEventNumAttendees(event.numAttendees || "");
       setEventDescription(event.description || "");
+      setDateTime(dayjs(event.date))
     }).catch(console.error);
   }, [eventId, getEvent]);
 
   const handleEventEdit = async (event) => {
     event.preventDefault();
 
-    const selectedDate = new Date(
-      parseInt(year),
-      parseInt(month),
-      parseInt(day),
-      parseInt(hours),
-      parseInt(minutes)
-    );
-    const isoDateString = selectedDate.toISOString();
+    // Validation checks
+    if (!eventName || !eventLocation || !eventNumAttendees || !dateTime || !eventDescription) {
+      snackbar.showError("Please fill in all required fields")
+      return
+    }
+
+    const isoDateString = dateTime.toISOString()
 
     const updatedData = {
       title: eventName,
       location: eventLocation?.label,
-      numAttendees: eventNumAttendees,
+      numAttendees: parseInt(eventNumAttendees),
       date: isoDateString,
-      description: eventDescription,
-    };
+      description: eventDescription
+    }
 
     try {
       await updateEvent(eventId, updatedData);
-      navigate("/events-management");
+      snackbar.showSuccess("Event edited successfully!", "/events-management")
     } catch (error) {
       console.log("Failed to update event:", error);
+      snackbar.showError(`${error}`)
     }
   };
 
@@ -70,6 +62,14 @@ const EditEvent = () => {
     event.preventDefault();
     navigate("/events-management");
   };
+
+
+  const handleEventNumAttendeesChange = ({ target }) => {
+    const value = parseInt(target.value)
+    if (value >= 1 || target.value === '') {
+      setEventNumAttendees(target.value)
+    }
+  }
 
   return (
     <>
@@ -82,20 +82,19 @@ const EditEvent = () => {
           eventLocation={eventLocation}
           eventNumAttendees={eventNumAttendees}
           eventDescription={eventDescription}
-          year={year}
-          month={month}
-          day={day}
-          hours={hours}
-          minutes={minutes}
+          dateTime={dateTime}
           handleEventNameChange={({ target }) => setEventName(target.value)}
-          handleEventLocationChange={(target) => setEventLocation(target)} 
-          handleEventNumAttendeesChange={({ target }) => setEventNumAttendees(target.value)}
+          handleEventLocationChange={(newValue) => setEventLocation(newValue)}
+          handleEventNumAttendeesChange={handleEventNumAttendeesChange}
           handleEventDescriptionChange={({ target }) => setEventDescription(target.value)}
-          handleYearChange={({ target }) => setYear(target.value)}
-          handleMonthChange={({ target }) => setMonth(target.value)}
-          handleDayChange={({ target }) => setDay(target.value)}
-          handleHoursChange={({ target }) => setHours(target.value)}
-          handleMinutesChange={({ target }) => setMinutes(target.value)}
+          handleDateTimeChange={(newDateTime) => setDateTime(newDateTime)}
+        />
+        <SnackbarComponent
+          open={snackbar.open}
+          message={snackbar.message}
+          severity={snackbar.severity}
+          autoHideDuration={snackbar.autoHideDuration}
+          handleClose={snackbar.handleClose}
         />
       </div>
     </>
