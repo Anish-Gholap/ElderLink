@@ -4,24 +4,28 @@ import { useAuthContext } from "../contexts/AuthContext" // Add this import
 import { Link, useNavigate } from "react-router-dom";
 import { Button, Container, Typography, Box } from '@mui/material';
 import Toggle from "../components/Toggle"
+import { useSnackbar } from "../hooks/useSnackbar";
+import SnackbarComponent from "../components/SnackbarComponent";
 
 const EventAttendance = () => {
   const { user } = useAuthContext();
   const { userEventsAttending, withdrawEvent } = useEventsContext();
   const navigate = useNavigate();
+  const snackbar = useSnackbar();
 
   const handleWithdraw = async (eventId) => {
     try {
       await withdrawEvent(eventId); // Call the withdrawEvent function from context
-      window.alert("Successfully withdrawn from the event.");
+      snackbar.showSuccess("Successfully withdrawn from the event.");
     } catch (error) {
       console.error("Error withdrawing from event:", error);
-      window.alert("There was an error withdrawing from the event.");
+      snackbar.showError("There was an error withdrawing from the event.");
     }
   };
 
   return (
     <Container sx={{ mt: 4, mb: 4, display: "flex", flexDirection: "column", alignItems: "center" }}>
+      
 
       <Typography textAlign='center' fontWeight={700} variant="h4" mb={3}>Manage Events</Typography>
 
@@ -59,6 +63,13 @@ const EventAttendance = () => {
           Discover Events
         </Button>
       </Link>
+      <SnackbarComponent
+        open={snackbar.open}
+        message={snackbar.message}
+        severity={snackbar.severity}
+        autoHideDuration={snackbar.autoHideDuration}
+        handleClose={snackbar.handleClose}
+      />
     </Container>
   );
 };

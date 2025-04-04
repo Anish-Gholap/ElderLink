@@ -45,7 +45,7 @@ const EventDetails = () => {
       } catch (error) {
         console.error("Failed to fetch location data:", error);
       } finally {
-        setIsLoadingMap(false);
+        setIsLoadingMap(false); // Not adding an error snackbar here since it doesnt make sense
       }
     };
 

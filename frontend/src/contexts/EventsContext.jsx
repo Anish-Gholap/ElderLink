@@ -1,10 +1,11 @@
 /* eslint-disable react-refresh/only-export-components */
 // Context to manage events across all
-import {createContext, useCallback, useContext, useEffect, useState} from "react";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import eventsService from "../services/events"
 import searchService from "../services/search"
-import {useAuthContext} from "../contexts/AuthContext"
+import { useAuthContext } from "../contexts/AuthContext"
 import excludeVariablesFromRoot from "@mui/material/styles/excludeVariablesFromRoot.js";
+import { useSnackbar } from "../hooks/useSnackbar";
 
 const EventsContext = createContext()
 
@@ -19,6 +20,7 @@ export const EventsProvider = ({ children }) => {
   const [userLat, setUserLat] = useState(null);
   const [userLong, setUserLong] = useState(null);
   const [loading, setLoading] = useState(false)
+  const snackbar = useSnackbar();
 
   useEffect(() => {
     setLoading(true);
@@ -26,25 +28,27 @@ export const EventsProvider = ({ children }) => {
     if (userLat && userLong) {
       // Fetch events by distance when location is available
       searchService.getEventsByDistance(userLat, userLong)
-          .then(data => {
-            setAllEvents(data);
-            setLoading(false);
-          })
-          .catch(err => {
-            console.error("Error fetching events by distance: ", err);
-            setLoading(false);
-          });
+        .then(data => {
+          setAllEvents(data);
+          setLoading(false);
+        })
+        .catch(err => {
+          console.error("Error fetching events by distance: ", err);
+          snackbar.showError("Error fetching events by distance. Please try again.");
+          setLoading(false);
+        });
     } else {
       // Fetch all events when no location is available
       searchService.getEventsByDistance()
-          .then(data => {
-            setAllEvents(data);
-            setLoading(false);
-          })
-          .catch(err => {
-            console.error("Error fetching all events: ", err);
-            setLoading(false);
-          });
+        .then(data => {
+          setAllEvents(data);
+          setLoading(false);
+        })
+        .catch(err => {
+          console.error("Error fetching all events: ", err);
+          snackbar.showError("Error fetching all events. Please try again.");
+          setLoading(false);
+        });
     }
   }, [userLat, userLong]);
 
@@ -74,7 +78,13 @@ export const EventsProvider = ({ children }) => {
     if (user && user.id) {
       eventsService.getUserEvents(user.id)
         .then(data => setMyEvents(data))
-        .catch(err => console.error("Error fetching user events:", err));
+        .catch(err => {
+          console.error("Error fetching user events:", err);
+          snackbar.showError("Error fetching user events. Please try again.");
+
+
+        }
+        );
     } else {
       // If user logs out or no user, clear
       console.log("No user found, skipping fetch.")
@@ -92,6 +102,7 @@ export const EventsProvider = ({ children }) => {
       } catch (err) {
         console.error("Error fetching user's events attending", err)
         setUserEventsAttending([])
+        snackbar.showError("Error fetching user's events attending. Please try again.");
       }
     } else {
       setUserEventsAttending([])
@@ -144,6 +155,7 @@ export const EventsProvider = ({ children }) => {
       return await eventsService.getEventById(eventId)
     } catch (error) {
       console.error("Error fetching event:", error)
+      return {} // or handle the error as needed
     }
   }
 
@@ -173,6 +185,7 @@ export const EventsProvider = ({ children }) => {
 
       if (!event) {
         console.error("Event not found")
+        snackbar.showError("Event not found")
         return
       }
 
@@ -193,27 +206,28 @@ export const EventsProvider = ({ children }) => {
 
     } catch (error) {
       console.error("Failed to join event:", error)
-      window.alert("Unable to join event")
+      snackbar.showError("Failed to join event. Please try again.");
     }
-    
+
   }
   const withdrawEvent = async (eventId) => {
     try {
       await eventsService.withdrawEvent(eventId, user.id, user.token);
       window.alert("Withdrawn from event successfully");
-  
+
       // Refresh event lists after update
       const refreshedAll = await eventsService.getAllEvents();
       setAllEvents(refreshedAll);
 
       await fetchEventsAttending()
-  
+
       if (user?.id) {
         const refreshedMine = await eventsService.getUserEvents(user.id);
         setMyEvents(refreshedMine);
       }
     } catch (error) {
       console.error("Failed to withdraw from event:", error);
+      snackbar.showError("Failed to withdraw from event. Please try again.");
     }
   };
 

@@ -22,15 +22,19 @@ import searchService from "../services/search"
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
+import { useSnackbar } from "../hooks/useSnackbar"
+import SnackbarComponent from "../components/SnackbarComponent"
 
 const EventDiscovery = () => {
   const {allEvents, updateUserLocation} = useEventsContext()
+  const snackbar = useSnackbar()
 
   // Single search query
   const [searchQuery, setSearchQuery] = useState("")
   const [searchResults, setSearchResults] = useState(null)
   const [filterByClub, setFilterByClub] = useState(false)
   const [selectedDate, setSelectedDate] = useState(null)
+  const [fetchFailed, setFetchFailed] = useState(false)
 
   // For filter popover
   const [anchorEl, setAnchorEl] = useState(null)
@@ -66,6 +70,12 @@ const EventDiscovery = () => {
     return () => clearTimeout(delaySearch)
   }, [searchQuery, filterByClub, selectedDate]) // Add selectedDate to dependencies
 
+  useEffect(() => {
+    if (fetchFailed) {
+      snackbar.showError("Failed to fetch events. Please try again.")
+    }
+  }, [fetchFailed])
+
   const handleSearch = async () => {
     const params = new URLSearchParams()
 
@@ -99,8 +109,10 @@ const EventDiscovery = () => {
       // const res = await fetch(`http://localhost:3002/api/search?${params.toString()}`)
       const res = await searchService.searchEvents(params)
       setSearchResults(res)
+      setFetchFailed(false)
     } catch (error) {
       console.error("Error fetching search results:", error)
+      setFetchFailed(true)
     }
   }
 
@@ -271,6 +283,13 @@ const EventDiscovery = () => {
           <Typography color="text.secondary">Try adjusting your search terms or filters.</Typography>
         </Box>
       )}
+    <SnackbarComponent
+      open={snackbar.open}
+      message={snackbar.message}
+      severity={snackbar.severity}
+      autoHideDuration={snackbar.autoHideDuration}
+      handleClose={snackbar.handleClose}
+    />
     </>
   )
 }
