@@ -10,6 +10,8 @@ import EventLocationMap from "../components/EventLocationMap"; // Import our map
 import { findLocationByName } from "../services/locations"; // Import location service
 import { useAuthContext } from "../contexts/AuthContext";
 import userService from '../services/users';
+import { useSnackbar } from "../hooks/useSnackbar";
+import SnackbarComponent from "../components/SnackbarComponent";
 
 const EventDetails = () => {
   const { eventId } = useParams();
@@ -18,7 +20,8 @@ const EventDetails = () => {
   const [locationData, setLocationData] = useState(null);
   const [isLoadingMap, setIsLoadingMap] = useState(false);
   const [host, setHost] = useState(null);
-  const { getEvent, joinEvent } = useEventsContext();
+  const { getEvent, joinEvent, eventSnackbar } = useEventsContext();
+
 
   // Fetch event
   useEffect(() => {
@@ -166,7 +169,13 @@ const EventDetails = () => {
           Join event
         </Button>}
     </Box>
-
+    <SnackbarComponent
+      open={eventSnackbar.open}
+      message={eventSnackbar.message}
+      severity={eventSnackbar.severity}
+      autoHideDuration={eventSnackbar.autoHideDuration}
+      handleClose={eventSnackbar.handleClose}
+    />
   </>
   );
 };

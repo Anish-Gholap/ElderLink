@@ -1,31 +1,35 @@
 import { useEventsContext } from "../contexts/EventsContext";
 import EventCard from "../components/EventCard";
-import { useAuthContext } from "../contexts/AuthContext" // Add this import
+import { useAuthContext } from "../contexts/AuthContext"
 import { Link, useNavigate } from "react-router-dom";
-import { Button, Container, Typography, Box } from '@mui/material';
+import { Button, Container, Typography, Box, Dialog, DialogContent, DialogTitle, DialogActions } from '@mui/material';
 import Toggle from "../components/Toggle"
 import { useSnackbar } from "../hooks/useSnackbar";
 import SnackbarComponent from "../components/SnackbarComponent";
+import { useState } from "react";
 
 const EventAttendance = () => {
   const { user } = useAuthContext();
   const { userEventsAttending, withdrawEvent } = useEventsContext();
   const navigate = useNavigate();
   const snackbar = useSnackbar();
+  const [openConfirmation, setOpenConfirmation] = useState(0);
 
   const handleWithdraw = async (eventId) => {
     try {
       await withdrawEvent(eventId); // Call the withdrawEvent function from context
       snackbar.showSuccess("Successfully withdrawn from the event.");
+      return true;
     } catch (error) {
       console.error("Error withdrawing from event:", error);
       snackbar.showError("There was an error withdrawing from the event.");
+      return false;
     }
   };
 
   return (
     <Container sx={{ mt: 4, mb: 4, display: "flex", flexDirection: "column", alignItems: "center" }}>
-      
+
 
       <Typography textAlign='center' fontWeight={700} variant="h4" mb={3}>Manage Events</Typography>
 
@@ -40,7 +44,7 @@ const EventAttendance = () => {
             <Button
               variant="contained"
               color="secondary"
-              onClick={() => handleWithdraw(event.id)}
+              onClick={() => setOpenConfirmation(event.id)}
             >
               Withdraw
             </Button>
@@ -70,6 +74,20 @@ const EventAttendance = () => {
         autoHideDuration={snackbar.autoHideDuration}
         handleClose={snackbar.handleClose}
       />
+      <Dialog open={openConfirmation} onClose={() => setOpenConfirmation(0)}>
+        <DialogTitle>Confirm Withdrawal</DialogTitle>
+        <DialogContent>
+          <Typography>Are you sure you want to withdraw from this event?</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenConfirmation(0)}>Cancel</Button>
+          <Button onClick={() => {
+            handleWithdraw(openConfirmation).then(() => {
+              setOpenConfirmation(0);
+            });
+          }} color="primary">Withdraw</Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 };

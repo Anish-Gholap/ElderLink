@@ -34,7 +34,7 @@ export const EventsProvider = ({ children }) => {
         })
         .catch(err => {
           console.error("Error fetching events by distance: ", err);
-          snackbar.showError("Error fetching events by distance. Please try again.");
+          snackbar.showError("Error fetching events by distance." + err);
           setLoading(false);
         });
     } else {
@@ -46,7 +46,7 @@ export const EventsProvider = ({ children }) => {
         })
         .catch(err => {
           console.error("Error fetching all events: ", err);
-          snackbar.showError("Error fetching all events. Please try again.");
+          snackbar.showError("Error fetching all events." + err);
           setLoading(false);
         });
     }
@@ -80,7 +80,7 @@ export const EventsProvider = ({ children }) => {
         .then(data => setMyEvents(data))
         .catch(err => {
           console.error("Error fetching user events:", err);
-          snackbar.showError("Error fetching user events. Please try again.");
+          snackbar.showError("Error fetching user events. " + err);
 
 
         }
@@ -102,7 +102,7 @@ export const EventsProvider = ({ children }) => {
       } catch (err) {
         console.error("Error fetching user's events attending", err)
         setUserEventsAttending([])
-        snackbar.showError("Error fetching user's events attending. Please try again.");
+        snackbar.showError("Error fetching user's events attending. "+ err);
       }
     } else {
       setUserEventsAttending([])
@@ -191,7 +191,7 @@ export const EventsProvider = ({ children }) => {
 
       // send updated event
       await eventsService.joinEvent(eventId, user.id, user.token)
-      window.alert("Joined event successfully")
+      snackbar.showSuccess("Joined event successfully")
 
       // refresh event lists after update
       const refreshedAll = await eventsService.getAllEvents()
@@ -205,15 +205,16 @@ export const EventsProvider = ({ children }) => {
       }
 
     } catch (error) {
+       if (!error) error = "Unknown error"
       console.error("Failed to join event:", error)
-      snackbar.showError("Failed to join event. Please try again.");
+      snackbar.showError("Failed to join event:" + error);
     }
 
   }
   const withdrawEvent = async (eventId) => {
     try {
       await eventsService.withdrawEvent(eventId, user.id, user.token);
-      window.alert("Withdrawn from event successfully");
+      snackbar.showSuccess("Withdrawn from event successfully");
 
       // Refresh event lists after update
       const refreshedAll = await eventsService.getAllEvents();
@@ -227,7 +228,7 @@ export const EventsProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Failed to withdraw from event:", error);
-      snackbar.showError("Failed to withdraw from event. Please try again.");
+      snackbar.showError("Failed to withdraw from event. "+ error);
     }
   };
 
@@ -243,7 +244,8 @@ export const EventsProvider = ({ children }) => {
     updateEvent,
     joinEvent,
     withdrawEvent,
-    updateUserLocation
+    updateUserLocation,
+    eventSnackbar: snackbar,
   }
 
   return (
