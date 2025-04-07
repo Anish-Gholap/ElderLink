@@ -12,7 +12,7 @@ Content-Type: application/json
 %}
 
 ### Remove event
-DELETE http://localhost:3002/api/events/67ed506ee3b969bb21729efb
+DELETE http://localhost:3002/api/events/67f3cb243cd421e4632d3abc
 Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 

@@ -59,6 +59,14 @@ const SignUp = () => {
     }
   };
 
+  const handlePhoneChange = (event) => {
+    let inputValue = event.target.value;
+    if (inputValue.startsWith('+65')) {
+      inputValue = inputValue.substring(3);
+    }
+    setPhoneNumber(inputValue);
+  }
+
   return (
     <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
       <Box position="fixed" display='flex' alignItems='center' top={0} left={0} p={2} onClick={() => navigate('/')} sx={{ cursor: "pointer" }}>
@@ -77,7 +85,7 @@ const SignUp = () => {
         handleUsernameChange={({ target }) => setUsername(target.value)}
         handleNameChange={({ target }) => setName(target.value)}
         handlePasswordChange={({ target }) => setPassword(target.value)}
-        handlePhoneChange={({ target }) => setPhoneNumber(target.value)}
+        handlePhoneChange={handlePhoneChange}
         handleConfirmPasswordChange={({ target }) => setConfirmPassword(target.value)}
       />
 

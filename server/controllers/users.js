@@ -3,28 +3,65 @@ const bcrypt = require('bcryptjs')
 const {response} = require("express");
 
 //handle user creation for registration
+// const createUser = async (request, response) => {
+//     const {username, name, phoneNumber, password} = request.body
+//
+//     // validate password
+//     const passwordValidation = validatePassword(password);
+//     if (!passwordValidation.isValid) {
+//         return response.status(400).json({ error: passwordValidation.message });
+//     }
+//
+//     //hash password
+//     const saltRounds = 10
+//     const passwordHash = await bcrypt.hash(password, saltRounds)
+//
+//     const user = new User({
+//         username: username,
+//         name: name,
+//         phoneNumber: phoneNumber,
+//         passwordHash: passwordHash
+//     })
+//
+//     const savedUser = await user.save()
+//     response.status(201).json(savedUser)
+// }
+
 const createUser = async (request, response) => {
-    const {username, name, phoneNumber, password} = request.body
+    try {
+        const {username, name, phoneNumber, password, confirmPassword} = request.body
 
-    // validate password
-    const passwordValidation = validatePassword(password);
-    if (!passwordValidation.isValid) {
-        return response.status(400).json({ error: passwordValidation.message });
+        if (confirmPassword !== undefined && confirmPassword !== password) {
+            return response.status(400).json({error: "Passwords must match!"})
+        }
+
+        // validate password
+        const passwordValidation = validatePassword(password);
+        if (!passwordValidation.isValid) {
+            return response.status(400).json({ error: passwordValidation.message });
+        }
+
+        //hash password
+        const saltRounds = 10
+        const passwordHash = await bcrypt.hash(password, saltRounds)
+
+        const user = new User({
+            username: username,
+            name: name,
+            phoneNumber: phoneNumber,
+            passwordHash: passwordHash
+        })
+
+        const savedUser = await user.save()
+        response.status(201).json({
+            user: savedUser.toJSON(),
+            message: "User Registered Successfully!"
+        })
+
+    } catch (error) {
+        console.log(error.message)
+        throw error
     }
-
-    //hash password
-    const saltRounds = 10
-    const passwordHash = await bcrypt.hash(password, saltRounds)
-
-    const user = new User({
-        username: username,
-        name: name,
-        phoneNumber: phoneNumber,
-        passwordHash: passwordHash
-    })
-
-    const savedUser = await user.save()
-    response.status(201).json(savedUser)
 }
 
 // handle GET all users
@@ -64,10 +101,10 @@ const validatePassword = (password) => {
         message: ''
     };
 
-    // Check minimum length (6 characters)
-    if (!password || password.length < 6) {
+    // Check minimum length (5 characters)
+    if (!password || password.length < 5) {
         result.isValid = false
-        result.message = 'Password must be at least 6 characters long'
+        result.message = 'Password must be at least 5 characters long'
         return result
     }
 

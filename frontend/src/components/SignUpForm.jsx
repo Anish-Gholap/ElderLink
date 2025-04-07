@@ -21,13 +21,13 @@ const SignUpForm = ({
         if (!username || !name || !phoneNumber || !password || !confirmPassword) {
             return "Please fill in all fields"
         }
-        // check if username has minimum 4 characters
-        if (username.length < 4) {
-            return "Username must be at least 4 characters long"
+        // check if username has minimum 3 characters
+        if (username.length < 3) {
+            return "Username must be at least 3 characters long"
         }
-        // check if password has minimum 6 characters
-        if (password.length < 6) {
-            return "Password must be at least 6 characters long"
+        // check if password has minimum 5 characters
+        if (password.length < 5) {
+            return "Password must be at least 5 characters long"
         }
         // check if password and confirm password match
         if (password !== confirmPassword) {

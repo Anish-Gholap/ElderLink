@@ -10,7 +10,7 @@ const loginUser = async (request, response) => {
   const isPasswordCorrect = user !== null ? await bcrypt.compare(password, user.passwordHash) : false
 
   if(!(user && isPasswordCorrect)) {
-    return response.status(401).json({error: 'invalid username or password'})
+    return response.status(401).json({error: 'Invalid username or password!'})
   }
 
   const userForToken = {
@@ -21,7 +21,7 @@ const loginUser = async (request, response) => {
   const token = jwt.sign(userForToken, process.env.SECRET, {expiresIn: 60 * 60})
   const tokenExpiresAt = Date.now() + 60 * 60 * 1000
 
-  response.status(200).send({token, username: user.username, name: user.name, id: user.id, tokenExpiresAt})
+  response.status(200).send({token, username: user.username, name: user.name, id: user.id, tokenExpiresAt, message: "Log in Successful!"})
 }
 
 module.exports = {
