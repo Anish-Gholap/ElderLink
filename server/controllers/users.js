@@ -44,35 +44,6 @@ const editUser = async (request, response) => {
 // TODO: Remove user. Try Mongoose hooks to update Events tied to user to delete
 
 
-const validatePassword = (password) => {
-    // Initialize result object
-    const result = {
-        isValid: true,
-        message: ''
-    };
-
-    // Check minimum length (6 characters)
-    if (!password || password.length < 6) {
-        result.isValid = false
-        result.message = 'Password must be at least 6 characters long'
-        return result
-    }
-
-    // Check for at least 1 uppercase letter
-    if (!/[A-Z]/.test(password)) {
-        result.isValid = false
-        result.message = 'Password must contain at least one uppercase letter'
-        return result
-    }
-
-    // Check for at least 1 lowercase letter
-    if (!/[a-z]/.test(password)) {
-        result.isValid = false
-        result.message = 'Password must contain at least one lowercase letter'
-        return result
-    }
-}
-
 module.exports = {
     getAllUsers,
     editUser
