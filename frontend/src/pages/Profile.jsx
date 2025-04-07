@@ -20,13 +20,12 @@ function Profile() {
         try {
             await editProfileHandler(user.id, updatedData, user.token);
             setOpenEditProfile(false);
+            snackbar.showSuccess("Profile Updated!")
         } catch (error) {
             console.log("Failed to update profile:", error);
             snackbar.showError("Failed to update profile. Please try again.");
         }
     };
-
-
 
     return (
         <>
