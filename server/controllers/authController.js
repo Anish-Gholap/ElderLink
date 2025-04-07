@@ -100,12 +100,13 @@ const loginUser = async (request, response) => {
 
 // Find user with phone number
 const findUserWithPhoneNumber = async (request, response) => {
+  console.log(request.body)
   try {
     const {phoneNumber} = request.body
     const user = await User.findOne({phoneNumber})
 
     if (!user) {
-      return response.status(404).json({error: "User not found"})
+      return response.status(404).json({error: "Wrong phone number"})
     }
 
     return response.status(200).json(user)

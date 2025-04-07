@@ -89,7 +89,7 @@ const NavBar = () => {
                   notifications={notificationsArray.reverse()}  // Reverse the notifications array before passing
                   open={openNotifications}
                   handleDelete={handleDelete}
-                  userId={user.id}
+                  userId={user?.id}
                   onClose={() => {
                     console.log("close notif");
                     setOpenNotifications(false)

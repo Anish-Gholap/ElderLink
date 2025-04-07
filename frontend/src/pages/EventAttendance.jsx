@@ -85,7 +85,7 @@ const EventAttendance = () => {
             handleWithdraw(openConfirmation).then(() => {
               setOpenConfirmation(0);
             });
-          }} color="primary">Withdraw</Button>
+          }} color="error">Withdraw</Button>
         </DialogActions>
       </Dialog>
     </Container>

@@ -24,22 +24,19 @@ const createUser = async (newUserData) => {
 
 // find user using phoneNumber
 const findUserWithPhoneNumber = async (phoneNumber) => {
-  try {
-    const response = await axios.post(`${baseUrl}/find-by-phone`, phoneNumber)
-    return response.data
-  } catch (error){
-    console.log(error)
-  }
+  const response = await axios.post(`${baseUrl}/find-by-phone`, {
+    phoneNumber
+  })
+  return response.data
+
 }
 
 // change password
-const changePassword = async ({username, password, confirmPassword, otp}) => {
-  try {
-    const response = await axios.post((`${baseUrl}/change-password`, username, password, confirmPassword, otp))
-    return response.data
-  } catch (error) {
-    console.log(error)
-  }
+const changePassword = async ({ username, password, confirmPassword, otp }) => {
+
+  const response = await axios.post(`${baseUrl}/change-password`, { username, password, confirmPassword, otp })
+  return response.data
+
 }
 
 export default {

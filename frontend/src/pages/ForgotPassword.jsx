@@ -4,6 +4,7 @@ import { Box, Typography, TextField, Button, Paper, Stepper, Step, StepLabel } f
 import { FaArrowLeft } from "react-icons/fa";
 import { useSnackbar } from "../hooks/useSnackbar";
 import SnackbarComponent from "../components/SnackbarComponent";
+import authService from '../services/auth.js'
 
 const ForgotPassword = () => {
     const [activeStep, setActiveStep] = useState(0);
@@ -11,17 +12,34 @@ const ForgotPassword = () => {
     const [otp, setOtp] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [user, setUser] = useState(null); // To store the user object after fetching
+    const [isLoading, setIsLoading] = useState(false); // To manage loading state
     const navigate = useNavigate();
     const snackbar = useSnackbar();
 
     const steps = ["Phone Number", "Verify OTP", "Reset Password"];
 
-    const validatePhoneNumber = () => {
+    const validatePhoneNumber = async () => {
         // Simple validation - check if phone number is entered
+
         if (!phoneNumber.trim()) {
             snackbar.showError("Please enter your phone number");
             return false;
         }
+
+        try {
+            setIsLoading(true); // Set loading state to true
+            const user = await authService.findUserWithPhoneNumber(phoneNumber);
+            setUser(user); // Store the user object for later use
+        }
+        catch (error) {
+            console.error("Error fetching user:", error.response.data.error);
+            snackbar.showError("User not found" + error.response.data.error);
+            return false;
+        } finally {
+            setIsLoading(false); // Reset loading state
+        }
+
         return true;
     };
 
@@ -34,35 +52,53 @@ const ForgotPassword = () => {
         return true;
     };
 
-    const validatePasswords = () => {
+    const validatePasswords = async () => {
+
         if (!newPassword) {
             snackbar.showError("Please enter a new password");
             return false;
         }
-        if (newPassword.length < 6) {
-            snackbar.showError("Password must be at least 6 characters long");
-            return false;
-        }
+    
         if (newPassword !== confirmPassword) {
             snackbar.showError("Passwords do not match");
             return false;
         }
+
+        try {
+            setIsLoading(true); // Set loading state to true
+            await authService.changePassword({
+                username: user.username,
+                password: newPassword,
+                confirmPassword: confirmPassword,
+                otp: otp
+            });
+            snackbar.showSuccess("Password changed successfully!");
+            navigate("/login"); // Redirect to login page after successful password change
+        }
+        catch (error) {
+            console.error("Error changing password:", error);
+            snackbar.showError("Failed to change password. Please try again." + error.response.data.error);
+            return false;
+        } finally {
+            setIsLoading(false); // Reset loading state
+        }
+            
         return true;
     };
 
-    const handleNext = () => {
+    const handleNext = async () => {
         let isValid = false;
 
         switch (activeStep) {
             case 0:
-                isValid = validatePhoneNumber();
+                isValid = await validatePhoneNumber();
                 // In a real app, we would send an OTP to the phone number here
                 break;
             case 1:
                 isValid = validateOtp();
                 break;
             case 2:
-                isValid = validatePasswords();
+                isValid = await validatePasswords();
                 if (isValid) {
                     // In a real app, we would submit the new password to the backend here
                     snackbar.showSuccess("Password has been reset successfully!", "/login");
@@ -107,6 +143,9 @@ const ForgotPassword = () => {
             case 1:
                 return (
                     <Box>
+                        <Typography variant="h5" mb={2}>
+                            Welcome, <span style={{ fontWeight: "bold" }}>{user?.username}</span>! 
+                        </Typography>
                         <Typography variant="body1" mb={2}>
                             We've sent a 4-digit verification code to your phone. Please enter it below.
                             (Hint: Use 1234 for this demo)
@@ -163,7 +202,7 @@ const ForgotPassword = () => {
                 <FaArrowLeft fontSize="2rem" />
             </Box>
 
-            <Paper elevation={4} sx={{ p: 6, width: "80%", maxWidth: "500px" }}>
+            <Paper elevation={4} sx={{ p: 6, width: "50%", maxWidth: "500px" }}>
                 <Typography variant="h4" textAlign="center" mb={4}>
                     Reset Password
                 </Typography>
