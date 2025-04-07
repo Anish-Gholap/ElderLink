@@ -37,12 +37,11 @@ export const UsersProvider = ({ children }) => {
     //Instead of waiting for 1-2s of refetching, I changed the display instantly. I assume backend will always be successful
     const editProfileHandler = async (userId, updatedData, token) => {
         try {
-            setUserData(prevData => ({
-                ...prevData,
-                ...updatedData,
-            }));
-            //setLoading(true);
             const updatedUser = await usersService.updateUser(userId, updatedData, token); 
+            const refreshedUser = await usersService.getAllUsers(userId, token);
+            setUserData(refreshedUser);
+            //setLoading(true);
+            
             //setLoading(false);
         } catch (error) {
             console.error("Failed to update profile:", error);
