@@ -12,7 +12,7 @@ function Profile() {
     //AuthContext holds no information regarding user details except name, username and id
     const { user } = useAuthContext();
     //Seperate Extract required from UserContext
-    const { userData, editProfileHandler } = useUsersContext();
+    const { userData, editProfileHandler, checkUsernameExist  } = useUsersContext();
     const [openEditProfile, setOpenEditProfile] = React.useState(false);
     const snackbar = useSnackbar();
 
@@ -42,6 +42,7 @@ function Profile() {
                 onClose={() => setOpenEditProfile(false)}
                 onSubmit={handleProfileEdit}
                 userData={userData}
+                checkUsernameExist={checkUsernameExist}
             />
 
             <Box

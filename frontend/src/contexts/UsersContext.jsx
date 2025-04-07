@@ -38,12 +38,11 @@ export const UsersProvider = ({ children }) => {
 
     const editProfileHandler = async (userId, updatedData, token) => {
         try {
-            setUserData(prevData => ({
-                ...prevData,
-                ...updatedData,
-            }));
-            //setLoading(true);
             const updatedUser = await usersService.updateUser(userId, updatedData, token); 
+            const refreshedUser = await usersService.getAllUsers(userId, token);
+            setUserData(refreshedUser);
+            //setLoading(true);
+            
             //setLoading(false);
         } catch (error) {
             console.error("Failed to update profile:", error);
@@ -66,12 +65,21 @@ export const UsersProvider = ({ children }) => {
         }
     };
     
+    const checkUsernameExist = async (username) => {
+        try {
+            const user = await usersService.checkUsernameExist(username);
+            return user;
+        } catch (error) {
+            console.error("Error checking username:", error);
+            return null;
+        }
+    };
     
 
     if (loading) return <div>Loading...</div>;
 
     return (
-        <UsersContext.Provider value={{ userData, editProfileHandler, createUserHandler }}>
+        <UsersContext.Provider value={{ userData, editProfileHandler, createUserHandler, checkUsernameExist }}>
             {children}
         </UsersContext.Provider>
     );

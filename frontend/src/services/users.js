@@ -7,6 +7,17 @@ const getAllUsers = async (userId) => {
     const user = users.find(user => user.id === userId);
     return user
   }
+  const checkUsernameExist = async (username) => {
+    try {
+        const response = await axios.get(`${baseUrl}`);
+        const users = response.data;
+        const user = users.find(user => user.username === username);
+        return user;
+    } catch (error) {
+        console.error("Error checking username:", error);
+        return null;
+    }
+};
 
 const updateUser = async (userId, updatedData, token) => {
   try {
@@ -41,6 +52,7 @@ const updateUser = async (userId, updatedData, token) => {
 
   export default {
     getAllUsers,
+    createUser,
     //deleteUser,
     updateUser,
   }

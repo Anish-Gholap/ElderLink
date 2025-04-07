@@ -26,7 +26,7 @@ import { useSnackbar } from "../hooks/useSnackbar"
 import SnackbarComponent from "../components/SnackbarComponent"
 
 const EventDiscovery = () => {
-  const {allEvents, updateUserLocation} = useEventsContext()
+  const {allEvents, updateUserLocation, eventSnackbar} = useEventsContext()
   const snackbar = useSnackbar()
 
   // Single search query
@@ -289,6 +289,13 @@ const EventDiscovery = () => {
       severity={snackbar.severity}
       autoHideDuration={snackbar.autoHideDuration}
       handleClose={snackbar.handleClose}
+    />
+    <SnackbarComponent
+      open={eventSnackbar.open}
+      message={eventSnackbar.message}
+      severity={eventSnackbar.severity}
+      autoHideDuration={eventSnackbar.autoHideDuration}
+      handleClose={eventSnackbar.handleClose}
     />
     </>
   )
