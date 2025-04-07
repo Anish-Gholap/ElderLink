@@ -4,7 +4,7 @@ import NavBar from "./NavBar";
 const Layout = ({children}) => {
   const location = useLocation()
 
-  const pagesWithoutNavBar = ["/", "/login", "/signup"]
+  const pagesWithoutNavBar = ["/", "/login", "/signup", "/forgot-password"]
 
   // hide navbar on home and login pages
   const hideNavBar = pagesWithoutNavBar.includes(location.pathname)

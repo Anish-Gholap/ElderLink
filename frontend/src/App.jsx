@@ -17,6 +17,7 @@ import EventAttendance from './pages/EventAttendance'
 import Profile from './pages/Profile'
 import { UsersProvider } from './contexts/UsersContext'
 import { Typography } from '@mui/material'
+import ForgotPassword from './pages/ForgotPassword'
 
 const App = () => {
   return (
@@ -29,6 +30,7 @@ const App = () => {
             <Route path='/' element={<Home />} />
             <Route path='/login' element={<Login />} />
             <Route path='/signup' element={<SignUp />} />
+            <Route path='/forgot-password' element={<ForgotPassword />} />
             {/* Protected Route for Pages only accessible after login */}
             <Route path='/event-discovery' element= {
               <ProtectedRoute>

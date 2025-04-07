@@ -29,7 +29,7 @@ const LoginForm = ({ handleSubmit, handleUsernameChange, handlePasswordChange, u
       <Typography color="error" variant="body2" align="center" gutterBottom >
         {errorMessage}
       </Typography>
-      <Link to='/'> {/* Add this line */}
+      <Link to='/forgot-password'>
         <Typography fontSize='0.8rem' >
           Forgot password?
         </Typography>
