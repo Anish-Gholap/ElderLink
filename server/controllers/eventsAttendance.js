@@ -1,6 +1,5 @@
 const User = require('../models/user')
 const Event = require('../models/event')
-const {request, response} = require("express");
 
 // handle user events attending
 const getEventsAttending = async (request, response) => {

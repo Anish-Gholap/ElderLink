@@ -1,139 +1,48 @@
+// controllers/usersController.js
 const User = require('../models/user')
-const bcrypt = require('bcryptjs')
-const {response} = require("express");
 
-//handle user creation for registration
-// const createUser = async (request, response) => {
-//     const {username, name, phoneNumber, password} = request.body
-//
-//     // validate password
-//     const passwordValidation = validatePassword(password);
-//     if (!passwordValidation.isValid) {
-//         return response.status(400).json({ error: passwordValidation.message });
-//     }
-//
-//     //hash password
-//     const saltRounds = 10
-//     const passwordHash = await bcrypt.hash(password, saltRounds)
-//
-//     const user = new User({
-//         username: username,
-//         name: name,
-//         phoneNumber: phoneNumber,
-//         passwordHash: passwordHash
-//     })
-//
-//     const savedUser = await user.save()
-//     response.status(201).json(savedUser)
-// }
-
-const createUser = async (request, response) => {
+// Get all users
+const getAllUsers = async (request, response) => {
     try {
-        const {username, name, phoneNumber, password, confirmPassword} = request.body
-
-        if (confirmPassword !== undefined && confirmPassword !== password) {
-            return response.status(400).json({error: "Passwords must match!"})
-        }
-
-        // validate password
-        const passwordValidation = validatePassword(password);
-        if (!passwordValidation.isValid) {
-            return response.status(400).json({ error: passwordValidation.message });
-        }
-
-        //hash password
-        const saltRounds = 10
-        const passwordHash = await bcrypt.hash(password, saltRounds)
-
-        const user = new User({
-            username: username,
-            name: name,
-            phoneNumber: phoneNumber,
-            passwordHash: passwordHash
-        })
-
-        const savedUser = await user.save()
-        response.status(201).json({
-            user: savedUser.toJSON(),
-            message: "User Registered Successfully!"
-        })
-
+        const users = await User.find({})
+        response.status(200).json(users)
     } catch (error) {
         console.log(error.message)
-        throw error
+        response.status(500).json({ error: 'Server error occurred' })
     }
 }
 
-// handle GET all users
-const getAllUsers = async (request, response) => {
-    const users = await User.find({})
-    response.status(200).json(users)
-}
-
-// edit user
+// Edit user
 const editUser = async (request, response) => {
-    const body = request.body
-    const userToEditId = request.user.id
+    try {
+        const body = request.body
+        const userToEditId = request.user.id
 
-    const updatedUser = await User.findByIdAndUpdate(
-        userToEditId,
-        body,
-        {new: true, runValidators: true}
-    )
+        const updatedUser = await User.findByIdAndUpdate(
+          userToEditId,
+          body,
+          { new: true, runValidators: true }
+        )
 
-    response.status(200).json({
-        success:true,
-        data: {
-            id: updatedUser._id,
-            name: updatedUser.name,
-            phoneNumber: updatedUser.phoneNumber
+        if (!updatedUser) {
+            return response.status(404).json({ error: 'User not found' })
         }
-    })
-}
 
-// TODO: Remove user. Try Mongoose hooks to update Events tied to user to delete
-
-
-const validatePassword = (password) => {
-    // Initialize result object
-    const result = {
-        isValid: true,
-        message: ''
-    };
-
-    // Check minimum length (5 characters)
-    if (!password || password.length < 5) {
-        result.isValid = false
-        result.message = 'Password must be at least 5 characters long'
-        return result
+        response.status(200).json({
+            success: true,
+            data: {
+                id: updatedUser._id,
+                name: updatedUser.name,
+                phoneNumber: updatedUser.phoneNumber
+            }
+        })
+    } catch (error) {
+        console.log(error.message)
+        response.status(500).json({ error: 'Server error occurred' })
     }
-
-    // Check for at least 1 uppercase letter
-    if (!/[A-Z]/.test(password)) {
-        result.isValid = false
-        result.message = 'Password must contain at least one uppercase letter'
-        return result
-    }
-
-    // Check for at least 1 lowercase letter
-    if (!/[a-z]/.test(password)) {
-        result.isValid = false
-        result.message = 'Password must contain at least one lowercase letter'
-        return result
-    }
-
-    // Check for at least 1 special character
-    if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) {
-        result.isValid = false
-        result.message = 'Password must contain at least one special character'
-        return result
-    }
-
-    return result
 }
 
 module.exports = {
-    createUser,
     getAllUsers,
     editUser
 }

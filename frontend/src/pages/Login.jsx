@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import LoginForm from "../components/LoginForm"
-import loginService from "../services/login"
+import authService from "../services/auth.js"
 import { useAuthContext } from "../contexts/AuthContext"
 import { useNavigate } from "react-router-dom"
 import { TextField, Box, Typography } from "@mui/material"
@@ -41,7 +41,7 @@ const Login = () => {
     if (!validateDetails()) return
 
     try {
-      const user = await loginService.login({
+      const user = await authService.login({
         username,
         password
       })

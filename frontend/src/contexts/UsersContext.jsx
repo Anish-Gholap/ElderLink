@@ -1,6 +1,7 @@
 import { useAuthContext } from "../contexts/AuthContext";
 import { createContext, useState, useEffect, useContext } from "react";
 import usersService from "../services/users";
+import authService from "../services/auth.js"
 import { useSnackbar } from "../hooks/useSnackbar";
 
 const UsersContext = createContext();
@@ -34,7 +35,7 @@ export const UsersProvider = ({ children }) => {
         }
     }, [user?.id]);
 
-    //Instead of waiting for 1-2s of refetching, I changed the display instantly. I assume backend will always be successful
+
     const editProfileHandler = async (userId, updatedData, token) => {
         try {
             setUserData(prevData => ({
@@ -53,11 +54,11 @@ export const UsersProvider = ({ children }) => {
 
     const createUserHandler = async (newUserData) => {
         try {
-            const createdUser = await usersService.createUser(newUserData);
+            const createdUser = await authService.createUser(newUserData);
     
             setUserData(prevData => ({
                 ...prevData,
-                createdUser, // Ensure this matches your state structure
+                createdUser,
             }));
         } catch (error) {
             console.error("Failed to create user:", error);

@@ -6,7 +6,7 @@ import SignUpForm from '../components/SignUpForm';
 import { useUsersContext } from "../contexts/UsersContext";
 import { useSnackbar } from '../hooks/useSnackbar';
 import SnackbarComponent from '../components/SnackbarComponent';
-import usersService from "../services/users.js"
+import authService from "../services/auth.js"
 
 const SignUp = () => {
   const [username, setUsername] = useState("");
@@ -48,7 +48,7 @@ const SignUp = () => {
         password
       }
 
-      await usersService.createUser(newUser)
+      await authService.createUser(newUser)
 
       // Show success message and redirect to login
       snackbar.showSuccess("Registration successful, redirecting to Login", "/login");

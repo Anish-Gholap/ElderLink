@@ -5,7 +5,7 @@ const {createUser, getAllUsers, editUser} = require('../controllers/users')
 usersRouter.get('/', getAllUsers)
 
 // POST user to DB
-usersRouter.post('/', createUser)
+// usersRouter.post('/', createUser)
 
 // PATCH user in DB
 usersRouter.patch('/profile', editUser)
