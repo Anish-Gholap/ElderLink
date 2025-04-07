@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 
 
-const EditProfileDialog = ({ open, onClose, onSubmit, userData }) => {
+const EditProfileDialog = ({ open, onClose, onSubmit, userData, checkUsernameExist }) => {
     const [userName, setUserName] = useState('');
     const [name, setName] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
@@ -24,51 +24,58 @@ const EditProfileDialog = ({ open, onClose, onSubmit, userData }) => {
         }
     }, [open, userData]);
 
-    const handleSubmit = () => {
-        const validationError = validateDetails();
+    const handleSubmit = async () => {
+        const validationError = await validateDetails(); 
         if (validationError) {
             setErrorMessage(validationError);
-            return; // Don't submit if validation fails
+            return; 
         }
 
         const updatedData = { username: userName, name, phoneNumber };
-        onSubmit(updatedData);  // Call the passed function with new data
-        onClose();  // Close the dialog
-        setErrorMessage('');  // Clear any previous error message
+        onSubmit(updatedData);  
+        onClose();  
+        setErrorMessage('');  
     };
 
-    const validateDetails = () => {
-
+    const validateDetails = async () => {
         if (!userName || !name || !phoneNumber) {
-            return "Please fill in all fields"
+            return "Please fill in all fields";
         }
-        // check if username has minimum 4 characters
-        // Allows only alphanumeric characters
-        const usernameRegex = /^[a-zA-Z0-9]+$/; 
+
+        // Check if username has minimum 3 characters and is alphanumeric
+        const usernameRegex = /^[a-zA-Z0-9]+$/;
         if (userName.length < 3 || userName.length > 12) {
             return "Username must be between 3 and 12 characters long";
         }
         if (!usernameRegex.test(userName)) {
             return "Username must contain only alphanumeric characters (no special characters)";
         }
-        // check if name has minimum 3 characters
-        // Allows only alphabets and spaces
-        const nameRegex = /^[A-Za-z\s]+$/; 
+
+        // Check if name has minimum 3 characters and is alphabetic (allows spaces)
+        const nameRegex = /^[A-Za-z\s]+$/;
         if (name.length < 3) {
             return "Name must be at least 3 characters long";
         }
         if (!nameRegex.test(name)) {
             return "Name must contain only alphabets and spaces";
         }
-        // Check if phone number is exactly 8 characters long and contains only numbers
-        // Only allows exactly 8 digits
-        const phoneNumberRegex = /^[0-9]{8}$/; 
+
+        // Check if phone number is exactly 8 digits
+        const phoneNumberRegex = /^[0-9]{8}$/;
         if (!phoneNumberRegex.test(phoneNumber)) {
             return "Phone number must be exactly 8 digits long and contain only numbers";
         }
-        
-        return null
-    }
+
+        // Check if username exists (only if changed)
+        if (userName !== userData.username) {
+            const userExists = await checkUsernameExist(userName);
+            if (userExists) {
+                return "Username already exists.";  
+            }
+        }
+
+        return null;  
+    };
 
     return (
         <Dialog open={open} onClose={onClose}>

@@ -64,12 +64,21 @@ export const UsersProvider = ({ children }) => {
         }
     };
     
+    const checkUsernameExist = async (username) => {
+        try {
+            const user = await usersService.checkUsernameExist(username);
+            return user;
+        } catch (error) {
+            console.error("Error checking username:", error);
+            return null;
+        }
+    };
     
 
     if (loading) return <div>Loading...</div>;
 
     return (
-        <UsersContext.Provider value={{ userData, editProfileHandler, createUserHandler }}>
+        <UsersContext.Provider value={{ userData, editProfileHandler, createUserHandler, checkUsernameExist }}>
             {children}
         </UsersContext.Provider>
     );
