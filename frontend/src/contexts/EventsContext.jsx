@@ -121,8 +121,14 @@ export const EventsProvider = ({ children }) => {
       const response = await eventsService.createEvent(eventData, user.token)
       console.log(response)
 
-      const refreshedAll = await eventsService.getAllEvents()
-      setAllEvents(refreshedAll)
+      if (userLat && userLong) {
+        const refreshedAll = await searchService.getEventsByDistance(userLat, userLong)
+        setAllEvents(refreshedAll)
+      } else {
+        // Fall back to regular sorting if no location
+        const refreshedAll = await searchService.getEventsByDistance()
+        setAllEvents(refreshedAll)
+      }
 
       // If user is creator, refetch their events
       if (user?.id) {
@@ -139,8 +145,8 @@ export const EventsProvider = ({ children }) => {
     // send token for authorization
     await eventsService.deleteEvent(eventId, user.token)
 
-    const refreshedAll = await eventsService.getAllEvents();
-    setAllEvents(refreshedAll);
+    const refreshedAll = await searchService.getEventsByDistance(userLat, userLong)
+    setAllEvents(refreshedAll)
 
     if (user?.id) {
       const refreshedMine = await eventsService.getUserEvents(user.id);
@@ -165,7 +171,7 @@ export const EventsProvider = ({ children }) => {
       await eventsService.editEvent(eventId, eventData, user.token)
 
       // refresh event lists after update
-      const refreshedAll = await eventsService.getAllEvents()
+      const refreshedAll = await searchService.getEventsByDistance(userLat, userLong)
       setAllEvents(refreshedAll)
 
       if (user?.id) {
@@ -195,7 +201,7 @@ export const EventsProvider = ({ children }) => {
       snackbar.showSuccess("Joined event successfully")
 
       // refresh event lists after update
-      const refreshedAll = await eventsService.getAllEvents()
+      const refreshedAll = await searchService.getEventsByDistance(userLat, userLong)
       setAllEvents(refreshedAll)
 
       await fetchEventsAttending()
@@ -218,8 +224,8 @@ export const EventsProvider = ({ children }) => {
       snackbar.showSuccess("Withdrawn from event successfully");
 
       // Refresh event lists after update
-      const refreshedAll = await eventsService.getAllEvents();
-      setAllEvents(refreshedAll);
+      const refreshedAll = await searchService.getEventsByDistance(userLat, userLong)
+      setAllEvents(refreshedAll)
 
       await fetchEventsAttending()
 
@@ -254,4 +260,4 @@ export const EventsProvider = ({ children }) => {
       {children}
     </EventsContext.Provider>
   )
-} 
+}

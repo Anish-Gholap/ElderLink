@@ -13,7 +13,8 @@ import {
   FormControlLabel,
   Checkbox,
   Stack,
-  Divider
+  Divider,
+  CircularProgress
 } from "@mui/material"
 import {CiSearch} from "react-icons/ci"
 import {FaPen} from "react-icons/fa"
@@ -26,7 +27,7 @@ import { useSnackbar } from "../hooks/useSnackbar"
 import SnackbarComponent from "../components/SnackbarComponent"
 
 const EventDiscovery = () => {
-  const {allEvents, updateUserLocation, eventSnackbar} = useEventsContext()
+  const {allEvents, updateUserLocation, eventSnackbar, loading} = useEventsContext()
   const snackbar = useSnackbar()
 
   // Single search query
@@ -52,10 +53,18 @@ const EventDiscovery = () => {
       },
       (error) => {
         console.error("❌ Failed to get user location", error)
+        // Still call updateUserLocation with null values to ensure events are fetched
+        // This will trigger the fallback in your context
+        updateUserLocation(null, null);
       }
     )
 
-  }, [])
+    // Cleanup function
+    return () => {
+      // If needed, you can reset location on unmount
+      // updateUserLocation(null, null);
+    }
+  }, [updateUserLocation]) // Add updateUserLocation to dependencies
 
   // Handle search with debounce
   useEffect(() => {
@@ -273,7 +282,12 @@ const EventDiscovery = () => {
       </Box>
 
       {/* Event Cards */}
-      {eventsToDisplay && eventsToDisplay.length > 0 ? (
+      {loading ? (
+        <Box sx={{textAlign: 'center', py: 4, display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+          <CircularProgress size={40} sx={{ mb: 2 }} />
+          <Typography variant="h6">Loading events...</Typography>
+        </Box>
+      ) : eventsToDisplay && eventsToDisplay.length > 0 ? (
         eventsToDisplay.map(event => (
           <EventCard event={event} key={event.id}/>
         ))
@@ -283,20 +297,21 @@ const EventDiscovery = () => {
           <Typography color="text.secondary">Try adjusting your search terms or filters.</Typography>
         </Box>
       )}
-    <SnackbarComponent
-      open={snackbar.open}
-      message={snackbar.message}
-      severity={snackbar.severity}
-      autoHideDuration={snackbar.autoHideDuration}
-      handleClose={snackbar.handleClose}
-    />
-    <SnackbarComponent
-      open={eventSnackbar.open}
-      message={eventSnackbar.message}
-      severity={eventSnackbar.severity}
-      autoHideDuration={eventSnackbar.autoHideDuration}
-      handleClose={eventSnackbar.handleClose}
-    />
+
+      <SnackbarComponent
+        open={snackbar.open}
+        message={snackbar.message}
+        severity={snackbar.severity}
+        autoHideDuration={snackbar.autoHideDuration}
+        handleClose={snackbar.handleClose}
+      />
+      <SnackbarComponent
+        open={eventSnackbar.open}
+        message={eventSnackbar.message}
+        severity={eventSnackbar.severity}
+        autoHideDuration={eventSnackbar.autoHideDuration}
+        handleClose={eventSnackbar.handleClose}
+      />
     </>
   )
 }
