@@ -1,4 +1,6 @@
+Here is the updated version of the README with the correct formatting:
 
+```markdown
 # ElderLink  
 **SC2006 Software Engineering Team 4**  
 ElderLink is a web application designed to connect and engage elderly individuals through events, notifications, and a chatbot service. This project is developed as part of SC2006 Software Engineering Team 4.
@@ -88,7 +90,12 @@ ElderLink is a web application designed to connect and engage elderly individual
    npm install
    ```
 
-3. Start the development server:
+3. Create a `.env` file in the `frontend` directory with the necessary environment variables (e.g., API base URL):
+   ```
+   VITE_API_BASE_URL=<your-api-base-url>
+   ```
+
+4. Start the development server:
    ```bash
    npm run dev
    ```
@@ -134,3 +141,6 @@ ElderLink is a web application designed to connect and engage elderly individual
 ## License
 
 *Specify your license here.*
+```
+
+This version includes the `.env` configuration with the placeholder `<your-api-base-url>`. Let me know if you need any more changes!
