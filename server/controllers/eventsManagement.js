@@ -54,8 +54,7 @@ const addEvent = async (request, response) => {
     const savedEvent = await event.save()
 
     user.eventsCreated = user.eventsCreated.concat(savedEvent._id)
-    // add here is user should be added to his own event attendees list
-    // user.attendees = user.attendees.concat(user._id)
+
     await user.save()
 
     response.status(201).json(savedEvent)
