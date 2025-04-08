@@ -20,17 +20,20 @@ const {setupNotificationsListeners} = require('./services/notificationsListener'
 const chatbotBackendService = require('./services/chatbotBackend')
 const chatbotRouter = require('./views/chatbot')
 
+// Check if we're running in test mode
+const isTestEnvironment = process.env.NODE_ENV === 'test';
+
 // MongoDB Connection
 mongoose.set('strictQuery', false)
 logger.info('connecting to', config.MONGODB_URI)
 
 mongoose.connect(config.MONGODB_URI)
-    .then(() => {
-        logger.info('connected to MongoDB')
-    })
-    .catch((error) => {
-        logger.error('error connecting to MongoDB', error.message)
-    })
+  .then(() => {
+      logger.info('connected to MongoDB')
+  })
+  .catch((error) => {
+      logger.error('error connecting to MongoDB', error.message)
+  })
 
 const startCache = async () => {
     try {
@@ -45,7 +48,12 @@ const startCache = async () => {
 startCache()
 
 // Chatbot backend
-chatbotBackendService.initialize()
+if (!isTestEnvironment) {
+    logger.info('Initializing chatbot backend')
+    chatbotBackendService.initialize()
+} else {
+    logger.info('Running in test environment - skipping chatbot backend initialization')
+}
 
 // Middlewares
 app.use(cors())
@@ -70,15 +78,17 @@ app.use('/api/chatbot', chatbotRouter)
 app.use(middlewares.unknownEndpoint)
 app.use(middlewares.errorHandler)
 
-// Chatbot Shutdown
-process.on('SIGINT', () => {
-    chatbotBackendService.stopAIBackend()
-    process.exit(0)
-})
 
-process.on('SIGTERM', () => {
-    chatbotBackendService.stopAIBackend()
-    process.exit(0)
-})
+if (!isTestEnvironment) {
+    process.on('SIGINT', () => {
+        chatbotBackendService.stopAIBackend()
+        process.exit(0)
+    })
+
+    process.on('SIGTERM', () => {
+        chatbotBackendService.stopAIBackend()
+        process.exit(0)
+    })
+}
 
 module.exports = app

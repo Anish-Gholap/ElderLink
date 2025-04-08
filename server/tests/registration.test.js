@@ -28,7 +28,7 @@ describe('User Registration', () => {
       }
 
       const result = await api
-        .post('/api/users')
+        .post('/api/auth')
         .send(newUser)
         .expect(201)
         .expect('Content-Type', /application\/json/)
@@ -54,7 +54,7 @@ describe('User Registration', () => {
       }
 
       const result = await api
-        .post('/api/users')
+        .post('/api/auth')
         .send(newUser)
         .expect(400)
         .expect('Content-Type', /application\/json/)
@@ -77,7 +77,7 @@ describe('User Registration', () => {
       }
 
       const result = await api
-        .post('/api/users')
+        .post('/api/auth')
         .send(newUser)
         .expect(400)
         .expect('Content-Type', /application\/json/)
@@ -102,7 +102,7 @@ describe('User Registration', () => {
       }
 
       const result = await api
-        .post('/api/users')
+        .post('/api/auth')
         .send(newUser)
         .expect(201)
         .expect('Content-Type', /application\/json/)
@@ -128,7 +128,7 @@ describe('User Registration', () => {
       }
 
       const result = await api
-        .post('/api/users')
+        .post('/api/auth')
         .send(newUser)
         .expect(400)
         .expect('Content-Type', /application\/json/)
@@ -151,7 +151,7 @@ describe('User Registration', () => {
       }
 
       const result = await api
-        .post('/api/users')
+        .post('/api/auth')
         .send(newUser)
         .expect(400)
         .expect('Content-Type', /application\/json/)
@@ -174,7 +174,7 @@ describe('User Registration', () => {
       }
 
       const result = await api
-        .post('/api/users')
+        .post('/api/auth')
         .send(newUser)
         .expect(400)
         .expect('Content-Type', /application\/json/)
@@ -195,7 +195,7 @@ describe('User Registration', () => {
       }
 
       await api
-        .post('/api/users')
+        .post('/api/auth')
         .send(firstUser)
         .expect(201)
 
@@ -210,7 +210,7 @@ describe('User Registration', () => {
       }
 
       const result = await api
-        .post('/api/users')
+        .post('/api/auth')
         .send(secondUser)
         .expect(400)
         .expect('Content-Type', /application\/json/)
@@ -235,7 +235,7 @@ describe('User Registration', () => {
       }
 
       const result = await api
-        .post('/api/users')
+        .post('/api/auth')
         .send(newUser)
         .expect(201)
         .expect('Content-Type', /application\/json/)
@@ -261,7 +261,7 @@ describe('User Registration', () => {
       }
 
       const result = await api
-        .post('/api/users')
+        .post('/api/auth')
         .send(newUser)
         .expect(400)
         .expect('Content-Type', /application\/json/)
@@ -284,7 +284,7 @@ describe('User Registration', () => {
       }
 
       const result = await api
-        .post('/api/users')
+        .post('/api/auth')
         .send(newUser)
         .expect(400)
         .expect('Content-Type', /application\/json/)
@@ -310,7 +310,7 @@ describe('User Registration', () => {
       }
 
       const result = await api
-        .post('/api/users')
+        .post('/api/auth')
         .send(newUser)
         .expect(201)
         .expect('Content-Type', /application\/json/)
@@ -333,7 +333,7 @@ describe('User Registration', () => {
       }
 
       const result = await api
-        .post('/api/users')
+        .post('/api/auth')
         .send(newUser)
         .expect(400)
         .expect('Content-Type', /application\/json/)
@@ -356,7 +356,7 @@ describe('User Registration', () => {
       }
 
       const result = await api
-        .post('/api/users')
+        .post('/api/auth')
         .send(newUser)
         .expect(400)
         .expect('Content-Type', /application\/json/)
@@ -379,7 +379,7 @@ describe('User Registration', () => {
       }
 
       const result = await api
-        .post('/api/users')
+        .post('/api/auth')
         .send(newUser)
         .expect(400)
         .expect('Content-Type', /application\/json/)
@@ -402,7 +402,7 @@ describe('User Registration', () => {
       }
 
       const result = await api
-        .post('/api/users')
+        .post('/api/auth')
         .send(newUser)
         .expect(400)
         .expect('Content-Type', /application\/json/)
@@ -427,7 +427,7 @@ describe('User Registration', () => {
       }
 
       const result = await api
-        .post('/api/users')
+        .post('/api/auth')
         .send(newUser)
         .expect(400)
         .expect('Content-Type', /application\/json/)
