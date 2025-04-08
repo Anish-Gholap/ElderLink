@@ -13,20 +13,35 @@ const startAIBackend = async () => {
     return;
   }
 
-  // Path to the Python backend executable
-  const backendPath = path.join(__dirname, '..', 'python_backend', 'ai_chatbot_backend', 'ai_chatbot_backend.exe');
+  // Determine platform-specific path and command
+  const isPythonScript = process.platform !== 'win32'; // Check if we're not on Windows
 
-  // Check if executable exists
+  // Path to the backend - either Python script or executable
+  let backendPath;
+  let command;
+  let args = [];
+
+  if (isPythonScript) {
+    // For macOS/Linux - use Python interpreter with script
+    command = 'python3'; // or 'python' depending on your setup
+    backendPath = path.join(__dirname, '..', 'python_backend', 'ai_chatbot_backend', 'main.py'); // Adjust to your actual Python script path
+    args = [backendPath];
+  } else {
+    // For Windows - use executable directly
+    command = path.join(__dirname, '..', 'python_backend', 'ai_chatbot_backend', 'ai_chatbot_backend.exe');
+    backendPath = command;
+  }
+
+  // Check if backend file exists
   if (!fs.existsSync(backendPath)) {
-    logger.error(`AI backend executable not found at: ${backendPath}`);
-    throw new Error('AI backend executable not found');
+    logger.error(`AI backend file not found at: ${backendPath}`);
+    throw new Error('AI backend file not found');
   }
 
   logger.info(`Starting AI backend from: ${backendPath}`);
 
-
-  // Working directory should be the directory containing the executable
-  backendProcess = spawn(backendPath, [], {
+  // Working directory should be the directory containing the backend
+  backendProcess = spawn(command, args, {
     cwd: path.dirname(backendPath)
   });
 
