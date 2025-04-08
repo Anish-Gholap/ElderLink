@@ -36,6 +36,7 @@ const joinEvent = async (request, response) => {
     }
 
     event.attendees = event.attendees.concat(user.id)
+
     await event.save()
 
     user.eventsAttending = user.eventsAttending.concat(eventId)
