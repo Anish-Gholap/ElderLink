@@ -17,7 +17,8 @@ const middlewares = require('./utils/middlewares')
 const {initializeCache} = require('./services/locationsCache')
 const notificationsEmitter = require('./services/notificationsEmitter')
 const {setupNotificationsListeners} = require('./services/notificationsListener')
-
+const chatbotBackendService = require('./services/chatbotBackend')
+const chatbotRouter = require('./views/chatbot')
 
 // MongoDB Connection
 mongoose.set('strictQuery', false)
@@ -40,7 +41,11 @@ const startCache = async () => {
     }
 }
 
+// Locations Cache
 startCache()
+
+// Chatbot backend
+chatbotBackendService.initialize()
 
 // Middlewares
 app.use(cors())
@@ -60,8 +65,20 @@ app.use('/api/events/', eventsAttendanceRouter)
 app.use('/api/locations', locationsRouter)
 app.use('/api/search', searchRouter)
 app.use('/api/auth', authRouter)
+app.use('/api/chatbot', chatbotRouter)
 
 app.use(middlewares.unknownEndpoint)
 app.use(middlewares.errorHandler)
+
+// Chatbot Shutdown
+process.on('SIGINT', () => {
+    chatbotBackendService.stopAIBackend()
+    process.exit(0)
+})
+
+process.on('SIGTERM', () => {
+    chatbotBackendService.stopAIBackend()
+    process.exit(0)
+})
 
 module.exports = app

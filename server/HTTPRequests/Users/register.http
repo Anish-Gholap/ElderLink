@@ -2,7 +2,7 @@ POST http://localhost:3002/api/auth
 Content-Type: application/json
 
 {
-  "username": "junwei",
+  "username": "junwei!",
   "name": "Junwei",
   "phoneNumber": "99989999",
   "password": "Junwei!"

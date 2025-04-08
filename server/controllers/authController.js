@@ -41,7 +41,7 @@ const validatePassword = (password) => {
 
 
 const createUser = async (request, response) => {
-  try {
+
     const {username, name, phoneNumber, password, confirmPassword} = request.body
 
     if (confirmPassword !== undefined && confirmPassword !== password) {
@@ -70,11 +70,6 @@ const createUser = async (request, response) => {
       user: savedUser.toJSON(),
       message: "User Registered Successfully!"
     })
-
-  } catch (error) {
-    console.log(error.message)
-    response.status(500).json({ error: 'Server error occurred' })
-  }
 }
 
 const loginUser = async (request, response) => {
