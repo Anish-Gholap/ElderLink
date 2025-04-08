@@ -1,6 +1,4 @@
-Here is the updated version of the README with the correct formatting:
 
-```markdown
 # ElderLink  
 **SC2006 Software Engineering Team 4**  
 ElderLink is a web application designed to connect and engage elderly individuals through events, notifications, and a chatbot service. This project is developed as part of SC2006 Software Engineering Team 4.
