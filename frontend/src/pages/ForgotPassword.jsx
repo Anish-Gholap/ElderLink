@@ -34,7 +34,7 @@ const ForgotPassword = () => {
         }
         catch (error) {
             console.error("Error fetching user:", error.response.data.error);
-            snackbar.showError("User not found" + error.response.data.error);
+            snackbar.showError("User not found " + error.response.data.error);
             return false;
         } finally {
             setIsLoading(false); // Reset loading state
@@ -77,7 +77,7 @@ const ForgotPassword = () => {
         }
         catch (error) {
             console.error("Error changing password:", error);
-            snackbar.showError("Failed to change password. Please try again." + error.response.data.error);
+            snackbar.showError("Failed to change password. Please try again. " + error.response.data.error);
             return false;
         } finally {
             setIsLoading(false); // Reset loading state
@@ -202,7 +202,7 @@ const ForgotPassword = () => {
                 <FaArrowLeft fontSize="2rem" />
             </Box>
 
-            <Paper elevation={4} sx={{ p: 6, width: "50%", maxWidth: "500px" }}>
+            <Paper elevation={4} sx={{ p: 10, width: "50%", maxWidth: "500px" }}>
                 <Typography variant="h4" textAlign="center" mb={4}>
                     Reset Password
                 </Typography>

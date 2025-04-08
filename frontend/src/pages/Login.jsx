@@ -54,7 +54,7 @@ const Login = () => {
       setPassword("")
 
       // navigate to event discovery page
-      snackbar.showSuccess("Login successful", "/event-discovery")
+      snackbar.showSuccess("Login successful! Loading...", "/event-discovery")
 
       console.log(user)
     } catch (exception) {
