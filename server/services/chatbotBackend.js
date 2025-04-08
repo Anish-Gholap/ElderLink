@@ -13,23 +13,27 @@ const startAIBackend = async () => {
     return;
   }
 
-  // Determine platform-specific path and command
-  const isPythonScript = process.platform !== 'win32'; // Check if we're not on Windows
-
-  // Path to the backend - either Python script or executable
+  // Determine platform-specific executable
   let backendPath;
   let command;
   let args = [];
 
-  if (isPythonScript) {
-    // For macOS/Linux - use Python interpreter with script
-    command = 'python3'; // or 'python' depending on your setup
-    backendPath = path.join(__dirname, '..', 'python_backend', 'ai_chatbot_backend', 'main.py'); // Adjust to your actual Python script path
-    args = [backendPath];
-  } else {
-    // For Windows - use executable directly
+  if (process.platform === 'win32') {
+    // For Windows - use Windows executable
     command = path.join(__dirname, '..', 'python_backend', 'ai_chatbot_backend', 'ai_chatbot_backend.exe');
     backendPath = command;
+  } else if (process.platform === 'darwin') {
+    // For macOS - use macOS executable
+    command = path.join(__dirname, '..', 'python_backend', 'ai_chatbot_backend', 'ai_chatbot_backend');
+    backendPath = command;
+    // Make sure the file is executable
+    fs.chmodSync(backendPath, '755');
+  } else {
+    // For Linux - use Linux executable
+    command = path.join(__dirname, '..', 'python_backend', 'ai_chatbot_backend', 'ai_chatbot_backend');
+    backendPath = command;
+    // Make sure the file is executable
+    fs.chmodSync(backendPath, '755');
   }
 
   // Check if backend file exists
