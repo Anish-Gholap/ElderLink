@@ -3,7 +3,6 @@ import {
     Dialog,
     DialogActions,
     DialogContent,
-    DialogContentText,
     DialogTitle,
     Fab,
     Typography,
@@ -12,11 +11,10 @@ import {
     IconButton,
     Paper,
 } from '@mui/material'
-import { FaPaperPlane } from 'react-icons/fa';
-import { FaComments } from 'react-icons/fa';
-import { FaTimes } from 'react-icons/fa';
+import { FaPaperPlane, FaComments, FaTimes, FaPlay } from 'react-icons/fa';
 import React, { useRef, useEffect } from 'react'
 import { GiRobotAntennas } from 'react-icons/gi';
+import { getChatbotResponse } from '../services/chatbot';
 
 function ChatWindow() {
     const [showChat, setShowChat] = React.useState(false);
@@ -25,11 +23,13 @@ function ChatWindow() {
         {
             authorIsUser: false,
             text: "Hi there! I'm JOJO, your friendly chat assistant. How can I help you today?",
-            datetime: new Date()
+            datetime: new Date(),
+            audio: null
         }
     ]);
     const [isTyping, setIsTyping] = React.useState(false);
-
+    const [audioPlayer, setAudioPlayer] = React.useState(null);
+    const [playingMessageId, setPlayingMessageId] = React.useState(null);
 
     const messagesEndRef = useRef(null);
 
@@ -42,6 +42,30 @@ function ChatWindow() {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     };
 
+    // Function to play audio from base64 string
+    const playAudio = (base64Audio, messageId) => {
+        // Stop any currently playing audio
+        if (audioPlayer) {
+            audioPlayer.pause();
+            audioPlayer.currentTime = 0;
+        }
+
+        // Create a new audio element
+        const audio = new Audio();
+        audio.src = `data:audio/mp3;base64,${base64Audio}`;
+
+        // Set up event listeners
+        audio.onplay = () => setPlayingMessageId(messageId);
+        audio.onended = () => setPlayingMessageId(null);
+        audio.onpause = () => setPlayingMessageId(null);
+
+        // Play the audio
+        audio.play().catch(err => console.error("Error playing audio:", err));
+
+        // Save the audio player reference
+        setAudioPlayer(audio);
+    };
+
     // Handle sending a message
     const handleSendMessage = async () => {
         if (inputValue.trim() === "") return;
@@ -50,7 +74,8 @@ function ChatWindow() {
         const userMessage = {
             authorIsUser: true,
             text: inputValue,
-            datetime: new Date()
+            datetime: new Date(),
+            audio: null // Users don't have audio responses
         };
 
         setMessages(prev => [...prev, userMessage]);
@@ -60,26 +85,18 @@ function ChatWindow() {
         setIsTyping(true);
 
         try {
-            // For demo, wrap the setTimeout in a Promise
-            await new Promise((resolve, reject) => {
-                const timer = setTimeout(() => {
-                    try {
-                        const aiMessage = {
-                            authorIsUser: false,
-                            text: `Thanks for your message: "${userMessage.text}". This is a simulated response. In a real implementation, this would be replaced with an actual API call to a chatbot service.`,
-                            datetime: new Date()
-                        };
+            const aiResponse = await getChatbotResponse(inputValue);
 
-                        setMessages(prev => [...prev, aiMessage]);
-                        resolve();
-                    } catch (err) {
-                        reject(err);
-                    }
-                }, 1500);
+            // Create AI message with the response
+            const aiMessage = {
+                authorIsUser: false,
+                text: aiResponse.text,
+                datetime: new Date(),
+                audio: aiResponse.audio || null // Use the audio from the response if available
+            };
 
-                // Add a way to cancel the timer if needed
-                return () => clearTimeout(timer);
-            });
+            setMessages(prev => [...prev, aiMessage]);
+
         } catch (error) {
             console.error("Error sending message:", error);
             setMessages(prev => [
@@ -87,7 +104,8 @@ function ChatWindow() {
                 {
                     authorIsUser: false,
                     text: "Sorry, I couldn't process your request. Please try again.",
-                    datetime: new Date()
+                    datetime: new Date(),
+                    audio: null
                 }
             ]);
         } finally {
@@ -122,7 +140,7 @@ function ChatWindow() {
                 onClick={() => setShowChat(true)}
                 variant="extended"
             >
-                <FaComments sx={{ mr: 1 }} />
+                <FaComments style={{ marginRight: '8px' }} />
                 <span>Chat with JOJO</span>
             </Fab>
             <Dialog
@@ -145,10 +163,13 @@ function ChatWindow() {
                     bgcolor: '#f5f5f5',
                     borderBottom: '1px solid #e0e0e0'
                 }}>
-                    <Typography variant="h6">
-                        Chat with JOJO
-                        <GiRobotAntennas fontSize={'2rem'} color='maroon'/>
-                    </Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+
+                        <Typography variant="h6" >
+                            Chat with JOJO
+                        </Typography>
+                        <GiRobotAntennas style={{ fontSize: '2rem', color: 'maroon' }} />
+                    </Box>
                     <IconButton onClick={() => setShowChat(false)}>
                         <FaTimes />
                     </IconButton>
@@ -189,9 +210,33 @@ function ChatWindow() {
                                     }}
                                 >
                                     <Typography variant="body1">{message.text}</Typography>
-                                    <Typography variant="caption" sx={{ display: 'block', opacity: 0.8, mt: 0.5 }}>
-                                        {message.datetime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                    </Typography>
+                                    <Box sx={{
+                                        display: 'flex',
+                                        justifyContent: 'space-between',
+                                        alignItems: 'center',
+                                        mt: 0.5
+                                    }}>
+                                        <Typography variant="caption" sx={{ opacity: 0.8 }}>
+                                            {message.datetime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                        </Typography>
+
+                                        {!message.authorIsUser && message.audio && (
+                                            <IconButton
+                                                size="small"
+                                                onClick={() => playAudio(message.audio, index)}
+                                                sx={{
+                                                    color: 'white',
+                                                    opacity: 0.8,
+                                                    backgroundColor: playingMessageId === index ? 'rgba(255,255,255,0.3)' : 'transparent',
+                                                    '&:hover': {
+                                                        backgroundColor: 'rgba(255,255,255,0.2)'
+                                                    }
+                                                }}
+                                            >
+                                                <FaPlay size={12} />
+                                            </IconButton>
+                                        )}
+                                    </Box>
                                 </Paper>
                             </Box>
                         ))}
@@ -238,10 +283,10 @@ function ChatWindow() {
                         onClick={handleSendMessage}
                         disabled={!inputValue.trim() || isTyping}
                         sx={{
-                            bgcolor: inputValue.trim() ? '#1976d2' : '#e0e0e0',
+                            bgcolor: inputValue.trim() && !isTyping ? '#1976d2' : '#e0e0e0',
                             color: 'white',
                             '&:hover': {
-                                bgcolor: inputValue.trim() ? '#1565c0' : '#e0e0e0',
+                                bgcolor: inputValue.trim() && !isTyping ? '#1565c0' : '#e0e0e0',
                             }
                         }}
                     >
