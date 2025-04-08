@@ -85,7 +85,7 @@ function ChatWindow() {
         setIsTyping(true);
 
         try {
-            const aiResponse = await getChatbotResponse(inputValue);
+            const aiResponse = await getChatbotResponse(inputValue, messages.map(msg => msg.text));
 
             // Create AI message with the response
             const aiMessage = {
