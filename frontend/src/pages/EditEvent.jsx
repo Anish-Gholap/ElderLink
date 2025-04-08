@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { useEventsContext } from "../contexts/EventsContext";
 import { useNavigate } from "react-router-dom";
 import EventForm from "../components/EventForm";
-import {useSnackbar} from "../hooks/useSnackbar.js";
+import { useSnackbar } from "../hooks/useSnackbar.js";
 import SnackbarComponent from "../components/SnackbarComponent.jsx";
 import dayjs from "dayjs";
 
@@ -12,13 +12,15 @@ const EditEvent = () => {
   const { getEvent, updateEvent } = useEventsContext();
   const navigate = useNavigate();
 
-  const [eventName, setEventName] = useState("")
-  const [eventLocation, setEventLocation] = useState("")
-  const [eventNumAttendees, setEventNumAttendees] = useState("")
-  const [eventDescription, setEventDescription] = useState("")
-  const [dateTime, setDateTime] = useState(dayjs())
+  const [eventName, setEventName] = useState("");
+  const [eventLocation, setEventLocation] = useState("");
+  const [eventNumAttendees, setEventNumAttendees] = useState("");
+  const [eventDescription, setEventDescription] = useState("");
+  const [dateTime, setDateTime] = useState(dayjs());
 
-  const snackbar = useSnackbar()
+  const [currentAttendeesCount, setCurrentAttendeesCount] = useState(0); // 👈 Add this!
+
+  const snackbar = useSnackbar();
 
   useEffect(() => {
     getEvent(eventId).then(event => {
@@ -26,7 +28,8 @@ const EditEvent = () => {
       setEventLocation(event.location || "");
       setEventNumAttendees(event.numAttendees || "");
       setEventDescription(event.description || "");
-      setDateTime(dayjs(event.date))
+      setDateTime(dayjs(event.date));
+      setCurrentAttendeesCount(event.attendees?.length || 0); // 👈 Add this!
     }).catch(console.error);
   }, [eventId, getEvent]);
 
@@ -35,26 +38,31 @@ const EditEvent = () => {
 
     // Validation checks
     if (!eventName || !eventLocation || !eventNumAttendees || !dateTime || !eventDescription) {
-      snackbar.showError("Please fill in all required fields")
-      return
+      snackbar.showError("Please fill in all required fields");
+      return;
     }
 
-    const isoDateString = dateTime.toISOString()
+    if (parseInt(eventNumAttendees) < currentAttendeesCount) {
+      snackbar.showError(`Number of attendees cannot be less than current attendance (${currentAttendeesCount} attendees)`);
+      return;
+    }
+
+    const isoDateString = dateTime.toISOString();
 
     const updatedData = {
       title: eventName,
-      location: eventLocation?.label,
+      location: eventLocation?.label || eventLocation, // Handles both selected and existing values
       numAttendees: parseInt(eventNumAttendees),
       date: isoDateString,
       description: eventDescription
-    }
+    };
 
     try {
       await updateEvent(eventId, updatedData);
-      snackbar.showSuccess("Event edited successfully!", "/events-management")
+      snackbar.showSuccess("Event edited successfully!", "/events-management");
     } catch (error) {
       console.log("Failed to update event:", error);
-      snackbar.showError(`${error}`)
+      snackbar.showError(`${error}`);
     }
   };
 
@@ -63,13 +71,12 @@ const EditEvent = () => {
     navigate("/events-management");
   };
 
-
   const handleEventNumAttendeesChange = ({ target }) => {
-    const value = parseInt(target.value)
+    const value = parseInt(target.value);
     if (value >= 1 || target.value === '') {
-      setEventNumAttendees(target.value)
+      setEventNumAttendees(target.value);
     }
-  }
+  };
 
   return (
     <>
