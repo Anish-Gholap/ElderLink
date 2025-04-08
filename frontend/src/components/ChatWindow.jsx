@@ -42,8 +42,16 @@ function ChatWindow() {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     };
 
-    // Function to play audio from base64 string
-    const playAudio = (base64Audio, messageId) => {
+    // Function to toggle audio playback from base64 string
+    const toggleAudio = (base64Audio, messageId) => {
+        // If clicking the currently playing message, pause it
+        if (playingMessageId === messageId && audioPlayer) {
+            audioPlayer.pause();
+            audioPlayer.currentTime = 0;
+            setPlayingMessageId(null);
+            return;
+        }
+
         // Stop any currently playing audio
         if (audioPlayer) {
             audioPlayer.pause();
@@ -223,7 +231,7 @@ function ChatWindow() {
                                         {!message.authorIsUser && message.audio && (
                                             <IconButton
                                                 size="small"
-                                                onClick={() => playAudio(message.audio, index)}
+                                                onClick={() => toggleAudio(message.audio, index)}
                                                 sx={{
                                                     color: 'white',
                                                     opacity: 0.8,
@@ -233,7 +241,7 @@ function ChatWindow() {
                                                     }
                                                 }}
                                             >
-                                                <FaPlay size={12} />
+                                                {playingMessageId === index ? <FaTimes size={12} /> : <FaPlay size={12} />}
                                             </IconButton>
                                         )}
                                     </Box>
