@@ -24,7 +24,7 @@ const startAIBackend = async () => {
     backendPath = command;
   } else if (process.platform === 'darwin') {
     // For macOS - use macOS executable
-    command = path.join(__dirname, '..', 'python_backend', 'ai_chatbot_backend', 'ai_chatbot_backend');
+    command = path.join(__dirname, '..', 'python_backend_mac', 'ai_chatbot_backend', 'ai_chatbot_backend');
     backendPath = command;
     // Make sure the file is executable
     fs.chmodSync(backendPath, '755');
