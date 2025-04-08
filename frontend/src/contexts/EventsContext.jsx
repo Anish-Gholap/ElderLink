@@ -34,7 +34,7 @@ export const EventsProvider = ({ children }) => {
         })
         .catch(err => {
           console.error("Error fetching events by distance: ", err);
-          snackbar.showError("Error fetching events by distance." + err);
+          snackbar.showError("Error fetching events by distance. " + err);
           setLoading(false);
         });
     } else {
@@ -46,7 +46,7 @@ export const EventsProvider = ({ children }) => {
         })
         .catch(err => {
           console.error("Error fetching all events: ", err);
-          snackbar.showError("Error fetching all events." + err);
+          snackbar.showError("Error fetching all events. " + err);
           setLoading(false);
         });
     }
@@ -80,7 +80,7 @@ export const EventsProvider = ({ children }) => {
         .then(data => setMyEvents(data))
         .catch(err => {
           console.error("Error fetching user events:", err);
-          snackbar.showError("Error fetching user events. " + err);
+          snackbar.showError("Error fetching user events.  " + err);
 
 
         }
@@ -102,7 +102,7 @@ export const EventsProvider = ({ children }) => {
       } catch (err) {
         console.error("Error fetching user's events attending", err)
         setUserEventsAttending([])
-        snackbar.showError("Error fetching user's events attending. "+ err);
+        snackbar.showError("Error fetching user's events attending.  " + err);
       }
     } else {
       setUserEventsAttending([])
@@ -208,7 +208,7 @@ export const EventsProvider = ({ children }) => {
     } catch (error) {
        if (!error) error = "Unknown error"
       console.error("Failed to join event:", error)
-      snackbar.showError("Failed to join event:" + error);
+      snackbar.showError("Failed to join event: " + error);
     }
 
   }
@@ -229,7 +229,7 @@ export const EventsProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Failed to withdraw from event:", error);
-      snackbar.showError("Failed to withdraw from event. "+ error);
+      snackbar.showError("Failed to withdraw from event.  " + error);
     }
   };
 
