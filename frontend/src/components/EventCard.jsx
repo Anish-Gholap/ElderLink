@@ -46,8 +46,10 @@ const EventCard = ({ event, handleDelete, sx, actions = null}) => {
           {event.location}
         </Typography>
         <Typography variant="body2" className="event-location" style={{ marginBottom: '4px' }}>
-          <FaPeopleGroup style={{ marginRight: '4px' }} />
-          {event.numAttendees} slots left
+        <FaPeopleGroup style={{ marginRight: '4px' }} />
+        {event.attendees?.length || 0} / {event.numAttendees} attendees
+        {" — "}
+        {event.numAttendees - (event.attendees?.length || 0)} spots left
         </Typography>
         <Typography variant="body3" className="event-datetime" color="textSecondary">
           <FaRegClock style={{ marginRight: '4px' }} />
