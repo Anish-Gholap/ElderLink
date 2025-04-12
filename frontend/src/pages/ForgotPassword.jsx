@@ -6,6 +6,12 @@ import { useSnackbar } from "../hooks/useSnackbar";
 import SnackbarComponent from "../components/SnackbarComponent";
 import authService from '../services/auth.js'
 
+/**
+ * ForgotPassword component for resetting a user's password.
+ * Guides the user through a three-step process: phone number verification, OTP verification, and password reset.
+ * @component
+ * @returns {JSX.Element} The ForgotPassword page component.
+ */
 const ForgotPassword = () => {
     const [activeStep, setActiveStep] = useState(0);
     const [phoneNumber, setPhoneNumber] = useState("");
@@ -19,6 +25,11 @@ const ForgotPassword = () => {
 
     const steps = ["Phone Number", "Verify OTP", "Reset Password"];
 
+    /**
+     * Validates the phone number and fetches the user data.
+     * @async
+     * @returns {Promise<boolean>} Returns `true` if the phone number is valid, otherwise `false`.
+     */
     const validatePhoneNumber = async () => {
         // Simple validation - check if phone number is entered
 
@@ -43,6 +54,10 @@ const ForgotPassword = () => {
         return true;
     };
 
+    /**
+     * Validates the OTP entered by the user.
+     * @returns {boolean} Returns `true` if the OTP is valid, otherwise `false`.
+     */
     const validateOtp = () => {
         // Hardcoded OTP is 1234
         if (otp !== "1234") {
@@ -52,6 +67,11 @@ const ForgotPassword = () => {
         return true;
     };
 
+    /**
+     * Validates the new password and confirms the password reset.
+     * @async
+     * @returns {Promise<boolean>} Returns `true` if the password reset is successful, otherwise `false`.
+     */
     const validatePasswords = async () => {
 
         if (!newPassword) {
@@ -86,6 +106,10 @@ const ForgotPassword = () => {
         return true;
     };
 
+    /**
+     * Handles the "Next" button click, validating the current step and moving to the next step if valid.
+     * @async
+     */
     const handleNext = async () => {
         let isValid = false;
 
@@ -114,11 +138,18 @@ const ForgotPassword = () => {
         }
     };
 
+    /**
+     * Handles the "Back" button click, moving to the previous step.
+     */
     const handleBack = () => {
         setActiveStep((prevStep) => prevStep - 1);
     };
 
-    // Render the content based on the active step
+    /**
+     * Renders the content for each step in the password reset process.
+     * @param {number} step - The current step index.
+     * @returns {JSX.Element} The content for the current step.
+     */
     const getStepContent = (step) => {
         switch (step) {
             case 0:

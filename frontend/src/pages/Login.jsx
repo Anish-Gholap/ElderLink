@@ -8,7 +8,13 @@ import { FaArrowLeft } from "react-icons/fa"
 import {useSnackbar} from "../hooks/useSnackbar.js"
 import SnackbarComponent from "../components/SnackbarComponent.jsx"
 
-
+/**
+ * Login component for the ElderLink application.
+ * Provides a form for users to log in and handles authentication logic.
+ * Clears local storage to ensure a fresh session when accessed outside the app flow.
+ * @component
+ * @returns {JSX.Element} The Login page component.
+ */
 const Login = () => {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
@@ -16,12 +22,19 @@ const Login = () => {
   const navigate = useNavigate()
   const snackbar = useSnackbar()
 
-  // clear localStorage to force login if LoginPage was loaded outside of app flow
+  /**
+   * Clears local storage on component mount to force login if the Login page is loaded outside the app flow.
+   * @useEffect
+   */
   useEffect(() => {
     window.localStorage.clear()
     console.log("local storage cleared")
   }, [])
 
+  /**
+   * Validates the login details entered by the user.
+   * @returns {boolean} Returns `true` if the details are valid, otherwise `false`.
+   */
   const validateDetails = () => {
     if (username === "") {
       snackbar.showError("Username cannot be empty")
@@ -35,7 +48,12 @@ const Login = () => {
   }
 
 
-  // handle login form submission
+  /**
+   * Handles the login form submission.
+   * Validates the input, sends the login request, and updates the AuthContext on success.
+   * @async
+   * @param {Object} event - The form submission event.
+   */
   const handleLogin = async (event) => {
     event.preventDefault()
     if (!validateDetails()) return

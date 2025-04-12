@@ -8,6 +8,13 @@ import EditProfileDialog from '../components/EditProfileDialog';
 import { useSnackbar } from '../hooks/useSnackbar';
 import SnackbarComponent from '../components/SnackbarComponent';
 
+/**
+ * Profile component for displaying and editing the user's profile.
+ * Fetches user details from the `AuthContext` and `UsersContext`.
+ * Allows the user to edit their profile using a dialog.
+ * @component
+ * @returns {JSX.Element} The Profile page component.
+ */
 function Profile() {
     //AuthContext holds no information regarding user details except name, username and id
     const { user } = useAuthContext();
@@ -16,6 +23,13 @@ function Profile() {
     const [openEditProfile, setOpenEditProfile] = React.useState(false);
     const snackbar = useSnackbar();
 
+    /**
+     * Handles the profile edit submission.
+     * Sends the updated profile data to the server and updates the UI on success.
+     * @async
+     * @param {Object} updatedData - The updated profile data.
+     * @throws {Error} Displays an error message if the update fails.
+     */
     const handleProfileEdit = async (updatedData) => {
         try {
             await editProfileHandler(user.id, updatedData, user.token);

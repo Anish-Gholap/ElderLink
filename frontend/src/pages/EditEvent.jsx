@@ -7,6 +7,12 @@ import { useSnackbar } from "../hooks/useSnackbar.js";
 import SnackbarComponent from "../components/SnackbarComponent.jsx";
 import dayjs from "dayjs";
 
+/**
+ * EditEvent component for editing an existing event.
+ * Provides a form pre-filled with the event's current details and handles event update logic.
+ * @component
+ * @returns {JSX.Element} The EditEvent page component.
+ */
 const EditEvent = () => {
   const { eventId } = useParams();
   const { getEvent, updateEvent } = useEventsContext();
@@ -22,6 +28,10 @@ const EditEvent = () => {
 
   const snackbar = useSnackbar();
 
+  /**
+   * Fetches the event details and populates the form fields.
+   * @useEffect
+   */
   useEffect(() => {
     getEvent(eventId).then(event => {
       setEventName(event.title || "");
@@ -33,6 +43,12 @@ const EditEvent = () => {
     }).catch(console.error);
   }, [eventId, getEvent]);
 
+  /**
+   * Handles the event update process.
+   * Validates input fields, sends the updated event data to the backend, and navigates back on success.
+   * @async
+   * @param {Object} event - The form submission event.
+   */
   const handleEventEdit = async (event) => {
     event.preventDefault();
 
@@ -66,11 +82,20 @@ const EditEvent = () => {
     }
   };
 
+  /**
+   * Handles the cancel action, navigating back to the events management page.
+   * @param {Object} event - The form submission event.
+   */
   const handleCancel = (event) => {
     event.preventDefault();
     navigate("/events-management");
   };
 
+  /**
+   * Handles changes to the number of attendees input field.
+   * Ensures the value is a positive number or empty.
+   * @param {Object} target - The input event target.
+   */
   const handleEventNumAttendeesChange = ({ target }) => {
     const value = parseInt(target.value);
     if (value >= 1 || target.value === '') {

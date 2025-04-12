@@ -13,6 +13,12 @@ import userService from '../services/users';
 import { useSnackbar } from "../hooks/useSnackbar";
 import SnackbarComponent from "../components/SnackbarComponent";
 
+/**
+ * EventDetails component for displaying detailed information about a specific event.
+ * Includes event details, host information, and a map of the event location.
+ * @component
+ * @returns {JSX.Element} The EventDetails page component.
+ */
 const EventDetails = () => {
   const { eventId } = useParams();
   const { user } = useAuthContext();

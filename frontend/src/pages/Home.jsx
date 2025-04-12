@@ -2,9 +2,19 @@ import { Box, Button, Typography } from '@mui/material'
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
+/**
+ * Home component for the ElderLink application.
+ * Serves as the landing page, providing options to log in or sign up.
+ * Clears local storage to ensure a fresh session when accessed outside the app flow.
+ * @component
+ * @returns {JSX.Element} The Home page component.
+ */
 const Home = () => {
 
-  // clear localStorage to force login if HomePage was loaded outside of app flow
+  /**
+   * Clears local storage on component mount to force login if the Home page is loaded outside the app flow.
+   * @useEffect
+   */
   useEffect(() => {
     window.localStorage.clear()
     console.log("local storage cleared")

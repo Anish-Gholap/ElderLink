@@ -8,6 +8,12 @@ import { useSnackbar } from "../hooks/useSnackbar";
 import SnackbarComponent from "../components/SnackbarComponent";
 import { useState } from "react";
 
+/**
+ * EventAttendance component for managing events the user is attending.
+ * Displays a list of events the user is attending and allows them to withdraw from events.
+ * @component
+ * @returns {JSX.Element} The EventAttendance page component.
+ */
 const EventAttendance = () => {
   const { user } = useAuthContext();
   const { userEventsAttending, withdrawEvent } = useEventsContext();
@@ -15,6 +21,13 @@ const EventAttendance = () => {
   const snackbar = useSnackbar();
   const [openConfirmation, setOpenConfirmation] = useState(0);
 
+  /**
+   * Handles the withdrawal process from an event.
+   * Calls the `withdrawEvent` function from the EventsContext and displays a success or error message.
+   * @async
+   * @param {number} eventId - The ID of the event to withdraw from.
+   * @returns {Promise<boolean>} Returns `true` if the withdrawal is successful, otherwise `false`.
+   */
   const handleWithdraw = async (eventId) => {
     try {
       await withdrawEvent(eventId); // Call the withdrawEvent function from context

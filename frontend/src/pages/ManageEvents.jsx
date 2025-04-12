@@ -4,6 +4,12 @@ import { useNavigate } from "react-router-dom";
 import { Button, Container, Typography, Box, } from '@mui/material';
 import Toggle from "../components/Toggle"
 
+/**
+ * CreateEventButton component for navigating to the Create Event page.
+ * Provides a button to allow users to create a new event.
+ * @component
+ * @returns {JSX.Element} The Create Event button component.
+ */
 const CreateEventButton = () => {
   const navigate = useNavigate();
 
@@ -16,10 +22,21 @@ const CreateEventButton = () => {
   );
 };
 
+/**
+ * ManageEvents component for managing events created by the user.
+ * Displays a list of events with options to edit or delete them.
+ * @component
+ * @returns {JSX.Element} The Manage Events page component.
+ */
 const ManageEvents = () => {
   const { myEvents, removeEvent } = useEventsContext();
   const navigate = useNavigate();
-
+  
+  /**
+   * Handles the deletion of an event.
+   * Prompts the user for confirmation before deleting the event.
+   * @param {string} id - The ID of the event to delete.
+   */
   const handleDelete = (id) => {
     if (window.confirm("Are you sure you wish to delete this event?")) {
       removeEvent(id).catch(err => console.error(err));

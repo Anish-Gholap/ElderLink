@@ -8,6 +8,13 @@ import { useSnackbar } from '../hooks/useSnackbar';
 import SnackbarComponent from '../components/SnackbarComponent';
 import authService from "../services/auth.js"
 
+/**
+ * SignUp component for the ElderLink application.
+ * Provides a form for users to register a new account and handles the sign-up logic.
+ * Clears local storage to ensure a fresh session when accessed outside the app flow.
+ * @component
+ * @returns {JSX.Element} The SignUp page component.
+ */
 const SignUp = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -18,12 +25,22 @@ const SignUp = () => {
   const navigate = useNavigate();
   const { createUserHandler } = useUsersContext();
   const snackbar = useSnackbar();
-
+  
+  /**
+   * Clears local storage on component mount to ensure a fresh session.
+   * @useEffect
+   */
   useEffect(() => {
     window.localStorage.clear();
     console.log("local storage cleared");
   }, []);
 
+  /**
+   * Handles the sign-up form submission.
+   * Validates the input fields, sends the registration request, and redirects to the login page on success.
+   * @async
+   * @param {Object} event - The form submission event.
+   */
   const handleSignUp = async (event) => {
     event.preventDefault();
 
@@ -58,7 +75,12 @@ const SignUp = () => {
       snackbar.showError(`Sign-up failed. ${error}` );
     }
   };
-
+  
+  /** 
+   * Handles changes to the phone number input field.
+   * Removes the "+65" prefix if present.
+   * @param {Object} event - The input change event.
+   */
   const handlePhoneChange = (event) => {
     let inputValue = event.target.value;
     if (inputValue.startsWith('+65')) {

@@ -26,6 +26,12 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import { useSnackbar } from "../hooks/useSnackbar"
 import SnackbarComponent from "../components/SnackbarComponent"
 
+/**
+ * EventDiscovery component for discovering and searching events.
+ * Provides a search bar, filters, and displays a list of events.
+ * @component
+ * @returns {JSX.Element} The EventDiscovery page component.
+ */
 const EventDiscovery = () => {
   const {allEvents, updateUserLocation, eventSnackbar, loading} = useEventsContext()
   const snackbar = useSnackbar()
@@ -43,7 +49,10 @@ const EventDiscovery = () => {
 
   const navigate = useNavigate()
 
-  // Get user location
+  /**
+   * Fetches the user's location and updates the context.
+   * @useEffect
+   */
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -66,7 +75,10 @@ const EventDiscovery = () => {
     }
   }, [updateUserLocation]) // Add updateUserLocation to dependencies
 
-  // Handle search with debounce
+  /**
+   * Handles search with debounce to optimize API calls.
+   * @useEffect
+   */
   useEffect(() => {
     const delaySearch = setTimeout(() => {
       if (searchQuery || selectedDate) {
@@ -79,12 +91,20 @@ const EventDiscovery = () => {
     return () => clearTimeout(delaySearch)
   }, [searchQuery, filterByClub, selectedDate]) // Add selectedDate to dependencies
 
+  /**
+   * Displays an error message if fetching events fails.
+   * @useEffect
+   */
   useEffect(() => {
     if (fetchFailed) {
       snackbar.showError("Failed to fetch events. Please try again.")
     }
   }, [fetchFailed])
 
+  /**
+   * Handles the search functionality based on query and filters.
+   * @async
+   */
   const handleSearch = async () => {
     const params = new URLSearchParams()
 
@@ -125,21 +145,32 @@ const EventDiscovery = () => {
     }
   }
 
+  /**
+   * Resets the search query and filters.
+   */
   const handleReset = () => {
     setSearchQuery("")
     setSearchResults(null)
     setFilterByClub(false)
     setSelectedDate(null)
   }
-
+  /**
+   * Opens the filter popover.
+   * @param {Object} event - The click event.
+   */
   const handleFilterClick = (event) => {
     setAnchorEl(event.currentTarget)
   }
-
+  /**
+   * Closes the filter popover.
+   */
   const handleFilterClose = () => {
     setAnchorEl(null)
   }
 
+  /**
+   * Toggles the filter by community club and triggers a search if a query exists.
+   */
   const handleFilterChange = () => {
     setFilterByClub(!filterByClub)
     // Trigger search if there's a query
@@ -147,12 +178,18 @@ const EventDiscovery = () => {
       handleSearch()
     }
   }
-
+  /**
+   * Updates the selected date and triggers a search.
+   * @param {Object} newDate - The selected date.
+   */
   const handleDateChange = (newDate) => {
     setSelectedDate(newDate)
     // Search will be triggered by useEffect
   }
 
+  /**
+   * Clears the selected date and triggers a search.
+   */
   const handleClearDate = () => {
     setSelectedDate(null)
     // Search will be triggered by useEffect if there's a query

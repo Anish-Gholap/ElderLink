@@ -8,6 +8,12 @@ import { useSnackbar } from "../hooks/useSnackbar.js"
 import SnackbarComponent from "../components/SnackbarComponent.jsx"
 import dayjs from "dayjs"
 
+/**
+ * CreateEvent component for creating a new event.
+ * Provides a form for users to input event details and handles event creation logic.
+ * @component
+ * @returns {JSX.Element} The CreateEvent page component.
+ */
 const CreateEvent = () => {
   const [eventName, setEventName] = useState("")
   const [eventLocation, setEventLocation] = useState("")
@@ -19,6 +25,12 @@ const CreateEvent = () => {
   const navigate = useNavigate()
   const snackbar = useSnackbar()
 
+  /**
+   * Handles the event creation process.
+   * Validates input fields, sends the event data to the backend, and resets the form on success.
+   * @async
+   * @param {Object} event - The form submission event.
+   */
   const handleEventCreation = async (event) => {
     event.preventDefault()
 
@@ -57,6 +69,10 @@ const CreateEvent = () => {
     }
   }
 
+  /**
+   * Handles the cancel action, resetting the form and navigating back to the event discovery page.
+   * @param {Object} event - The form submission event.
+   */
   const handleCancel = (event) => {
     event.preventDefault()
     setEventName("")
@@ -67,7 +83,11 @@ const CreateEvent = () => {
     navigate('/event-discovery')
   }
 
-  // Handle number of attendees to ensure positive values
+  /**
+   * Handles changes to the number of attendees input field.
+   * Ensures the value is a positive number or empty.
+   * @param {Object} target - The input event target.
+   */
   const handleEventNumAttendeesChange = ({ target }) => {
     const value = parseInt(target.value)
     if (value >= 1 || target.value === '') {
