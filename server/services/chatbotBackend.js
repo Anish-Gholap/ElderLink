@@ -5,7 +5,13 @@ const logger = require('../utils/logger');
 require('dotenv').config()
 
 let backendProcess = null;
-
+/**
+ * Start the AI backend process.
+ * This function determines the platform (Windows, macOS, Linux) and starts the appropriate AI backend executable.
+ * @async
+ * @returns {Promise<boolean>} Resolves to `true` if the backend starts successfully.
+ * @throws {Error} Throws an error if the backend file is not found or fails to start.
+ */
 const startAIBackend = async () => {
   if (backendProcess) {
     logger.info('AI backend is already running');
@@ -82,6 +88,11 @@ const startAIBackend = async () => {
   });
 };
 
+/**
+ * Stop the AI backend process.
+ * Terminates the backend process if it is running.
+ * @returns {boolean} Returns `true` if the backend process was stopped, `false` if no process was running.
+ */
 const stopAIBackend = () => {
   if (backendProcess) {
     logger.info('Stopping AI backend...');
@@ -93,7 +104,12 @@ const stopAIBackend = () => {
   return false;
 };
 
-// Initialize AI backend on module load
+/**
+ * Initialize the AI backend process.
+ * Starts the backend process when the module is loaded.
+ * @async
+ * @returns {Promise<void>} Logs success or failure of the backend initialization.
+ */
 const initialize = async () => {
   try {
     await startAIBackend();
