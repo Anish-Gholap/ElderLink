@@ -1,10 +1,22 @@
+/**
+ * @file aiController.js
+ * @description Handles AI chatbot interaction by forwarding requests to the Python backend.
+ */
+
 // server/controllers/aiController.js
 const axios = require('axios');
 const logger = require('../utils/logger');
 
+
 // The URL where your Python backend is running
 const CHATBOT_BACKEND_URL = 'http://localhost:3000';
 
+/**
+ * Sends a chat query to the Python-based AI backend and returns the response.
+ * @param {Object} request - Express request object.
+ * @param {Object} response - Express response object.
+ * @returns {Object} JSON response from AI backend or error details.
+ */
 const chat = async (request, response) => {
   try {
     // Extract and validate request body
