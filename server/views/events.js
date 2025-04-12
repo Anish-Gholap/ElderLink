@@ -2,10 +2,26 @@ const eventsRouter = require('express').Router()
 const {getAllEvents, getEventById, addEvent, removeEvent, editEvent} = require('../controllers/eventsManagement')
 const {checkEventOwner} = require('../utils/middlewares')
 
-// GET all events
+/**
+ * Route to get all events.
+ * @name GET /
+ * @function
+ * @memberof module:eventsRouter
+ * @inner
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ */
 eventsRouter.get('/', getAllEvents)
 
-// GET event by id
+/**
+ * Route to get an event by its ID.
+ * @name GET /:id
+ * @function
+ * @memberof module:eventsRouter
+ * @inner
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ */
 eventsRouter.get('/:id', getEventById)
 
 /*
@@ -13,16 +29,40 @@ Protected routes:
 User authentication required
 */
 
-// POST event to DB
+/**
+ * Route to add a new event.
+ * Protected route: User authentication required.
+ * @name POST /
+ * @function
+ * @memberof module:eventsRouter
+ * @inner
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ */
 eventsRouter.post('/', addEvent)
 
-// DELETE event in DB
+/**
+ * Route to delete an event by its ID.
+ * Protected route: User authentication and ownership required.
+ * @name DELETE /:id
+ * @function
+ * @memberof module:eventsRouter
+ * @inner
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ */
 eventsRouter.delete('/:id', checkEventOwner, removeEvent)
 
-// PATCH event in DB
+/**
+ * Route to edit an event by its ID.
+ * Protected route: User authentication and ownership required.
+ * @name PATCH /:id
+ * @function
+ * @memberof module:eventsRouter
+ * @inner
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ */
 eventsRouter.patch('/:id', checkEventOwner, editEvent)
-
-
-
 
 module.exports = eventsRouter

@@ -1,7 +1,15 @@
 const loginRouter = require('express').Router()
 const {loginUser} = require("../controllers/login")
 
-// POST to log in user
+/**
+ * Route to log in a user.
+ * @name POST /
+ * @function
+ * @memberof module:loginRouter
+ * @inner
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ */
 loginRouter.post("/", loginUser)
 
 module.exports = loginRouter
