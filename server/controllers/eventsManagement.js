@@ -3,7 +3,12 @@ const User = require('../models/user')
 const {AmendedMessage, DeletedMessage } = require('../controllers/notifications')
 const notificationsEmitter = require('../services/notificationsEmitter')
 
-//handle get all events
+/**
+ * Get all events, optionally filtered by the creator.
+ * @param {Object} request - Express request object.
+ * @param {Object} response - Express response object.
+ * @returns {Promise<void>} Responds with a list of events.
+ */
 const getAllEvents = async (request, response) => {
     const {createdBy} = request.query
 
@@ -18,7 +23,12 @@ const getAllEvents = async (request, response) => {
     response.json(events)
 }
 
-// handle get event by id
+/**
+ * Get a specific event by its ID.
+ * @param {Object} request - Express request object.
+ * @param {Object} response - Express response object.
+ * @returns {Promise<void>} Responds with the event or a 404 status if not found.
+ */
 const getEventById = async (request, response) => {
     const eventId = request.params.id
     const event = await Event.findById(eventId)
@@ -37,6 +47,12 @@ User authentication required. Token must be sent in request body for verificatio
 Retrieve user from request body added by the userExtractor middleware.
 */
 
+/**
+ * Add a new event.
+ * @param {Object} request - Express request object.
+ * @param {Object} response - Express response object.
+ * @returns {Promise<void>} Responds with the created event.
+ */
 const addEvent = async (request, response) => {
     const body = request.body
     const user = request.user
@@ -59,7 +75,12 @@ const addEvent = async (request, response) => {
 
     response.status(201).json(savedEvent)
 }
-
+/**
+ * Remove an event.
+ * @param {Object} request - Express request object.
+ * @param {Object} response - Express response object.
+ * @returns {Promise<void>} Responds with a 204 status on successful deletion.
+ */
 const removeEvent = async (request, response) => {
     const eventToDelete = request.event
     const user = request.user
@@ -88,7 +109,12 @@ const removeEvent = async (request, response) => {
 
     response.status(204).end()
 }
-
+/**
+ * Edit an existing event.
+ * @param {Object} request - Express request object.
+ * @param {Object} response - Express response object.
+ * @returns {Promise<void>} Responds with a 200 status on successful update.
+ */
 const editEvent = async (request, response) => {
     const eventId = request.event.id
     const eventAttendeesId = request.event.attendees
