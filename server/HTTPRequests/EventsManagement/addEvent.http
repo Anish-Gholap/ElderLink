@@ -1,0 +1,27 @@
+### Login to get token
+POST http://localhost:3002/api/login
+Content-Type: application/json
+
+{
+  "username": "anish",
+  "password": "Anish!"
+}
+
+> {%
+    client.global.set("auth_token", response.body.token);
+%}
+
+### Add event
+POST http://localhost:3002/api/events
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "title": "Mahjong",
+  "location": "Aljunied CC",
+  "date": "2023-04-25T21:00:00.000",
+  "description": "",
+  "numAttendees": 1
+}
+
+###

@@ -1,0 +1,30 @@
+### Test AI Chat Endpoint
+POST http://localhost:3002/api/chatbot/chat
+Content-Type: application/json
+
+{
+  "query": "What is machine learning?",
+  "systemPrompt": "You are a helpful AI assistant who provides concise answers.",
+  "modelSettings": {
+    "model": "llama-3.3-70b-versatile",
+    "provider": "Groq",
+    "allowSearch": true,
+    "ttsEnabled": false
+  }
+}
+
+### Test AI Chat with TTS
+POST http://localhost:3002/api/chatbot/chat
+Content-Type: application/json
+
+{
+  "query": "Tell me a short joke.",
+  "systemPrompt": "You are a funny AI assistant.",
+  "modelSettings": {
+    "model": "llama-3.3-70b-versatile",
+    "provider": "Groq",
+    "allowSearch": false,
+    "ttsEnabled": true,
+    "voice": "en-SG-female-1"
+  }
+}

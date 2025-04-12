@@ -1,0 +1,9 @@
+PATCH http://localhost:3002/api/users/profile
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphY2tkYW5pZWxzIiwiaWQiOiI2N2RhZmJlY2JhMzliN2UyMDI0YzJmMzEiLCJpYXQiOjE3NDI0ODMxODcsImV4cCI6MTc0MjQ4Njc4N30.ZgdNoik6L8BkgrMbJZ5PZiPCOwjJbl843tzmrT_lFhw
+
+{
+  "name": "Jack Daniels Black"
+}
+
+###

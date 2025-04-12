@@ -1,0 +1,9 @@
+PATCH http://localhost:3002/api/events/67dfdf68b877a3c107219f0f
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphY2tkYW5pZWxzIiwiaWQiOiI2N2RhZmJlY2JhMzliN2UyMDI0YzJmMzEiLCJpYXQiOjE3NDI3MjQ5NDQsImV4cCI6MTc0MjcyODU0NH0.QLJUCFo_C2Uza34JJSlJVAvgeVT0Y_y3fM5Unapl2c4
+
+{
+  "location": "Bishan CC"
+}
+
+###
