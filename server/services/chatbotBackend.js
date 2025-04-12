@@ -1,4 +1,3 @@
-// server/services/aiBackendService.js
 const { spawn } = require('child_process');
 const path = require('path');
 const fs = require('fs');
@@ -13,26 +12,26 @@ const startAIBackend = async () => {
     return;
   }
 
-  // Determine platform-specific executable
+
   let backendPath;
   let command;
   let args = [];
 
   if (process.platform === 'win32') {
-    // For Windows - use Windows executable
+    // For Windows
     command = path.join(__dirname, '..', 'python_backend', 'ai_chatbot_backend', 'ai_chatbot_backend.exe');
     backendPath = command;
   } else if (process.platform === 'darwin') {
-    // For macOS - use macOS executable
+    // For macOS
     command = path.join(__dirname, '..', 'python_backend_mac', 'ai_chatbot_backend', 'ai_chatbot_backend');
     backendPath = command;
-    // Make sure the file is executable
+
     fs.chmodSync(backendPath, '755');
   } else {
-    // For Linux - use Linux executable
+    // For Linux
     command = path.join(__dirname, '..', 'python_backend', 'ai_chatbot_backend', 'ai_chatbot_backend');
     backendPath = command;
-    // Make sure the file is executable
+
     fs.chmodSync(backendPath, '755');
   }
 
@@ -44,7 +43,7 @@ const startAIBackend = async () => {
 
   logger.info(`Starting AI backend from: ${backendPath}`);
 
-  // Working directory should be the directory containing the backend
+
   backendProcess = spawn(command, args, {
     cwd: path.dirname(backendPath)
   });
@@ -75,7 +74,7 @@ const startAIBackend = async () => {
     // Set a timeout in case the server doesn't start properly
     const timeout = setTimeout(() => {
       backendProcess.stdout.removeListener('data', onStartup);
-      // Don't reject - the backend might still be starting up without logging the expected message
+
       resolve(true);
     }, 5000);
 

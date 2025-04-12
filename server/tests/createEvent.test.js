@@ -44,58 +44,58 @@ beforeEach(async () => {
 
 describe("Create Event Validation", () => {
 
-  // // Event Title Validation
-  // describe("Event Title Validation", () => {
-  //   test('allows valid title format', async () => {
-  //     const eventsAtStart = await Event.find({})
-  //
-  //     const newEvent = {
-  //       title: 'Mahjong',
-  //       location: 'Aljunied CC',
-  //       numAttendees: 4,
-  //       date: '2025-04-15T11:00:00.000Z',
-  //       description: 'This is a brief description of the mahjong event.!',
-  //     }
-  //
-  //     const result = await api
-  //       .post('/api/events')
-  //       .set('Authorization', `Bearer ${authToken}`)
-  //       .send(newEvent)
-  //       .expect(201)
-  //       .expect('Content-Type', /application\/json/)
-  //
-  //     const eventsAtEnd = await Event.find({})
-  //     assert.strictEqual(eventsAtEnd.length, eventsAtStart.length + 1)
-  //
-  //     const titles = eventsAtEnd.map(event => event.title)
-  //     assert(titles.includes(newEvent.title))
-  //   })
-  //
-  //   test('rejects title with special characters', async () => {
-  //     const eventsAtStart = await Event.find({})
-  //
-  //     const newEvent = {
-  //       title: 'M@hjong',
-  //       location: 'Aljunied CC',
-  //       numAttendees: 4,
-  //       date: '2025-04-15T11:00:00.000Z',
-  //       description: 'This is a brief description of the mahjong event.!',
-  //     }
-  //
-  //     const result = await api
-  //       .post('/api/events')
-  //       .set('Authorization', `Bearer ${authToken}`)
-  //       .send(newEvent)
-  //       .expect(400)
-  //       .expect('Content-Type', /application\/json/)
-  //
-  //     const eventsAtEnd = await Event.find({})
-  //     assert.strictEqual(eventsAtEnd.length, eventsAtStart.length)
-  //
-  //     console.log(result.body.error)
-  //     assert(result.body.error.includes("Event validation failed: title: Title can only contain letters, numbers, and spaces"))
-  //   })
-  // })
+  // Event Title Validation
+  describe("Event Title Validation", () => {
+    test('allows valid title format', async () => {
+      const eventsAtStart = await Event.find({})
+
+      const newEvent = {
+        title: 'Mahjong',
+        location: 'Aljunied CC',
+        numAttendees: 4,
+        date: '2025-04-15T11:00:00.000Z',
+        description: 'This is a brief description of the mahjong event.!',
+      }
+
+      const result = await api
+        .post('/api/events')
+        .set('Authorization', `Bearer ${authToken}`)
+        .send(newEvent)
+        .expect(201)
+        .expect('Content-Type', /application\/json/)
+
+      const eventsAtEnd = await Event.find({})
+      assert.strictEqual(eventsAtEnd.length, eventsAtStart.length + 1)
+
+      const titles = eventsAtEnd.map(event => event.title)
+      assert(titles.includes(newEvent.title))
+    })
+
+    test('rejects title with special characters', async () => {
+      const eventsAtStart = await Event.find({})
+
+      const newEvent = {
+        title: 'M@hjong',
+        location: 'Aljunied CC',
+        numAttendees: 4,
+        date: '2025-04-15T11:00:00.000Z',
+        description: 'This is a brief description of the mahjong event.!',
+      }
+
+      const result = await api
+        .post('/api/events')
+        .set('Authorization', `Bearer ${authToken}`)
+        .send(newEvent)
+        .expect(400)
+        .expect('Content-Type', /application\/json/)
+
+      const eventsAtEnd = await Event.find({})
+      assert.strictEqual(eventsAtEnd.length, eventsAtStart.length)
+
+      console.log(result.body.error)
+      assert(result.body.error.includes("Event validation failed: title: Title can only contain letters, numbers, and spaces"))
+    })
+  })
 
   // Number of Attendees
   describe("Event Number of Attendees Validation", () => {
