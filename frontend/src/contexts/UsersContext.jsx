@@ -6,8 +6,18 @@ import { useSnackbar } from "../hooks/useSnackbar";
 
 const UsersContext = createContext();
 
+/**
+ * Custom hook to access the UsersContext.
+ * @returns {Object} The context value containing user data and helper functions.
+ */
 export const useUsersContext = () => useContext(UsersContext);
 
+/**
+ * UsersProvider component to manage user-related state and provide it to child components.
+ * @param {Object} props - The component props.
+ * @param {React.ReactNode} props.children - The child components that will have access to the UsersContext.
+ * @returns {JSX.Element} The UsersContext provider component.
+ */
 export const UsersProvider = ({ children }) => {
     const { user } = useAuthContext();
     const [userData, setUserData] = useState(null);
@@ -35,7 +45,14 @@ export const UsersProvider = ({ children }) => {
         }
     }, [user?.id]);
 
-
+    /**
+     * Edit the profile of a user.
+     * @async
+     * @param {string} userId - The ID of the user to edit.
+     * @param {Object} updatedData - The updated user data.
+     * @param {string} token - The authentication token.
+     * @returns {Promise<void>}
+     */
     const editProfileHandler = async (userId, updatedData, token) => {
         try {
             const updatedUser = await usersService.updateUser(userId, updatedData, token); 
@@ -51,6 +68,12 @@ export const UsersProvider = ({ children }) => {
         }
     };
 
+    /**
+     * Create a new user.
+     * @async
+     * @param {Object} newUserData - The data for the new user.
+     * @returns {Promise<void>}
+     */
     const createUserHandler = async (newUserData) => {
         try {
             const createdUser = await authService.createUser(newUserData);
@@ -65,6 +88,12 @@ export const UsersProvider = ({ children }) => {
         }
     };
     
+    /**
+     * Check if a username already exists.
+     * @async
+     * @param {string} username - The username to check.
+     * @returns {Promise<Object|null>} The user data if the username exists, or `null` if it does not.
+     */
     const checkUsernameExist = async (username) => {
         try {
             const user = await usersService.checkUsernameExist(username);

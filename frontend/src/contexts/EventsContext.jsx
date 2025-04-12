@@ -9,8 +9,18 @@ import { useSnackbar } from "../hooks/useSnackbar";
 
 const EventsContext = createContext()
 
+/**
+ * Custom hook to access the EventsContext.
+ * @returns {Object} The context value containing events data and helper functions.
+ */
 export const useEventsContext = () => useContext(EventsContext)
 
+/**
+ * EventsProvider component to manage events state and provide it to child components.
+ * @param {Object} props - The component props.
+ * @param {React.ReactNode} props.children - The child components that will have access to the EventsContext.
+ * @returns {JSX.Element} The EventsContext provider component.
+ */
 export const EventsProvider = ({ children }) => {
   const { user } = useAuthContext()
 
@@ -59,6 +69,11 @@ export const EventsProvider = ({ children }) => {
   //     .catch(err => console.error("Error fetching all events: ", err))
   // }, [])
 
+  /**
+   * Update the user's location.
+   * @param {number} latitude - The latitude of the user's location.
+   * @param {number} longitude - The longitude of the user's location.
+   */
   const updateUserLocation = (latitude, longitude) => {
     setUserLat(latitude);
     setUserLong(longitude);
@@ -114,7 +129,11 @@ export const EventsProvider = ({ children }) => {
     fetchEventsAttending()
   }, [fetchEventsAttending]);
 
-  // helper functions to refetch and update local state to keep everything in sync
+  /**
+   * Add a new event.
+   * @param {Object} eventData - The data for the new event.
+   * @returns {Promise<void>}
+   */
   const addEvent = async (eventData) => {
     try {
       // send token for authorization
@@ -141,6 +160,11 @@ export const EventsProvider = ({ children }) => {
     }
   }
 
+  /**
+   * Remove an event.
+   * @param {string} eventId - The ID of the event to remove.
+   * @returns {Promise<void>}
+   */
   const removeEvent = async (eventId) => {
     // send token for authorization
     await eventsService.deleteEvent(eventId, user.token)
@@ -154,6 +178,11 @@ export const EventsProvider = ({ children }) => {
     }
   }
 
+  /**
+   * Get details of a specific event.
+   * @param {string} eventId - The ID of the event.
+   * @returns {Promise<Object|null>} The event details or `null` if not found.
+   */
   const getEvent = async (eventId) => {
     if (!eventId) return null
 
@@ -165,6 +194,12 @@ export const EventsProvider = ({ children }) => {
     }
   }
 
+  /**
+   * Update an existing event.
+   * @param {string} eventId - The ID of the event to update.
+   * @param {Object} eventData - The updated event data.
+   * @returns {Promise<void>}
+   */
   const updateEvent = async (eventId, eventData) => {
     try {
       console.log("Hello", eventData)
@@ -185,6 +220,11 @@ export const EventsProvider = ({ children }) => {
     }
   }
 
+  /**
+   * Join an event.
+   * @param {string} eventId - The ID of the event to join.
+   * @returns {Promise<void>}
+   */
   const joinEvent = async (eventId) => {
     // get event to join
     try {
@@ -218,6 +258,12 @@ export const EventsProvider = ({ children }) => {
     }
 
   }
+  
+  /**
+   * Withdraw from an event.
+   * @param {string} eventId - The ID of the event to withdraw from.
+   * @returns {Promise<void>}
+   */
   const withdrawEvent = async (eventId) => {
     try {
       await eventsService.withdrawEvent(eventId, user.id, user.token);

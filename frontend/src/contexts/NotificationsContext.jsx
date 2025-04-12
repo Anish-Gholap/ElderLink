@@ -4,8 +4,18 @@ import notificationsService from "../services/notifications"
 
 const NotificationsContext = createContext()
 
+/**
+ * Custom hook to access the NotificationsContext.
+ * @returns {Object} The context value containing notifications data and helper functions.
+ */
 export const useNotificationsContext = () => useContext(NotificationsContext)
 
+/**
+ * NotificationsProvider component to manage notifications state and provide it to child components.
+ * @param {Object} props - The component props.
+ * @param {React.ReactNode} props.children - The child components that will have access to the NotificationsContext.
+ * @returns {JSX.Element} The NotificationsContext provider component.
+ */
 export const NotificationsProvider = ({ children }) => {
     const { user } = useAuthContext()
     const [notifications, setNotifications] = useState([])
@@ -29,6 +39,12 @@ export const NotificationsProvider = ({ children }) => {
     // Debugging the state of notifications
     console.log("Notifications state:", notifications);
 
+    /**
+     * Remove a notification for the logged-in user.
+     * @param {string} userId - The ID of the user.
+     * @param {string} notificationId - The ID of the notification to remove.
+     * @returns {Promise<void>}
+     */
     const removeNotification = async (UserId, notificationId) => {
         try {
             setNotifications(prevNotifications => {

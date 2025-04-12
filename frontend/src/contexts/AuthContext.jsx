@@ -16,12 +16,30 @@ import {useNavigate} from "react-router-dom"
 
 const AuthContext = createContext()
 
+/**
+ * Custom hook to access the AuthContext.
+ * @returns {Object} The context value containing the user, login, and logout functions.
+ */
 export const useAuthContext = () => useContext(AuthContext)
 
+/**
+ * AuthProvider component to manage authentication state and provide it to child components.
+ * @param {Object} props - The component props.
+ * @param {React.ReactNode} props.children - The child components that will have access to the AuthContext.
+ * @returns {JSX.Element} The AuthContext provider component.
+ */
 export const AuthProvider = ({children}) => {
   const navigate = useNavigate()
 
-  // initialise user state from localStorage to persist login after Refresh
+  /**
+   * The currently logged-in user.
+   * @type {Object|null}
+   * @property {string} token - The authentication token.
+   * @property {string} username - The username of the user.
+   * @property {string} name - The full name of the user.
+   * @property {string} id - The user ID.
+   * @property {number} tokenExpiresAt - The timestamp when the token expires.
+   */
   const [user, setUser] = useState(() => {
     return JSON.parse(localStorage.getItem("user")) || null
   })
@@ -58,12 +76,17 @@ export const AuthProvider = ({children}) => {
     
   },[user])
 
-  // Helper functions
+  /**
+   * Log in a user and update the user state.
+   * @param {Object} userData - The user data to set.
+   */
   const login = (userData) => {
     setUser(userData)
     console.log(user)
   }
-
+  /**
+   * Log out the current user, clear the user state, and navigate to the home page.
+   */
   const logout = () => {
     setUser(null)
     localStorage.removeItem("user")
