@@ -1,6 +1,13 @@
 import axios from "axios";
 const baseUrl = "/api/chatbot/chat";
 
+/**
+ * Generates the system prompt for the chatbot based on the previous messages.
+ * @param {Array<Object>} previousMessages - The previous messages in the conversation.
+ * @param {string} previousMessages[].user - The user's message.
+ * @param {string} previousMessages[].ai - The AI's response.
+ * @returns {string} The system prompt string for the chatbot.
+ */
 const systemPrompt = (previousMessages) =>
     `
 You are “JoJo” an AI chatbot for the Elderlink app, designed to help elderly users 
@@ -64,7 +71,16 @@ When responding to users:
 You might be in a conversation with a user. For your context, the previous 3 messages are:
 ${previousMessages.slice(0, 3).map((message, index) => `User: ${message.user}\nAI: ${message.ai}`).join("\n")}
 `
-
+/**
+ * Fetches a response from the chatbot based on the user's query and previous messages.
+ * @async
+ * @param {string} query - The user's query to the chatbot.
+ * @param {Array<Object>} [previousMessages=[]] - The previous messages in the conversation.
+ * @param {string} previousMessages[].user - The user's message.
+ * @param {string} previousMessages[].ai - The AI's response.
+ * @returns {Promise<Object>} The chatbot's response.
+ * @throws {string} An error message if the request fails.
+ */
 export const getChatbotResponse = async (query, previousMessages = []) => {
     try {
         const response = await axios.post(baseUrl, {

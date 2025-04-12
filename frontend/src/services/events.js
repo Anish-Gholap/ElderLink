@@ -1,16 +1,34 @@
 import axios from 'axios'
 const baseUrl = "/api/events"
 
+/**
+ * Fetch all events.
+ * @async
+ * @returns {Promise<Array<Object>>} A list of all events.
+ */
 const getAllEvents = async () => {
     const response = await axios.get(baseUrl) // Implement search instead from Server-HTTPRequests/getEventswQuery
     return response.data
 }
 
+/**
+ * Fetch events created by a specific user.
+ * @async
+ * @param {string} userId - The ID of the user.
+ * @returns {Promise<Array<Object>>} A list of events created by the user.
+ */
 const getUserEvents = async (userId) => {
   const response = await axios.get(`${baseUrl}?createdBy=${userId}`)
   return response.data
 }
 
+/**
+ * Fetch events the user is attending.
+ * @async
+ * @param {string} userId - The ID of the user.
+ * @param {string} token - The authentication token.
+ * @returns {Promise<Array<Object>>} A list of events the user is attending.
+ */
 const getUserAttendingEvents = async (userId, token) => {
   console.log("getUserAttendingEvents is running")
   const response = await axios.get(`${baseUrl}/${userId}/attending`, {
@@ -21,6 +39,14 @@ const getUserAttendingEvents = async (userId, token) => {
   return response.data
 }
 
+/**
+ * Create a new event.
+ * @async
+ * @param {Object} eventData - The data for the new event.
+ * @param {string} token - The authentication token.
+ * @returns {Promise<Object>} The created event data.
+ * @throws {string} An error message if the creation fails.
+ */
 const createEvent = async (eventData, token) => {
   try {
     const response = await axios.post(baseUrl, eventData, {
@@ -36,6 +62,14 @@ const createEvent = async (eventData, token) => {
   }
 }
 
+/**
+ * Delete an event.
+ * @async
+ * @param {string} eventId - The ID of the event to delete.
+ * @param {string} token - The authentication token.
+ * @returns {Promise<Object>} A success message if the event is deleted.
+ * @throws {string} An error message if the deletion fails.
+ */
 const deleteEvent = async (eventId, token) => {
   console.log("From eventsService ", eventId)
 
@@ -53,11 +87,26 @@ const deleteEvent = async (eventId, token) => {
   }
 }
 
+/**
+ * Fetch details of a specific event by its ID.
+ * @async
+ * @param {string} eventId - The ID of the event.
+ * @returns {Promise<Object>} The event details.
+ */
 const getEventById = async (eventId) => {
   const response = await axios.get(`${baseUrl}/${eventId}`)
   return response.data
 }
 
+/**
+ * Edit an existing event.
+ * @async
+ * @param {string} eventId - The ID of the event to edit.
+ * @param {Object} updatedEvent - The updated event data.
+ * @param {string} token - The authentication token.
+ * @returns {Promise<Object>} The updated event data.
+ * @throws {string} An error message if the update fails.
+ */
 const editEvent = async (eventId, updatedEvent, token) => {
   try {
     const response = await axios.patch(`${baseUrl}/${eventId}`, updatedEvent, {
@@ -74,6 +123,15 @@ const editEvent = async (eventId, updatedEvent, token) => {
   }
 }
 
+/**
+ * Join an event.
+ * @async
+ * @param {string} eventId - The ID of the event to join.
+ * @param {string} userId - The ID of the user joining the event.
+ * @param {string} token - The authentication token.
+ * @returns {Promise<Object>} A success message if the user joins the event.
+ * @throws {string} An error message if the join fails.
+ */
 const joinEvent = async (eventId, userId, token) => {
   try {
     console.log("events service", userId)
@@ -91,7 +149,15 @@ const joinEvent = async (eventId, userId, token) => {
   }
 }
 
-// Withdraw from an event (remove user from attendees)
+/**
+ * Withdraw from an event (remove user from attendees).
+ * @async
+ * @param {string} eventId - The ID of the event to withdraw from.
+ * @param {string} userId - The ID of the user withdrawing from the event.
+ * @param {string} token - The authentication token.
+ * @returns {Promise<Object>} A success message if the user withdraws from the event.
+ * @throws {string} An error message if the withdrawal fails.
+ */
 const withdrawEvent = async (eventId, userId, token) => {
   try {
     console.log("Withdrawing user", userId, "from event", eventId);

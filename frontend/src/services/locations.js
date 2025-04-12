@@ -91,6 +91,13 @@ export const findLocationByName = async (locationName) => {
     return null;
 };
 
+/**
+ * Fetch all location names from the API.
+ * Filters out locations marked as under construction or pending relocation.
+ * @async
+ * @returns {Promise<Array<string>>} Array of location names.
+ * @throws {Error} Throws an error if the API request fails.
+ */
 export const getLocationNames = async () => {
     try {
         const response = await axios.get('/api/locations/names')
