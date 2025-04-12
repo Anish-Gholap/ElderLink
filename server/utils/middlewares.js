@@ -4,7 +4,13 @@ const User = require('../models/user')
 const Event = require('../models/event')
 
 
-// Logs Request in a clear format
+/**
+ * Middleware to log incoming HTTP requests.
+ * Logs the HTTP method, path, and body of the request.
+ * @param {Object} request - Express request object.
+ * @param {Object} response - Express response object.
+ * @param {Function} next - Express next middleware function.
+ */
 const requestLogger = (request, response, next) => {
     logger.info('Method: ', request.method)
     logger.info('Path: ', request.path)
@@ -15,12 +21,24 @@ const requestLogger = (request, response, next) => {
     next()
 }
 
-// handle requests to unknown endpoints
+/**
+ * Middleware to handle requests to unknown endpoints.
+ * Responds with a 404 status and an error message.
+ * @param {Object} request - Express request object.
+ * @param {Object} response - Express response object.
+ */
 const unknownEndpoint = (request, response) => {
     response.status(404).send({error: 'unknown endpoint'})
 }
 
-// handle errors
+/**
+ * Middleware to handle errors in the application.
+ * Handles specific errors such as validation errors, token errors, and database errors.
+ * @param {Error} error - The error object.
+ * @param {Object} request - Express request object.
+ * @param {Object} response - Express response object.
+ * @param {Function} next - Express next middleware function.
+ */
 const errorHandler = (error, request, response, next) => {
     //logger.error(error)
 
@@ -42,7 +60,13 @@ const errorHandler = (error, request, response, next) => {
     next(error)
 }
 
-// Identifies user from token
+/**
+ * Middleware to extract the user from the JWT token.
+ * Verifies the token and attaches the user object to the request.
+ * @param {Object} request - Express request object.
+ * @param {Object} response - Express response object.
+ * @param {Function} next - Express next middleware function.
+ */
 const userExtractor = async (request, response, next) => {
     try {
         const authorization = request.get('authorization')
@@ -82,7 +106,13 @@ const userExtractor = async (request, response, next) => {
     }
 }
 
-// checks event ownership
+/**
+ * Middleware to check if the authenticated user is the owner of the event.
+ * Verifies the event ID and checks if the user is the creator of the event.
+ * @param {Object} request - Express request object.
+ * @param {Object} response - Express response object.
+ * @param {Function} next - Express next middleware function.
+ */
 const checkEventOwner = async (request, response, next) => {
     try {
         const eventId = request.params.id
