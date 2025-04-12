@@ -1,9 +1,16 @@
-// controllers/authController.js
+/**
+ * @file authController.js
+ * @description Handles user authentication including registration, login, password validation and reset.
+ */
 const User = require('../models/user')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
-
+/**
+ * Validates password strength based on length and character requirements.
+ * @param {string} password - The password to validate.
+ * @returns {{isValid: boolean, message: string}} Validation result and message.
+ */
 const validatePassword = (password) => {
 
   const result = {
@@ -39,7 +46,12 @@ const validatePassword = (password) => {
   return result
 }
 
-
+/**
+ * Registers a new user.
+ * @param {Object} request - Express request object.
+ * @param {Object} response - Express response object.
+ * @returns {Object} JSON response with user data or error.
+ */
 const createUser = async (request, response) => {
 
     const {username, name, phoneNumber, password, confirmPassword} = request.body
@@ -72,6 +84,12 @@ const createUser = async (request, response) => {
     })
 }
 
+/**
+ * Logs in a user and returns a JWT token on success.
+ * @param {Object} request - Express request object.
+ * @param {Object} response - Express response object.
+ * @returns {Object} JSON response with token and user info or error.
+ */
 const loginUser = async (request, response) => {
   const {username, password} = request.body
 
@@ -93,7 +111,12 @@ const loginUser = async (request, response) => {
   response.status(200).send({token, username: user.username, name: user.name, id: user.id, tokenExpiresAt, message: "Log in Successful!"})
 }
 
-// Find user with phone number
+/**
+ * Finds a user by phone number.
+ * @param {Object} request - Express request object.
+ * @param {Object} response - Express response object.
+ * @returns {Object} JSON response with user data or error.
+ */
 const findUserWithPhoneNumber = async (request, response) => {
   console.log(request.body)
   try {
@@ -111,7 +134,12 @@ const findUserWithPhoneNumber = async (request, response) => {
   }
 }
 
-// Change password
+/**
+ * Changes a user's password after verifying OTP and validating new password.
+ * @param {Object} request - Express request object.
+ * @param {Object} response - Express response object.
+ * @returns {Object} JSON response with success message or error.
+ */
 const changePassword = async (request, response) => {
   try {
     const {username, password, confirmPassword, otp} = request.body
