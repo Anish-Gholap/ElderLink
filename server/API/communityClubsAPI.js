@@ -1,3 +1,10 @@
+/**
+ * Fetch community club data from the Singapore government API.
+ * Retrieves community club names, addresses, coordinates, and descriptions.
+ * @async
+ * @returns {Promise<Object[]>} A list of community clubs with their details, including name, address, coordinates, and description.
+ * @throws {Error} Throws an error if the API request fails or the response is invalid.
+ */
 const fetchCCFromAPI = async () => {
     const datasetId = "d_f706de1427279e61fe41e89e24d440fa"
     const url = "https://api-open.data.gov.sg/v1/public/api/datasets/" + datasetId + "/poll-download"
@@ -55,7 +62,12 @@ const fetchCCFromAPI = async () => {
     }
 }
 
-
+/**
+ * Parse the HTML description of a community club into a structured object.
+ * Extracts key-value pairs from the HTML table format.
+ * @param {string} description - The HTML description string.
+ * @returns {Object} A structured object containing the parsed key-value pairs.
+ */
 function parseDescription(description) {
     const result = {};
 
