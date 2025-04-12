@@ -1,6 +1,11 @@
 const User = require('../models/user')
 
-// Get all users
+/**
+ * Get all users.
+ * @param {Object} request - Express request object.
+ * @param {Object} response - Express response object.
+ * @returns {Promise<void>} Responds with a list of all users or an error message.
+ */
 const getAllUsers = async (request, response) => {
     try {
         const users = await User.find({})
@@ -11,7 +16,15 @@ const getAllUsers = async (request, response) => {
     }
 }
 
-// Edit user
+/**
+ * Edit a user's details.
+ * @param {Object} request - Express request object.
+ * @param {Object} request.body - The request body containing updated user details.
+ * @param {Object} request.user - The authenticated user object added by middleware.
+ * @param {string} request.user.id - The ID of the user to edit.
+ * @param {Object} response - Express response object.
+ * @returns {Promise<void>} Responds with the updated user details or an error message.
+ */
 const editUser = async (request, response) => {
     const body = request.body
     const userToEditId = request.user.id
