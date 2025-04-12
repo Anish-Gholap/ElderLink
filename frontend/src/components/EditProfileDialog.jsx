@@ -9,13 +9,29 @@ import {
     Button
 } from '@mui/material';
 
-
+/**
+ * EditProfileDialog component for editing a user's profile.
+ * Provides a dialog with input fields for updating the username, name, and phone number.
+ * Validates the input fields and checks for username uniqueness before submission.
+ * @component
+ * @param {Object} props - The component props.
+ * @param {boolean} props.open - Whether the dialog is open.
+ * @param {Function} props.onClose - Function to close the dialog.
+ * @param {Function} props.onSubmit - Function to handle the submission of updated profile data.
+ * @param {Object} props.userData - The current user data (username, name, phone number).
+ * @param {Function} props.checkUsernameExist - Function to check if a username already exists.
+ * @returns {JSX.Element} The EditProfileDialog component.
+ */
 const EditProfileDialog = ({ open, onClose, onSubmit, userData, checkUsernameExist }) => {
     const [userName, setUserName] = useState('');
     const [name, setName] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
 
+    /**
+     * Populates the input fields with the current user data when the dialog opens.
+     * @useEffect
+     */
     useEffect(() => {
         if (open && userData) {  // Set state only when the dialog opens
             setUserName(userData.username || '');
@@ -24,6 +40,11 @@ const EditProfileDialog = ({ open, onClose, onSubmit, userData, checkUsernameExi
         }
     }, [open, userData]);
 
+    /**
+     * Handles the submission of updated profile data.
+     * Validates the input fields and calls the `onSubmit` function if validation passes.
+     * @async
+     */
     const handleSubmit = async () => {
         const validationError = await validateDetails(); 
         if (validationError) {
@@ -37,6 +58,13 @@ const EditProfileDialog = ({ open, onClose, onSubmit, userData, checkUsernameExi
         setErrorMessage('');  
     };
 
+    /**
+     * Validates the input fields for the profile update.
+     * Ensures all fields are filled, username and name meet character requirements, and phone number is valid.
+     * Checks for username uniqueness if it has been changed.
+     * @async
+     * @returns {string|null} Returns an error message if validation fails, otherwise `null`.
+     */
     const validateDetails = async () => {
         if (!userName || !name || !phoneNumber) {
             return "Please fill in all fields";

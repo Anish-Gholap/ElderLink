@@ -43,6 +43,18 @@ schema of notification
   },
 */
 
+/**
+ * ConfirmDeleteDialog component for confirming the deletion of a notification.
+ * Displays a confirmation dialog with options to cancel or delete the notification.
+ * @component
+ * @param {Object} props - The component props.
+ * @param {boolean} props.open - Whether the confirmation dialog is open.
+ * @param {Function} props.setOpen - Function to toggle the open state of the confirmation dialog.
+ * @param {Function} props.handleDelete - Function to handle the deletion of a notification.
+ * @param {string} props.userId - The ID of the user associated with the notification.
+ * @param {string} props.notificationId - The ID of the notification to delete.
+ * @returns {JSX.Element} The ConfirmDeleteDialog component.
+ */
 const ConfirmDeleteDialog = ({
     open,
     setOpen,
@@ -79,7 +91,19 @@ const ConfirmDeleteDialog = ({
 }
 
 
-
+/**
+ * NotificationsDialog component for displaying a list of user notifications.
+ * Allows users to view, delete, and mark notifications as read.
+ * Includes a confirmation dialog for deleting notifications.
+ * @component
+ * @param {Object} props - The component props.
+ * @param {Array} props.notifications - The list of notifications to display.
+ * @param {boolean} props.open - Whether the notifications dialog is open.
+ * @param {Function} props.onClose - Function to close the notifications dialog.
+ * @param {Function} props.handleDelete - Function to handle the deletion of a notification.
+ * @param {string} props.userId - The ID of the user associated with the notifications.
+ * @returns {JSX.Element} The NotificationsDialog component.
+ */
 function NotificationsDialog({
     notifications = [],
     open,

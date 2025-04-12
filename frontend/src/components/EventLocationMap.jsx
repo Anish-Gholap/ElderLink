@@ -2,6 +2,23 @@ import { useEffect, useRef } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
+/**
+ * EventLocationMap component for displaying a map with the event's location.
+ * Uses the Leaflet library to render an interactive map with a marker at the event's coordinates.
+ * @component
+ * @param {Object} props - The component props.
+ * @param {Object} props.locationData - The location data for the event.
+ * @param {Object} props.locationData.coordinates - The coordinates of the event location.
+ * @param {number} props.locationData.coordinates.latitude - The latitude of the event location.
+ * @param {number} props.locationData.coordinates.longitude - The longitude of the event location.
+ * @param {string} props.locationData.name - The name of the event location.
+ * @param {Object} props.locationData.address - The address of the event location.
+ * @param {string} props.locationData.address.block - The block number of the event location.
+ * @param {string} props.locationData.address.street - The street name of the event location.
+ * @param {string} props.locationData.address.postalCode - The postal code of the event location.
+ * @param {number} [props.height=200] - The height of the map in pixels (default is 200).
+ * @returns {JSX.Element} The EventLocationMap component.
+ */
 const EventLocationMap = ({ locationData, height = 200 }) => {
     const mapRef = useRef(null);
     const mapInstanceRef = useRef(null);

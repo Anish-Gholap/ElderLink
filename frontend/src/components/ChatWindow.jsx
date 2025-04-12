@@ -16,6 +16,13 @@ import React, { useRef, useEffect } from 'react'
 import { GiRobotAntennas } from 'react-icons/gi';
 import { getChatbotResponse } from '../services/chatbot';
 
+/**
+ * ChatWindow component for interacting with the JOJO chatbot.
+ * Provides a chat interface where users can send messages and receive responses from the chatbot.
+ * Includes support for audio playback of chatbot responses.
+ * @component
+ * @returns {JSX.Element} The ChatWindow component.
+ */
 function ChatWindow() {
     const [showChat, setShowChat] = React.useState(false);
     const [inputValue, setInputValue] = React.useState("");
@@ -33,16 +40,26 @@ function ChatWindow() {
 
     const messagesEndRef = useRef(null);
 
-    // Auto-scroll to bottom when new messages arrive
+    /**
+     * Automatically scrolls to the bottom of the chat when new messages arrive.
+     * @useEffect
+     */
     useEffect(() => {
         scrollToBottom();
     }, [messages]);
 
+    /**
+     * Scrolls to the bottom of the chat window.
+     */
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     };
 
-    // Function to toggle audio playback from base64 string
+    /**
+     * Toggles audio playback for a chatbot response.
+     * @param {string} base64Audio - The base64-encoded audio string.
+     * @param {number} messageId - The ID of the message associated with the audio.
+     */
     const toggleAudio = (base64Audio, messageId) => {
         // If clicking the currently playing message, pause it
         if (playingMessageId === messageId && audioPlayer) {
@@ -74,7 +91,11 @@ function ChatWindow() {
         setAudioPlayer(audio);
     };
 
-    // Handle sending a message
+    /**
+     * Handles sending a message to the chatbot.
+     * Adds the user's message to the chat and fetches the chatbot's response.
+     * @async
+     */
     const handleSendMessage = async () => {
         if (inputValue.trim() === "") return;
 
@@ -121,7 +142,10 @@ function ChatWindow() {
         }
     };
 
-    // Handle Enter key press
+    /**
+     * Handles the Enter key press to send a message.
+     * @param {Object} e - The key press event.
+     */
     const handleKeyPress = (e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();

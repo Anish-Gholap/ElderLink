@@ -1,6 +1,25 @@
 import React, { useState } from 'react'
 import { Button, TextField, Box, Typography } from '@mui/material'
 
+/**
+ * SignUpForm component for rendering the sign-up form.
+ * Provides input fields for username, full name, phone number, password, and confirm password.
+ * Validates the input fields and displays error messages if validation fails.
+ * @component
+ * @param {Object} props - The component props.
+ * @param {Function} props.handleSubmit - Function to handle form submission.
+ * @param {Function} props.handleUsernameChange - Function to handle changes to the username input.
+ * @param {Function} props.handlePasswordChange - Function to handle changes to the password input.
+ * @param {Function} props.handleNameChange - Function to handle changes to the full name input.
+ * @param {Function} props.handlePhoneChange - Function to handle changes to the phone number input.
+ * @param {Function} props.handleConfirmPasswordChange - Function to handle changes to the confirm password input.
+ * @param {string} props.username - The current value of the username input.
+ * @param {string} props.password - The current value of the password input.
+ * @param {string} props.name - The current value of the full name input.
+ * @param {string} props.phoneNumber - The current value of the phone number input.
+ * @param {string} props.confirmPassword - The current value of the confirm password input.
+ * @returns {JSX.Element} The SignUpForm component.
+ */
 const SignUpForm = ({
     handleSubmit,
     handleUsernameChange,

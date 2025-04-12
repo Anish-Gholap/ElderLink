@@ -5,7 +5,26 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import { getLocationNames } from '../services/locations';
-
+/**
+ * EventForm component for creating or editing an event.
+ * Provides input fields for event details such as name, location, attendees, date/time, and description.
+ * Handles form submission and cancellation.
+ * @component
+ * @param {Object} props - The component props.
+ * @param {Function} props.handleSubmit - Function to handle form submission.
+ * @param {Function} props.handleCancel - Function to handle form cancellation.
+ * @param {Function} props.handleEventNameChange - Function to handle changes to the event name input.
+ * @param {Function} props.handleEventLocationChange - Function to handle changes to the event location input.
+ * @param {Function} props.handleEventDescriptionChange - Function to handle changes to the event description input.
+ * @param {Function} props.handleEventNumAttendeesChange - Function to handle changes to the number of attendees input.
+ * @param {Function} props.handleDateTimeChange - Function to handle changes to the event date and time input.
+ * @param {string} props.eventName - The current value of the event name input.
+ * @param {Object} props.eventLocation - The current value of the event location input.
+ * @param {number} props.eventNumAttendees - The current value of the number of attendees input.
+ * @param {string} props.eventDescription - The current value of the event description input.
+ * @param {Object} props.dateTime - The current value of the event date and time input.
+ * @returns {JSX.Element} The EventForm component.
+ */
 const EventForm = ({
                      handleSubmit,
                      handleCancel,

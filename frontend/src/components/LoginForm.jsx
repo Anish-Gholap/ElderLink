@@ -1,6 +1,19 @@
 import { Button, TextField, Box, Typography } from '@mui/material'
 import { Link } from 'react-router-dom'
-
+/**
+ * LoginForm component for rendering the login form.
+ * Provides input fields for username and password, and a submit button.
+ * Displays an error message if login fails and includes a link to the forgot password page.
+ * @component
+ * @param {Object} props - The component props.
+ * @param {Function} props.handleSubmit - Function to handle form submission.
+ * @param {Function} props.handleUsernameChange - Function to handle changes to the username input.
+ * @param {Function} props.handlePasswordChange - Function to handle changes to the password input.
+ * @param {string} props.username - The current value of the username input.
+ * @param {string} props.password - The current value of the password input.
+ * @param {string} [props.errorMessage] - The error message to display if login fails.
+ * @returns {JSX.Element} The LoginForm component.
+ */
 const LoginForm = ({ handleSubmit, handleUsernameChange, handlePasswordChange, username, password, errorMessage }) => {
 
   return (

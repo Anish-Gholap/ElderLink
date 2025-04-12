@@ -7,6 +7,15 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 
+/**
+ * Toggle component for switching between different views or pages.
+ * Provides a dropdown menu to navigate between "Events I created" and "Events I am attending".
+ * Automatically navigates to the selected page when the toggle value changes.
+ * @component
+ * @param {Object} props - The component props.
+ * @param {string} [props.defaultToggle="events-management"] - The default toggle value.
+ * @returns {JSX.Element} The Toggle component.
+ */
 const Toggle = (
   { defaultToggle = "events-management" }
 ) => {

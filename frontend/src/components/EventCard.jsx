@@ -6,6 +6,24 @@ import { FaRegClock } from "react-icons/fa";
 import { FaPeopleGroup } from "react-icons/fa6";
 import { LuPartyPopper } from "react-icons/lu";
 
+/**
+ * EventCard component for displaying event details.
+ * Provides a clickable card interface to navigate to the event details page.
+ * Displays event title, location, attendees, and date/time.
+ * @component
+ * @param {Object} props - The component props.
+ * @param {Object} props.event - The event data.
+ * @param {string} props.event.id - The unique ID of the event.
+ * @param {string} props.event.title - The title of the event.
+ * @param {string} props.event.location - The location of the event.
+ * @param {Array} [props.event.attendees] - The list of attendees for the event.
+ * @param {number} props.event.numAttendees - The maximum number of attendees for the event.
+ * @param {string} props.event.date - The date and time of the event in ISO format.
+ * @param {Function} [props.handleDelete] - Optional function to handle event deletion.
+ * @param {Object} [props.sx] - Optional styles to apply to the card.
+ * @param {JSX.Element|null} [props.actions] - Optional actions (e.g., buttons) to display on the card.
+ * @returns {JSX.Element} The EventCard component.
+ */
 const EventCard = ({ event, handleDelete, sx, actions = null}) => {
   const navigate = useNavigate()
 

@@ -9,7 +9,13 @@ import { FaBell } from "react-icons/fa6"
 
 
 
-
+/**
+ * NavBar component for displaying the application's navigation bar.
+ * Includes a logo, a sidebar for navigation links, a notifications icon, and a logout button.
+ * Provides functionality for viewing and managing notifications and navigating between pages.
+ * @component
+ * @returns {JSX.Element} The NavBar component.
+ */
 const NavBar = () => {
   const { user, logout } = useAuthContext()
   const { notifications, removeNotification } = useNotificationsContext()
