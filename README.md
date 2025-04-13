@@ -1,7 +1,18 @@
-
-# ElderLink  
+# ElderLink ![ElderLinkImage](/frontend/public/image%2028.png)
 **SC2006 Software Engineering Team 4**  
-ElderLink is a web application designed to connect and engage elderly individuals through events, notifications, and a chatbot service. This project is developed as part of SC2006 Software Engineering Team 4.
+ElderLink is a web application designed to connect and engage elderly individuals through events, our app has special features such as live user location with map, live notifications, and a chatbot service. This project is developed as part of SC2006 Software Engineering Team 4.
+
+Our Team consists of,
+
+Frontend:
+- [Zaheen](https://github.com/SyedZaheen)
+- [Timothy](https://github.com/timpula)
+- [Adrian](https://github.com/acph01)
+
+Backend:
+- [Anish](https://github.com/Anish-Gholap)
+- [Yi Jie](https://github.com/Yi-992)
+- [Jun Wei](https://github.com/tjunw14)
 
 ---
 
@@ -9,11 +20,9 @@ ElderLink is a web application designed to connect and engage elderly individual
 
 - [Features](#features)
 - [Technologies Used](#technologies-used)
-- [Project Structure](#project-structure)
 - [Setup Instructions](#setup-instructions)
 - [Scripts](#scripts)
 - [API Endpoints](#api-endpoints)
-- [License](#license)
 
 ---
 
@@ -135,10 +144,3 @@ ElderLink is a web application designed to connect and engage elderly individual
 - `POST /api/chatbot`: Interact with the chatbot  
 
 ---
-
-## License
-
-*Specify your license here.*
-```
-
-This version includes the `.env` configuration with the placeholder `<your-api-base-url>`. Let me know if you need any more changes!
